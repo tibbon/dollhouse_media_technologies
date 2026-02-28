@@ -1,63 +1,616 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Dollhouse Media Technologies &ndash; Technology, security and media consulting services">
-    <title>Dollhouse Media Technologies &ndash; Consulting Services</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            color: #333;
-        }
-        header, main, footer {
-            margin-bottom: 20px;
-        }
-        h1, h2 {
-            line-height: 1.2;
-        }
-        a {
-            color: #0066cc;
-        }
-        a:hover, a:focus {
-            text-decoration: underline;
-        }
-        p {
-            max-width: 65ch;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Dollhouse Media Technologies – Music, cybersecurity, AI, and art consulting">
+<title>Dollhouse Media Technologies</title>
+<link rel="stylesheet" href="site.css">
+<style>
+  /* ── Hero layout ── */
+  .container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  /* ── Shader effect layers ── */
+  .shader-layers {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    isolation: isolate;
+    transition: opacity 0.4s ease;
+  }
+
+  :root.dmt .shader-layers {
+    opacity: 1;
+  }
+
+  .shader-layers canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: block;
+  }
+
+  .blend-mask {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #000;
+    mix-blend-mode: multiply;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: clamp(32px, 6vw, 80px);
+  }
+
+  .blend-mask h1 { color: #000; }
+  .blend-mask .ml { color: #fff; }
+
+  /* ── Hero typography ── */
+  .hero-text {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: clamp(3rem, 9vw, 7rem);
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    text-align: left;
+  }
+
+  .hero-text .dmt,
+  .hero-text .ml {
+    font-weight: 900;
+  }
+
+  /* ── Visible text layer ── */
+  .visible-text {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: clamp(32px, 6vw, 80px);
+    z-index: 2;
+  }
+
+  .visible-text h1 {
+    color: var(--text);
+    transition: color 0.4s ease;
+  }
+
+  :root.dmt .visible-text h1 .dmt {
+    color: transparent;
+  }
+
+  /* ── Disciplines grid ── */
+  .disciplines-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(20px, 3vw, 40px);
+  }
+
+  .discipline-item {
+    padding: clamp(24px, 3vw, 40px) 0;
+    border-top: 1px solid var(--rule);
+    transition: border-color 0.4s ease;
+  }
+
+  .discipline-name {
+    font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .discipline-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    transition: color 0.4s ease;
+  }
+
+  /* ── Product card ── */
+  .product-card {
+    max-width: 720px;
+  }
+
+  .product-type {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: clamp(12px, 1.5vw, 20px);
+    transition: color 0.4s ease;
+  }
+
+  .product-name {
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    line-height: 1.15;
+    margin-bottom: clamp(16px, 2vw, 28px);
+  }
+
+  .product-name a {
+    color: var(--text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .product-name a:hover {
+    color: var(--accent);
+  }
+
+  .product-description {
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: clamp(20px, 2.5vw, 36px);
+    transition: color 0.4s ease;
+  }
+
+  .product-link {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    transition: opacity 0.2s ease, color 0.4s ease;
+  }
+
+  .product-link:hover {
+    opacity: 0.7;
+  }
+
+  .product-link::after {
+    content: " \2192";
+  }
+
+  /* ── Contact ── */
+  .contact-block {
+    max-width: 640px;
+  }
+
+  .contact-heading {
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: clamp(20px, 3vw, 40px);
+  }
+
+  .contact-email a {
+    font-size: clamp(1rem, 1.6vw, 1.3rem);
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    transition: opacity 0.2s ease, color 0.4s ease;
+  }
+
+  .contact-email a:hover {
+    opacity: 0.7;
+  }
+
+  /* ── Homepage 3-button mode switcher override ── */
+  .mode-switcher button.dmt-btn {
+    font-size: 0.85rem;
+    padding: 0.35em 0.8em;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    .disciplines-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 900px) and (min-width: 601px) {
+    .disciplines-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Dollhouse Media Technologies</h1>
-    </header>
 
-    <main>
-        <section>
-            <h2>Our Services</h2>
-            <p>Providing technology, security and media consulting services.</p>
-            <p>We&rsquo;re good at a lot of things, but fancy front&#8209;ends aren&rsquo;t one of them.</p>
-        </section>
-        <section>
-            <h2>Products</h2>
-            <p><a href="/blackbox/">BlackBox Audio Recorder</a> &ndash; Always-on audio recording for macOS. Runs in your menu bar, captures uncompressed WAV files from any input device.</p>
-        </section>
-        <section>
-            <h2>Contact Us</h2>
-            <p>Email: <a href="mailto:info@dollhousemediatech.com">info@dollhousemediatech.com</a></p>
-        </section>
-    </main>
+<!-- Hero: full viewport -->
+<div class="container">
+  <!-- Shader layers: canvas + blend mask -->
+  <div class="shader-layers">
+    <canvas id="c"></canvas>
+    <div class="blend-mask">
+      <h1 class="hero-text" aria-hidden="true">
+        <span class="ml">D</span>ollhouse<br>
+        <span class="ml">M</span>edia<br>
+        <span class="ml">T</span>echnologies
+      </h1>
+    </div>
+  </div>
 
-    <footer>
-        <address>
-            <p>Providence, Rhode Island</p>
-        </address>
-        <p>&copy; 2024 Dollhouse Media Technologies. All rights reserved.</p>
-    </footer>
+  <!-- Visible text (always shown) -->
+  <div class="visible-text">
+    <h1 class="hero-text">
+      <span class="dmt">D</span>ollhouse<br>
+      <span class="dmt">M</span>edia<br>
+      <span class="dmt">T</span>echnologies
+    </h1>
+  </div>
+</div>
+
+<!-- Page content below the fold -->
+<div class="page">
+
+  <hr>
+
+  <!-- Disciplines -->
+  <section class="section">
+    <p class="section-label">What We Do</p>
+    <div class="disciplines-grid">
+      <div class="discipline-item">
+        <h2 class="discipline-name">Music</h2>
+        <p class="discipline-desc">Production, sound design, and audio tools.</p>
+      </div>
+      <div class="discipline-item">
+        <h2 class="discipline-name">Security</h2>
+        <p class="discipline-desc">vCISO services: strategic oversight, risk management, and compliance.</p>
+      </div>
+      <div class="discipline-item">
+        <h2 class="discipline-name">AI</h2>
+        <p class="discipline-desc">Safety evaluation, governance frameworks, and responsible deployment.</p>
+      </div>
+      <div class="discipline-item">
+        <h2 class="discipline-name">Physical</h2>
+        <p class="discipline-desc">Installations, interactive environments, and fabrication.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- Products -->
+  <section class="section">
+    <p class="section-label">Products</p>
+    <div class="product-card">
+      <p class="product-type">Software</p>
+      <h3 class="product-name">
+        <a href="/blackbox/">BlackBox Audio Recorder</a>
+      </h3>
+      <p class="product-description">
+        Always-on audio recording for macOS. Menu bar, uncompressed WAV, any input device.
+      </p>
+      <a href="/blackbox/" class="product-link">Learn More</a>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- Contact -->
+  <section class="section" id="contact">
+    <div class="contact-block">
+      <h2 class="contact-heading">Let's work together.</h2>
+      <p class="contact-email">
+        <a href="mailto:info@dollhousemediatech.com">info@dollhousemediatech.com</a>
+      </p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-location">Providence, Rhode Island</span>
+      <span class="footer-copy">&copy; 2024&ndash;2026 <strong>D</strong>ollhouse <strong>M</strong>edia <strong>T</strong>echnologies</span>
+    </div>
+  </footer>
+
+</div>
+
+<div class="mode-switcher" id="modeSwitcher">
+  <button data-mode="light">Light</button>
+  <button data-mode="dark">Dark</button>
+  <button data-mode="dmt" class="dmt-btn">👾</button>
+</div>
+
+<script>
+// ─── WebGL state (declared early so applyMode can reference them) ───
+const canvas = document.getElementById('c');
+let gl = null, prog = null, uR, uT, uM;
+let shaderReady = false, shaderRunning = false, animId = null, t0 = 0;
+let mx = 0, my = 0, smx = 0, smy = 0;
+
+// ─── Mode switcher ───
+const root = document.documentElement;
+const switcher = document.getElementById('modeSwitcher');
+const btns = switcher.querySelectorAll('button');
+const modes = ['light', 'dark', 'dmt'];
+
+function osPrefersDark() {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+function currentMode() {
+  for (const m of modes) {
+    if (root.classList.contains(m)) return m;
+  }
+  return osPrefersDark() ? 'dark' : 'light';
+}
+
+function applyMode(mode) {
+  root.classList.remove(...modes);
+  root.classList.add(mode);
+  btns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  localStorage.setItem('theme', mode);
+
+  if (mode === 'dmt') {
+    startShader();
+  } else {
+    stopShader();
+  }
+}
+
+switcher.addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  applyMode(btn.dataset.mode);
+});
+
+// Restore saved or detect OS preference
+const saved = localStorage.getItem('theme');
+if (saved && modes.includes(saved)) {
+  applyMode(saved);
+} else {
+  const initial = osPrefersDark() ? 'dark' : 'light';
+  root.classList.add(initial);
+  btns.forEach(b => b.classList.toggle('active', b.dataset.mode === initial));
+}
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (!root.classList.contains('light') && !root.classList.contains('dark') && !root.classList.contains('dmt')) {
+    const mode = osPrefersDark() ? 'dark' : 'light';
+    btns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  }
+});
+
+// ─── WebGL Shader (lazy init, only runs in DMT mode) ───
+function initShader() {
+  if (shaderReady) return true;
+  gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+  if (!gl) { console.error('WebGL not available'); return false; }
+
+  const DPR = Math.min(window.devicePixelRatio, 1.0);
+  canvas.width = window.innerWidth * DPR;
+  canvas.height = window.innerHeight * DPR;
+  gl.viewport(0, 0, canvas.width, canvas.height);
+
+  const VS = `attribute vec2 a;void main(){gl_Position=vec4(a,0,1);}`;
+  const FS = `
+#ifdef GL_ES
+precision highp float;
+#endif
+uniform vec2 R;
+uniform float T;
+uniform vec2 M;
+#define TAU 6.28318531
+mat2 rot(float a){float s=sin(a),c=cos(a);return mat2(c,-s,s,c);}
+vec2 h2(vec2 p){p=vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3)));return-1.+2.*fract(sin(p)*43758.5453);}
+float gn(vec2 p){
+  vec2 i=floor(p),f=fract(p),u=f*f*f*(f*(f*6.-15.)+10.);
+  return mix(mix(dot(h2(i),f),dot(h2(i+vec2(1,0)),f-vec2(1,0)),u.x),
+             mix(dot(h2(i+vec2(0,1)),f-vec2(0,1)),dot(h2(i+vec2(1,1)),f-vec2(1,1)),u.x),u.y);
+}
+float fbm(vec2 p){
+  float v=0.,a=.5;mat2 r=rot(.37);
+  for(int i=0;i<3;i++){v+=a*gn(p);p=r*p*2.+100.;a*=.5;}
+  return v;
+}
+float warp(vec2 p,float t){
+  float s=t*.03;
+  vec2 q=vec2(fbm(p+s*vec2(.3,.7)),fbm(p+vec2(5.2,1.3)+s*vec2(-.4,.6)));
+  return fbm(p+2.5*q+s*vec2(.5,-.3));
+}
+vec3 neon(float t,vec3 bias){return .5+.5*cos(TAU*(t*vec3(1,.9,.8)+bias));}
+vec3 boxFold(vec3 p,float l){return clamp(p,-l,l)*2.-p;}
+void sphereFold(inout vec3 p,inout float dr,float minR2,float fixR2){
+  float r2=dot(p,p);
+  if(r2<minR2){float k=fixR2/minR2;p*=k;dr*=k;}
+  else if(r2<fixR2){float k=fixR2/r2;p*=k;dr*=k;}
+}
+float deCity(vec3 pos,float t){
+  vec3 p=pos;float dr=1.;
+  float scale=-2.5+.4*sin(t*.04);float boxL=1.05+.1*sin(t*.03);
+  for(int i=0;i<5;i++){
+    p=boxFold(p,boxL);sphereFold(p,dr,.15,1.);
+    p=p*scale+pos;dr=dr*abs(scale)+1.;
+    float tw=t*.005+float(i)*.03;p.xz*=rot(tw);p.yz*=rot(tw*.7);
+  }
+  return length(p)/abs(dr);
+}
+float deBlockSphere(vec3 pos,float t){
+  vec3 p=pos;float d=length(p)-2.;
+  vec3 q=abs(p);
+  if(q.x<q.z)q.xz=q.zx;if(q.y<q.z)q.yz=q.zy;if(q.x<q.y)q.xy=q.yx;
+  float blockSize=.35+.05*sin(t*.05);
+  for(int i=0;i<3;i++){
+    q=abs(q)-blockSize;float fi=float(i);
+    q.xy*=rot(t*.006+fi*.1);q.yz*=rot(t*.005+fi*.08);blockSize*=.6;
+  }
+  return max(d*.5,length(q)-.08);
+}
+float deCorridor(vec3 pos,float t){
+  vec3 p=pos;p.z=mod(p.z+t*.15,4.)-2.;
+  for(int i=0;i<3;i++){
+    p=abs(p)-vec3(.8,.8,.6)*(1.+.1*sin(t*.04+float(i)));
+    float fi=float(i);p.xy*=rot(t*.008+fi*.15);p.yz*=rot(t*.006+fi*.1);
+  }
+  vec3 q=abs(p)-.15;
+  return min(max(q.x,max(q.y,q.z)),0.)+length(max(q,0.))-.02;
+}
+float deScene(vec3 pos,float t){
+  float cycle=t*.02;
+  pos.xz*=rot(t*.01);pos.yz*=rot(t*.007);
+  float d1=deCity(pos*.8,t)*1.25;
+  float d2=deBlockSphere(pos*.6+vec3(sin(t*.02),cos(t*.015),0)*.5,t)*1.67;
+  float d3=deCorridor(pos,t);
+  float k=.3,a=d1,b=d2;
+  float h=clamp(.5+.5*(b-a)/k,0.,1.);
+  float s1=mix(b,a,h)-k*h*(1.-h);
+  a=s1;b=d3;h=clamp(.5+.5*(b-a)/k,0.,1.);
+  return mix(b,a,h)-k*h*(1.-h);
+}
+vec3 trapColor(vec3 pos,float t){
+  vec3 p=pos;p.xz*=rot(t*.01);p.yz*=rot(t*.007);
+  vec3 trap=vec3(10.);float dr=1.;float scale=-2.5+.4*sin(t*.04);
+  for(int i=0;i<4;i++){
+    p=boxFold(p,1.05+.1*sin(t*.03));sphereFold(p,dr,.15,1.);
+    p=p*scale+pos;dr=dr*abs(scale)+1.;
+    p.xz*=rot(t*.005+float(i)*.03);p.yz*=rot(t*.005*.7);
+    trap=min(trap,abs(p));
+  }
+  return trap;
+}
+vec4 march(vec3 ro,vec3 rd,float t){
+  float d=0.;vec3 p;float closest=100.;
+  for(int i=0;i<36;i++){
+    p=ro+rd*d;float h=deScene(p,t);closest=min(closest,h);
+    if(h<.001||d>12.)break;d+=h*.85;
+  }
+  if(d>12.){float glow=exp(-closest*8.)*.4;return vec4(glow,glow,glow,-1.);}
+  vec2 e=vec2(.003,0);
+  vec3 n=normalize(vec3(deScene(p+e.xyy,t)-deScene(p-e.xyy,t),deScene(p+e.yxy,t)-deScene(p-e.yxy,t),deScene(p+e.yyx,t)-deScene(p-e.yyx,t)));
+  vec3 trap=trapColor(p,t);float hue=trap.x*.4+trap.y*.35+trap.z*.25+t*.008;
+  vec3 col=neon(hue,vec3(.0,.3,.65));
+  vec3 l1=normalize(vec3(.6,.8,.4)),l2=normalize(vec3(-.5,-.3,.7));
+  vec3 lcol1=neon(t*.012,vec3(.1,.4,.7)),lcol2=neon(t*.012+.5,vec3(.6,.2,.4));
+  float diff1=max(dot(n,l1),0.),diff2=max(dot(n,l2),0.);
+  float spec=pow(max(dot(reflect(-l1,n),-rd),0.),24.);
+  float ao=1.-.3*exp(-closest*20.);
+  vec3 lit=col*(lcol1*diff1*.5+lcol2*diff2*.3+.08)*ao;
+  lit+=spec*vec3(1,.95,.9)*.6;
+  float rim=pow(1.-abs(dot(n,-rd)),3.);
+  lit+=neon(hue+.2,vec3(.3,.5,.8))*rim*.5;
+  lit*=exp(-d*.12);
+  return vec4(lit,exp(-d*.12));
+}
+void main(){
+  vec2 uv=(gl_FragCoord.xy-.5*R)/min(R.x,R.y);
+  float t=T;uv+=M*.06;
+  float ct=t*.06;
+  vec3 ro=vec3(sin(ct*.7)*2.+sin(ct*.3)*.8,cos(ct*.5)*1.5+sin(ct*.4)*.6,-t*.12+sin(ct*.2)*1.5);
+  float ct2=ct+.15;
+  vec3 ta=vec3(sin(ct2*.7)*2.+sin(ct2*.3)*.8,cos(ct2*.5)*1.5+sin(ct2*.4)*.6,-(t*.12+.15*t)+sin(ct2*.2)*1.5);
+  ta=ro+normalize(ta-ro)*3.;
+  float roll=sin(t*.02)*.15;vec3 fwd=normalize(ta-ro);
+  vec3 right=normalize(cross(vec3(sin(roll),cos(roll),0),fwd)),up=cross(fwd,right);
+  vec3 rd=normalize(uv.x*right+uv.y*up+1.6*fwd);
+  vec4 scene=march(ro,rd,t);
+  float w1=warp(uv*2.,t),w2=warp(uv*2.+vec2(8.,3.),t*.6);
+  float bgHue=w1*.4+w2*.3+t*.008;
+  vec3 bg=neon(bgHue,vec3(.05,.2,.55))*(w1*.25+.03)*.4;
+  vec3 color;
+  if(scene.w<0.){float glow=scene.x;color=bg+neon(t*.01+glow,vec3(.1,.35,.65))*glow;}
+  else{color=mix(bg,scene.rgb,scene.w);}
+  color*=.85+.15*sin(t*.17);
+  color=color/(color+.2)*1.4;
+  float grey=dot(color,vec3(.299,.587,.114));
+  color=mix(vec3(grey),color,1.6);
+  color*=smoothstep(1.4,.3,length(uv));
+  float grain=fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233))+t*.1)*43758.5453);
+  color+=(grain-.5)*.012;
+  color *= 1.5;
+  gl_FragColor=vec4(clamp(color,0.,1.),1.);
+}
+`;
+
+  function mk(type, src) {
+    const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { console.error('Shader error:', gl.getShaderInfoLog(s)); return null; }
+    return s;
+  }
+
+  prog = gl.createProgram();
+  const vs = mk(gl.VERTEX_SHADER, VS);
+  const fs = mk(gl.FRAGMENT_SHADER, FS);
+  if (!vs || !fs) return false;
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { console.error('Link error:', gl.getProgramInfoLog(prog)); return false; }
+  gl.useProgram(prog);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+  const a = gl.getAttribLocation(prog, 'a');
+  gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
+
+  uR = gl.getUniformLocation(prog, 'R');
+  uT = gl.getUniformLocation(prog, 'T');
+  uM = gl.getUniformLocation(prog, 'M');
+
+  t0 = performance.now();
+  shaderReady = true;
+  return true;
+}
+
+function resizeCanvas() {
+  if (!gl) return;
+  const DPR = Math.min(window.devicePixelRatio, 1.0);
+  canvas.width = window.innerWidth * DPR;
+  canvas.height = window.innerHeight * DPR;
+  gl.viewport(0, 0, canvas.width, canvas.height);
+}
+
+function startShader() {
+  if (shaderRunning) return;
+  if (!shaderReady && !initShader()) return;
+  resizeCanvas();
+  shaderRunning = true;
+  (function loop() {
+    if (!shaderRunning) return;
+    smx += (mx - smx) * .012;
+    smy += (my - smy) * .012;
+    gl.uniform2f(uR, canvas.width, canvas.height);
+    gl.uniform1f(uT, (performance.now() - t0) / 1000);
+    gl.uniform2f(uM, smx, smy);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    animId = requestAnimationFrame(loop);
+  })();
+}
+
+function stopShader() {
+  shaderRunning = false;
+  if (animId) { cancelAnimationFrame(animId); animId = null; }
+}
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX / window.innerWidth - .5;
+  my = .5 - e.clientY / window.innerHeight;
+});
+
+window.addEventListener('resize', () => {
+  if (shaderRunning) resizeCanvas();
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) stopShader();
+  else if (currentMode() === 'dmt') startShader();
+});
+
+</script>
+
 </body>
 </html>
