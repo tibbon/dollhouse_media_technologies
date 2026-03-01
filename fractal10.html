@@ -432,6 +432,117 @@ vec3 palette(float t,vec3 a,vec3 b,vec3 c,vec3 d){
   return a+b*cos(6.28318*(c*t+d));
 }
 
+// ============================================================
+// FRACTAL DISTANCE — HOT path, called ~108× per pixel
+// All per-iteration rotations precomputed as arrays.
+// ============================================================
+
+// Precomputed state (set once per pixel in main, constant for all calls)
+float mb_scale, mb_fold, mb_minR2, mb_fixR2, mb_invMinR2;
+float ki_scale; vec3 ki_off; vec3 ki_offScaled;
+mat2 rot_p1xy, rot_p1yz, rot_p2xz, rot_p2yz;
+float blend_k;
+
+// Per-iteration rotation matrices — the big win.
+// Previously: 92 trig ops × 108 calls = ~10,000 trig ops/pixel
+// Now: 92 trig ops × 1 = 92 trig ops/pixel
+mat2 mb_rxz[MBOX_ITER], mb_ryz[MBOX_ITER], mb_rxy[MBOX_ITER];
+mat2 ki_rxz[KALI_ITER], ki_rxy[KALI_ITER];
+
+void precomputeParams(float time){
+  mb_scale=mix(2.3,2.9,.5+.5*sin(time*.053))+.08*sin(time*.017+.5);
+  mb_fold=mix(.95,1.15,.5+.5*sin(time*.041+1.))+.04*cos(time*.013);
+  mb_minR2=mix(.2,.5,.5+.5*cos(time*.047))+.06*sin(time*.011+2.);
+  mb_fixR2=1.+.05*sin(time*.0091);
+  mb_invMinR2=mb_fixR2/mb_minR2; // precompute division
+  ki_scale=mix(1.8,2.25,.5+.5*sin(time*.037))+.06*sin(time*.0083+1.);
+  ki_off=vec3(1.+.12*sin(time*.029)+.05*sin(time*.0067),
+    .92+.12*cos(time*.033)+.04*cos(time*.0053+.7),
+    1.05+.1*sin(time*.041+2.)+.05*sin(time*.0079+1.3));
+  ki_offScaled=ki_off*(ki_scale-1.); // precompute
+  rot_p1xy=rot(time*.009+.02*sin(time*.0061));
+  rot_p1yz=rot(time*.006+.015*cos(time*.0047));
+  rot_p2xz=rot(time*.011+2.+.02*sin(time*.0073));
+  rot_p2yz=rot(sin(time*.008)*.35+.01*cos(time*.0037));
+  blend_k=.2+.12*sin(time*.015)+.06*sin(time*.0043+1.);
+
+  // Precompute ALL per-iteration rotation matrices
+  float mb_twA=.08+.06*sin(time*.0071)+.03*sin(time*.019+1.);
+  float mb_twP=time*.021;
+  for(int i=0;i<MBOX_ITER;i++){
+    float fi=float(i);
+    mb_rxz[i]=rot(mb_twA*sin(mb_twP+fi*0.73));
+    mb_ryz[i]=rot(mb_twA*0.7*cos(mb_twP*0.83+fi*1.1));
+    mb_rxy[i]=rot(mb_twA*0.4*sin(mb_twP*0.67+fi*0.51+1.5));
+  }
+  float ki_twA=.06+.04*sin(time*.0059)+.025*cos(time*.023+2.);
+  float ki_twP=time*.015;
+  for(int i=0;i<KALI_ITER;i++){
+    float fi=float(i);
+    ki_rxz[i]=rot(ki_twA*sin(ki_twP+fi*.61));
+    ki_rxy[i]=rot(ki_twA*.6*cos(ki_twP*.77+fi*.89));
+  }
+}
+
+vec2 mandelbox(vec3 pos){
+  vec3 off=pos; float dr=1.0; vec3 z=pos; float trap=1e10;
+  for(int i=0;i<MBOX_ITER;i++){
+    z=clamp(z,-mb_fold,mb_fold)*2.0-z;
+    float r2=dot(z,z);
+    if(r2<mb_minR2){z*=mb_invMinR2;dr*=mb_invMinR2;}
+    else if(r2<mb_fixR2){float t2=mb_fixR2/r2;z*=t2;dr*=t2;}
+    z.xz*=mb_rxz[i]; z.yz*=mb_ryz[i]; z.xy*=mb_rxy[i];
+    z=z*mb_scale+off; dr=dr*abs(mb_scale)+1.0;
+    trap=min(trap,length(z.xz)); trap=min(trap,abs(z.y));
+  }
+  return vec2(length(z)/abs(dr),trap);
+}
+
+vec2 kaliIFS(vec3 p){
+  float trap=1e10; vec3 z=p; float dr=1.0;
+  for(int i=0;i<KALI_ITER;i++){
+    z=abs(z);
+    if(z.x<z.y)z.xy=z.yx; if(z.x<z.z)z.xz=z.zx; if(z.y<z.z)z.yz=z.zy;
+    z.xz*=ki_rxz[i]; z.xy*=ki_rxy[i];
+    z=z*ki_scale-ki_offScaled; dr=dr*ki_scale+1.;
+    trap=min(trap,length(z.xy)); trap=min(trap,abs(z.z));
+  }
+  return vec2(length(z)/dr,trap);
+}
+
+// FAST scene: distance + trap only. No phantoms.
+vec2 sceneFast(vec3 p){
+  vec3 p1=p; p1.xy*=rot_p1xy; p1.yz*=rot_p1yz;
+  vec3 p2=p; p2.xz*=rot_p2xz; p2.yz*=rot_p2yz;
+  vec2 d1=mandelbox(p1);
+  vec2 d2=kaliIFS(p2*.55); d2.x/=.55;
+  float h=clamp(.5+.5*(d2.x-d1.x)/blend_k,0.,1.);
+  return vec2(mix(d2.x,d1.x,h)-blend_k*h*(1.-h), mix(d2.y,d1.y,h));
+}
+
+float sceneDist(vec3 p){return sceneFast(p).x;}
+
+// Tetrahedral normal — 4 evaluations instead of 6
+vec3 calcNormal(vec3 p){
+  const vec2 e=vec2(.0006,-.0006);
+  return normalize(
+    e.xyy*sceneDist(p+e.xyy)+e.yyx*sceneDist(p+e.yyx)+
+    e.yxy*sceneDist(p+e.yxy)+e.xxx*sceneDist(p+e.xxx));
+}
+
+float calcAO(vec3 pos,vec3 nor){
+  ${S.ao===0?'return 1.0;':`float occ=0.,sca=1.;
+  for(int i=0;i<${S.ao};i++){
+    float h=.008+.12*float(i)/${Math.max(S.ao-1,1).toFixed(1)};
+    occ+=(h-sceneDist(pos+h*nor))*sca; sca*=.8;
+  }
+  return clamp(1.-3.*occ,0.,1.);`}
+}
+
+// ============================================================
+// PAREIDOLIA — evaluated ONCE at hit point only
+// ============================================================
+
 struct Phantom{vec3 center;float presence;float kind;float scale;vec3 facing;};
 
 Phantom getPhantom(float id,float time){
@@ -496,93 +607,14 @@ vec2 phantomField(vec3 p,Phantom ph){
   return vec2(deform,darkness)*ph.presence;
 }
 
-vec2 mandelbox(vec3 pos,float time){
-  float scale=mix(2.3,2.9,0.5+0.5*sin(time*0.053))+0.08*sin(time*0.017+0.5);
-  float foldLimit=mix(0.95,1.15,0.5+0.5*sin(time*0.041+1.0))+0.04*cos(time*0.013);
-  float minR2=mix(0.2,0.5,0.5+0.5*cos(time*0.047))+0.06*sin(time*0.011+2.0);
-  float fixR2=1.0+0.05*sin(time*0.0091);
-  float twA=0.08+0.06*sin(time*0.0071)+0.03*sin(time*0.019+1.0);
-  float twP=time*0.021;
-  vec3 off=pos; float dr=1.0; vec3 z=pos; float trap=1e10;
-  for(int i=0;i<MBOX_ITER;i++){
-    z=clamp(z,-foldLimit,foldLimit)*2.0-z;
-    float r2=dot(z,z);
-    if(r2<minR2){float t2=fixR2/minR2;z*=t2;dr*=t2;}
-    else if(r2<fixR2){float t2=fixR2/r2;z*=t2;dr*=t2;}
-    float fi=float(i);
-    z.xz*=rot(twA*sin(twP+fi*0.73));
-    z.yz*=rot(twA*0.7*cos(twP*0.83+fi*1.1));
-    z.xy*=rot(twA*0.4*sin(twP*0.67+fi*0.51+1.5));
-    z=z*scale+off; dr=dr*abs(scale)+1.0;
-    trap=min(trap,length(z.xz)); trap=min(trap,abs(z.y));
-  }
-  return vec2(length(z)/abs(dr),trap);
-}
-
-vec2 kaliIFS(vec3 p,float time){
-  float scale=mix(1.8,2.25,0.5+0.5*sin(time*0.037))+0.06*sin(time*0.0083+1.0);
-  vec3 off=vec3(1.+.12*sin(time*.029)+.05*sin(time*.0067),
-    .92+.12*cos(time*.033)+.04*cos(time*.0053+.7),
-    1.05+.1*sin(time*.041+2.)+.05*sin(time*.0079+1.3));
-  float twA=.06+.04*sin(time*.0059)+.025*cos(time*.023+2.);
-  float twP=time*.015;
-  float trap=1e10; vec3 z=p; float dr=1.0;
-  for(int i=0;i<KALI_ITER;i++){
-    z=abs(z);
-    if(z.x-z.y<0.)z.xy=z.yx;
-    if(z.x-z.z<0.)z.xz=z.zx;
-    if(z.y-z.z<0.)z.yz=z.zy;
-    float fi=float(i);
-    z.xz*=rot(twA*sin(twP+fi*.61));
-    z.xy*=rot(twA*.6*cos(twP*.77+fi*.89));
-    z=z*scale-off*(scale-1.); dr=dr*scale+1.;
-    trap=min(trap,length(z.xy)); trap=min(trap,abs(z.z));
-  }
-  return vec2(length(z)/dr,trap);
-}
-
-vec3 scene(vec3 p,float time){
-  vec3 p1=p;
-  p1.xy*=rot(time*.009+.02*sin(time*.0061));
-  p1.yz*=rot(time*.006+.015*cos(time*.0047));
-  vec3 p2=p;
-  p2.xz*=rot(time*.011+2.+.02*sin(time*.0073));
-  p2.yz*=rot(sin(time*.008)*.35+.01*cos(time*.0037));
-  vec2 d1=mandelbox(p1,time);
-  vec2 d2=kaliIFS(p2*.55,time); d2.x/=.55;
-  float k=.2+.12*sin(time*.015)+.06*sin(time*.0043+1.);
-  float h=clamp(.5+.5*(d2.x-d1.x)/k,0.,1.);
-  float dist=mix(d2.x,d1.x,h)-k*h*(1.-h);
-  float trap=mix(d2.y,d1.y,h);
+// Evaluate phantoms at a point — called ONCE per pixel at hit
+float evalPhantomDark(vec3 p,float time){
   float totalDark=0.0;
-  if(u_par>0.01){
-    for(int i=0;i<4;i++){
-      Phantom ph=getPhantom(float(i),time);
-      vec2 pr=phantomField(p,ph);
-      dist+=pr.x*u_par; totalDark+=pr.y*u_par;
-    }
-    totalDark=min(totalDark,1.0);
+  for(int i=0;i<4;i++){
+    Phantom ph=getPhantom(float(i),time);
+    totalDark+=phantomField(p,ph).y*u_par;
   }
-  return vec3(dist,trap,totalDark);
-}
-
-float sceneDist(vec3 p,float time){return scene(p,time).x;}
-
-float calcAO(vec3 pos,vec3 nor,float time){
-  ${S.ao===0?'return 1.0;':`float occ=0.,sca=1.;
-  for(int i=0;i<${S.ao};i++){
-    float h=.008+.12*float(i)/${Math.max(S.ao-1,1).toFixed(1)};
-    occ+=(h-sceneDist(pos+h*nor,time))*sca; sca*=.8;
-  }
-  return clamp(1.-3.*occ,0.,1.);`}
-}
-
-vec3 calcNormal(vec3 p,float time){
-  vec2 e=vec2(0.0004,0);
-  return normalize(vec3(
-    sceneDist(p+e.xyy,time)-sceneDist(p-e.xyy,time),
-    sceneDist(p+e.yxy,time)-sceneDist(p-e.yxy,time),
-    sceneDist(p+e.yyx,time)-sceneDist(p-e.yyx,time)));
+  return min(totalDark,1.0);
 }
 
 void main(){
@@ -591,23 +623,36 @@ void main(){
   vec3 ro=u_ro;
   vec3 rd=normalize(uv.x*u_right+uv.y*u_up+u_zoom*u_fwd);
 
+  // Precompute all time-dependent fractal params ONCE
+  precomputeParams(time);
+
+  // --- Raymarch (fast path — no phantoms) ---
   float t_march=0.; float d; vec3 p;
-  int steps=0; float trap=0.; float phantomDark=0.;
+  int steps=0; float trap=0.;
 
   for(int i=0;i<STEPS;i++){
     p=ro+t_march*rd;
-    vec3 res=scene(p,time);
-    d=res.x; trap=res.y; phantomDark=res.z;
-    if(abs(d)<0.0003||t_march>20.) break;
-    t_march += d * (0.7 + 0.25 * smoothstep(0.0, 0.1, abs(d)));
+    vec2 res=sceneFast(p);
+    d=res.x; trap=res.y;
+    if(abs(d)<0.0005||t_march>20.) break;
+    t_march += d * 0.85;  // more aggressive stepping (was 0.7)
     steps=i;
   }
 
   vec3 col=vec3(0);
   if(t_march<20.){
-    vec3 nor=calcNormal(p,time);
-    float ao=calcAO(p,nor,time);
+    // Re-evaluate trap at hit point for accurate color
+    vec2 hitRes=sceneFast(p);
+    trap=hitRes.y;
+
+    vec3 nor=calcNormal(p);
+    float ao=calcAO(p,nor);
     float colorTime=time*.022;
+
+    // Phantoms evaluated ONCE here, only for shading darkness
+    float phantomDark=0.0;
+    if(u_par>0.01) phantomDark=evalPhantomDark(p,time);
+
     float satW1=sin(time*.0052),satW2=sin(time*.003+1.7),satW3=sin(time*.016+.5);
     float satRaw=satW1*.4+satW2*.35+satW3*.25+u_satBias;
     float saturation=smoothstep(-.2,.7,satRaw);
