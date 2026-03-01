@@ -184,8 +184,8 @@
   <div class="panel-section">
     <div class="section-title" style="margin-bottom:10px">Presets</div>
     <div class="preset-row">
-      <button class="preset-btn" data-preset="potato">Potato</button>
-      <button class="preset-btn active" data-preset="balanced">Balanced</button>
+      <button class="preset-btn active" data-preset="potato">Potato</button>
+      <button class="preset-btn" data-preset="balanced">Balanced</button>
       <button class="preset-btn" data-preset="quality">Quality</button>
       <button class="preset-btn" data-preset="ultra">Ultra</button>
     </div>
@@ -218,7 +218,7 @@
   <div class="panel-section">
     <div class="section-title">Experience</div>
     <div class="control-label"><span>Speed</span><span class="control-value" id="val-speed">1.0x</span></div>
-    <input type="range" id="ctrl-speed" min="0.1" max="3.0" step="0.1" value="1.0">
+    <input type="range" id="ctrl-speed" min="0.01" max="1.0" step="0.05" value="0.1">
     <div class="control-label"><span>Pareidolia</span><span class="control-value" id="val-par">1.0x</span></div>
     <input type="range" id="ctrl-par" min="0.0" max="2.0" step="0.1" value="1.0">
     <div class="control-label"><span>Color Saturation Bias</span><span class="control-value" id="val-sat">0.0</span></div>
@@ -250,8 +250,8 @@ if (!gl) {
 // ============================================================
 
 const settings = {
-  res: 1.0, steps: 100, mbox: 10, kali: 8, ao: 4,
-  speed: 1.0, par: 1.0, sat: 0.0, fog: 1.0,
+  res: 0.5, steps: 50, mbox: 9, kali: 4, ao: 2,
+  speed: 0.25, par: 1.0, sat: 0.0, fog: 2.0,
   bloom: 0.35, bthresh: 0.6, bradius: 1.0,
 };
 let shaderDirty = true;
@@ -823,7 +823,7 @@ function hash3(n) {
 }
 
 let camPos=[0,0,0],camFwd=[0,0,1],camRight=[1,0,0],camUp=[0,1,0],camInit=false;
-let paused=false, time=0;
+let paused=false, time=Math.random() * 10000;
 let mouse=[0,0], targetMouse=[0,0];
 let depthAccum=0, userRoll=0, rollSmooth=0;
 let rightDragging=false, rightDragStartX=0, rightDragStartRoll=0;
