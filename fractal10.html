@@ -8,6 +8,146 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: #000; overflow: hidden; cursor: crosshair; }
   canvas { display: block; width: 100vw; height: 100vh; touch-action: none; }
+
+  #fps {
+    position: fixed; top: 16px; right: 16px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: rgba(255,255,255,0.5); font-size: 12px; font-weight: 500;
+    pointer-events: none; z-index: 20;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  }
+
+  #settings-btn {
+    position: fixed; top: 14px; left: 16px;
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    cursor: pointer; z-index: 30;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  #settings-btn:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+  #settings-btn svg { width: 16px; height: 16px; fill: none; stroke: rgba(255,255,255,0.6); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  #screenshot-btn {
+    position: fixed; top: 14px; left: 56px;
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    cursor: pointer; z-index: 30;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  #screenshot-btn:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+  #screenshot-btn svg { width: 16px; height: 16px; fill: none; stroke: rgba(255,255,255,0.6); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  #flash {
+    position: fixed; inset: 0; background: #fff; opacity: 0;
+    pointer-events: none; z-index: 100;
+    transition: opacity 0.15s ease-out;
+  }
+  #flash.active { opacity: 0.3; transition: none; }
+
+  #panel {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 280px;
+    background: rgba(10,10,14,0.92);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    z-index: 25;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    color: rgba(255,255,255,0.7);
+    font-size: 11px;
+  }
+  #panel.open { transform: translateX(0); }
+
+  .panel-header {
+    padding: 20px 20px 12px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.35);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .panel-section {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .panel-section:last-child { border-bottom: none; }
+
+  .control-label {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px;
+  }
+  .control-label span:first-child {
+    font-size: 11px; color: rgba(255,255,255,0.6);
+  }
+  .control-value {
+    font-size: 10px; color: rgba(255,255,255,0.35);
+    min-width: 40px; text-align: right;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px; outline: none;
+    margin: 4px 0 14px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 14px; height: 14px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 50%; cursor: pointer;
+    border: none;
+    transition: background 0.15s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover {
+    background: rgba(255,255,255,0.95);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 14px; height: 14px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 50%; cursor: pointer; border: none;
+  }
+
+  .preset-row {
+    display: flex; gap: 6px; margin-top: 8px;
+  }
+  .preset-btn {
+    flex: 1; padding: 6px 0;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    color: rgba(255,255,255,0.5);
+    font-family: inherit; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .preset-btn:hover {
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.8);
+    border-color: rgba(255,255,255,0.2);
+  }
+  .preset-btn.active {
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.9);
+    border-color: rgba(255,255,255,0.3);
+  }
+
+  .section-title {
+    color:rgba(255,255,255,0.4);font-size:10px;
+    text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;
+  }
+
   #ui {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
     font-family: 'SF Mono', 'Fira Code', monospace;
@@ -17,385 +157,912 @@
   }
   #ui span { opacity: 0; animation: fadeIn 3s 2s forwards; }
   @keyframes fadeIn { to { opacity: 1; } }
-  #fps {
-    position: fixed; top: 16px; right: 16px;
-    font-family: 'SF Mono', monospace; color: rgba(255,255,255,0.2);
-    font-size: 10px; pointer-events: none; z-index: 10;
-  }
 </style>
 </head>
 <body>
+
 <canvas id="c"></canvas>
-<div id="ui"><span>scroll to dive &middot; shift-scroll to roll &middot; right-drag to rotate<br>mouse to look &middot; space to pause &middot; R to reset</span></div>
+<div id="flash"></div>
+
+<button id="settings-btn" title="Settings (S)">
+  <svg viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+  </svg>
+</button>
+
+<button id="screenshot-btn" title="Screenshot (P)">
+  <svg viewBox="0 0 24 24">
+    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+    <circle cx="12" cy="13" r="4"/>
+  </svg>
+</button>
+
+<div id="panel">
+  <div class="panel-header">Settings</div>
+
+  <div class="panel-section">
+    <div class="section-title" style="margin-bottom:10px">Presets</div>
+    <div class="preset-row">
+      <button class="preset-btn" data-preset="potato">Potato</button>
+      <button class="preset-btn active" data-preset="balanced">Balanced</button>
+      <button class="preset-btn" data-preset="quality">Quality</button>
+      <button class="preset-btn" data-preset="ultra">Ultra</button>
+    </div>
+  </div>
+
+  <div class="panel-section">
+    <div class="section-title">Rendering</div>
+    <div class="control-label"><span>Resolution</span><span class="control-value" id="val-res">1.0x</span></div>
+    <input type="range" id="ctrl-res" min="0.25" max="2.0" step="0.25" value="1.0">
+    <div class="control-label"><span>March Steps</span><span class="control-value" id="val-steps">100</span></div>
+    <input type="range" id="ctrl-steps" min="40" max="200" step="10" value="100">
+    <div class="control-label"><span>Mandelbox Iters</span><span class="control-value" id="val-mbox">10</span></div>
+    <input type="range" id="ctrl-mbox" min="4" max="16" step="1" value="10">
+    <div class="control-label"><span>Kali IFS Iters</span><span class="control-value" id="val-kali">8</span></div>
+    <input type="range" id="ctrl-kali" min="3" max="14" step="1" value="8">
+    <div class="control-label"><span>AO Samples</span><span class="control-value" id="val-ao">4</span></div>
+    <input type="range" id="ctrl-ao" min="0" max="8" step="1" value="4">
+  </div>
+
+  <div class="panel-section">
+    <div class="section-title">Post Processing</div>
+    <div class="control-label"><span>Bloom Intensity</span><span class="control-value" id="val-bloom">0.35</span></div>
+    <input type="range" id="ctrl-bloom" min="0.0" max="1.0" step="0.05" value="0.35">
+    <div class="control-label"><span>Bloom Threshold</span><span class="control-value" id="val-bthresh">0.6</span></div>
+    <input type="range" id="ctrl-bthresh" min="0.1" max="1.5" step="0.05" value="0.6">
+    <div class="control-label"><span>Bloom Radius</span><span class="control-value" id="val-bradius">1.0x</span></div>
+    <input type="range" id="ctrl-bradius" min="0.2" max="3.0" step="0.1" value="1.0">
+  </div>
+
+  <div class="panel-section">
+    <div class="section-title">Experience</div>
+    <div class="control-label"><span>Speed</span><span class="control-value" id="val-speed">1.0x</span></div>
+    <input type="range" id="ctrl-speed" min="0.1" max="3.0" step="0.1" value="1.0">
+    <div class="control-label"><span>Pareidolia</span><span class="control-value" id="val-par">1.0x</span></div>
+    <input type="range" id="ctrl-par" min="0.0" max="2.0" step="0.1" value="1.0">
+    <div class="control-label"><span>Color Saturation Bias</span><span class="control-value" id="val-sat">0.0</span></div>
+    <input type="range" id="ctrl-sat" min="-1.0" max="1.0" step="0.1" value="0.0">
+    <div class="control-label"><span>Fog Density</span><span class="control-value" id="val-fog">1.0x</span></div>
+    <input type="range" id="ctrl-fog" min="0.0" max="3.0" step="0.1" value="1.0">
+  </div>
+</div>
+
 <div id="fps"></div>
+<div id="ui"><span>scroll to dive · shift-scroll to roll · right-drag to rotate · S settings · P screenshot</span></div>
 
 <script>
+"use strict";
+
 const canvas = document.getElementById('c');
-const gl = canvas.getContext('webgl2', { antialias: false, preserveDrawingBuffer: false });
-if (!gl) { document.body.innerHTML = '<p style="color:#fff;padding:2em;">WebGL2 required</p>'; }
+const gl = canvas.getContext('webgl2', {
+  antialias: false,
+  preserveDrawingBuffer: true,
+  powerPreference: 'high-performance'
+});
+if (!gl) {
+  document.body.innerHTML = '<p style="color:#fff;padding:2em;font-family:monospace;text-align:center;">WebGL 2 is required.<br>Please use Chrome, Firefox, Edge, or Safari 15+.</p>';
+  throw new Error('No WebGL2');
+}
 
-const vertSrc = `#version 300 es
+// ============================================================
+// SETTINGS
+// ============================================================
+
+const settings = {
+  res: 1.0, steps: 100, mbox: 10, kali: 8, ao: 4,
+  speed: 1.0, par: 1.0, sat: 0.0, fog: 1.0,
+  bloom: 0.35, bthresh: 0.6, bradius: 1.0,
+};
+let shaderDirty = true;
+
+// ============================================================
+// PANEL
+// ============================================================
+
+const panel = document.getElementById('panel');
+let panelOpen = false;
+function togglePanel() {
+  panelOpen = !panelOpen;
+  panel.classList.toggle('open', panelOpen);
+}
+document.getElementById('settings-btn').addEventListener('click', (e) => {
+  e.stopPropagation(); togglePanel();
+});
+
+function wireSlider(id, key, fmt, recompile) {
+  const slider = document.getElementById('ctrl-' + id);
+  const valEl = document.getElementById('val-' + id);
+  if (!slider || !valEl) return;
+  slider.addEventListener('input', () => {
+    settings[key] = parseFloat(slider.value);
+    valEl.textContent = fmt(settings[key]);
+    if (recompile) shaderDirty = true;
+    if (key === 'res') doResize();
+  });
+}
+
+wireSlider('res','res',v=>v.toFixed(2)+'x',false);
+wireSlider('steps','steps',v=>v.toFixed(0),true);
+wireSlider('mbox','mbox',v=>v.toFixed(0),true);
+wireSlider('kali','kali',v=>v.toFixed(0),true);
+wireSlider('ao','ao',v=>v.toFixed(0),true);
+wireSlider('speed','speed',v=>v.toFixed(1)+'x',false);
+wireSlider('par','par',v=>v.toFixed(1)+'x',false);
+wireSlider('sat','sat',v=>(v>=0?'+':'')+v.toFixed(1),false);
+wireSlider('fog','fog',v=>v.toFixed(1)+'x',false);
+wireSlider('bloom','bloom',v=>v.toFixed(2),false);
+wireSlider('bthresh','bthresh',v=>v.toFixed(2),false);
+wireSlider('bradius','bradius',v=>v.toFixed(1)+'x',false);
+
+const presets = {
+  potato:   { res:0.5,  steps:50,  mbox:6,  kali:5,  ao:0, bloom:0.2  },
+  balanced: { res:1.0,  steps:100, mbox:10, kali:8,  ao:4, bloom:0.35 },
+  quality:  { res:1.25, steps:140, mbox:12, kali:10, ao:6, bloom:0.45 },
+  ultra:    { res:1.5,  steps:200, mbox:16, kali:14, ao:8, bloom:0.55 },
+};
+
+function applyPreset(name) {
+  const p = presets[name];
+  if (!p) return;
+  for (const [k, v] of Object.entries(p)) {
+    settings[k] = v;
+    const sl = document.getElementById('ctrl-' + k);
+    if (sl) { sl.value = v; sl.dispatchEvent(new Event('input')); }
+  }
+  document.querySelectorAll('.preset-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.preset === name)
+  );
+}
+document.querySelectorAll('.preset-btn').forEach(b =>
+  b.addEventListener('click', () => applyPreset(b.dataset.preset))
+);
+
+// ============================================================
+// SCREENSHOT
+// ============================================================
+
+let wantScreenshot = false;
+function takeScreenshot() { wantScreenshot = true; }
+function doScreenshot() {
+  const flash = document.getElementById('flash');
+  flash.classList.add('active');
+  requestAnimationFrame(() => setTimeout(() => flash.classList.remove('active'), 60));
+  canvas.toBlob(blob => {
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'fractal-dive-' + Date.now() + '.png';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, 'image/png');
+}
+document.getElementById('screenshot-btn').addEventListener('click', (e) => {
+  e.stopPropagation(); takeScreenshot();
+});
+
+// ============================================================
+// SHADERS
+// ============================================================
+
+const VERT_QUAD = `#version 300 es
 in vec2 a_pos;
-void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
-`;
+void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }`;
 
-const fragSrc = `#version 300 es
+const VERT_UV = `#version 300 es
+in vec2 a_pos;
+out vec2 v_uv;
+void main() {
+  v_uv = a_pos * 0.5 + 0.5;
+  gl_Position = vec4(a_pos, 0.0, 1.0);
+}`;
+
+// --- Bloom threshold + downsample ---
+const BLOOM_THRESH_FRAG = `#version 300 es
+precision highp float;
+in vec2 v_uv;
+uniform sampler2D u_tex;
+uniform float u_threshold;
+out vec4 fragColor;
+void main() {
+  vec3 c = texture(u_tex, v_uv).rgb;
+  float brightness = dot(c, vec3(0.2126, 0.7152, 0.0722));
+  float knee = u_threshold * 0.5;
+  float soft = clamp((brightness - u_threshold + knee) / (2.0 * knee + 0.0001), 0.0, 1.0);
+  soft = soft * soft;
+  float contrib = max(0.0, brightness - u_threshold);
+  float w = max(contrib, soft * max(0.0, brightness - u_threshold * 0.5)) / max(brightness, 0.0001);
+  fragColor = vec4(c * w, 1.0);
+}`;
+
+// --- 9-tap separable Gaussian blur ---
+const BLUR_FRAG = `#version 300 es
+precision highp float;
+in vec2 v_uv;
+uniform sampler2D u_tex;
+uniform vec2 u_dir;
+out vec4 fragColor;
+void main() {
+  float w[5] = float[](0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
+  vec3 result = texture(u_tex, v_uv).rgb * w[0];
+  for (int i = 1; i < 5; i++) {
+    vec2 off = u_dir * float(i);
+    result += texture(u_tex, v_uv + off).rgb * w[i];
+    result += texture(u_tex, v_uv - off).rgb * w[i];
+  }
+  fragColor = vec4(result, 1.0);
+}`;
+
+// --- Composite: scene + bloom ---
+const COMPOSITE_FRAG = `#version 300 es
+precision highp float;
+in vec2 v_uv;
+uniform sampler2D u_scene;
+uniform sampler2D u_bloom;
+uniform float u_bloomIntensity;
+out vec4 fragColor;
+void main() {
+  vec3 scene = texture(u_scene, v_uv).rgb;
+  vec3 bloom = texture(u_bloom, v_uv).rgb;
+  fragColor = vec4(scene + bloom * u_bloomIntensity, 1.0);
+}`;
+
+// --- Main fractal shader (regenerated on settings change) ---
+function generateFractalFrag() {
+  const S = settings;
+  return `#version 300 es
 precision highp float;
 
 uniform vec2 u_res;
 uniform float u_time;
-uniform vec3 u_ro;
-uniform vec3 u_fwd;
-uniform vec3 u_right;
-uniform vec3 u_up;
-uniform float u_zoom;
+uniform vec3 u_ro, u_fwd, u_right, u_up;
+uniform float u_zoom, u_par, u_satBias, u_fogMul;
 
 out vec4 fragColor;
 
-mat2 rot(float a) {
-    float c = cos(a), s = sin(a);
-    return mat2(c, -s, s, c);
+#define STEPS ${S.steps}
+#define MBOX_ITER ${S.mbox}
+#define KALI_ITER ${S.kali}
+
+mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}
+
+float hash(vec3 p){
+  p=fract(p*0.3183099+0.1);p*=17.0;
+  return fract(p.x*p.y*p.z*(p.x+p.y+p.z));
 }
 
-float hash(vec3 p) {
-    p = fract(p * 0.3183099 + 0.1);
-    p *= 17.0;
-    return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
+vec3 palette(float t,vec3 a,vec3 b,vec3 c,vec3 d){
+  return a+b*cos(6.28318*(c*t+d));
 }
 
-vec3 palette(float t, vec3 a, vec3 b, vec3 c, vec3 d) {
-    return a + b * cos(6.28318 * (c * t + d));
+// --- Pareidolia ---
+struct Phantom{vec3 center;float presence;float kind;float scale;vec3 facing;};
+
+Phantom getPhantom(float id,float time){
+  Phantom ph;
+  float t=time*0.03+id*37.0;
+  ph.center=vec3(sin(t*0.31+id*2.1)*2.0,cos(t*0.23+id*1.7)*1.2,sin(t*0.37+id*3.1)*2.0);
+  float p1=sin(time*(0.011+id*0.003)+id*5.0);
+  float p2=sin(time*(0.017+id*0.002)+id*3.0);
+  float p3=sin(time*(0.007+id*0.004)+id*7.0);
+  ph.presence=smoothstep(0.3,0.8,p1*p2)*(0.3+0.3*max(0.0,p3));
+  ph.kind=fract(time*0.005+id*0.37);
+  ph.scale=0.3+0.2*sin(time*0.009+id*4.0);
+  float fa=time*0.02+id*2.0;
+  ph.facing=normalize(vec3(sin(fa),cos(fa*0.7)*0.3,cos(fa)));
+  return ph;
 }
 
-vec2 mandelbox(vec3 pos, float time) {
-    float scale = mix(2.3, 2.9, 0.5 + 0.5 * sin(time * 0.053))
-                + 0.08 * sin(time * 0.017 + 0.5);
-    float foldLimit = mix(0.95, 1.15, 0.5 + 0.5 * sin(time * 0.041 + 1.0))
-                    + 0.04 * cos(time * 0.013);
-    float minRadius2 = mix(0.2, 0.5, 0.5 + 0.5 * cos(time * 0.047))
-                      + 0.06 * sin(time * 0.011 + 2.0);
-    float fixedRadius2 = 1.0 + 0.05 * sin(time * 0.0091);
-    float twistAmp = 0.08 + 0.06 * sin(time * 0.0071) + 0.03 * sin(time * 0.019 + 1.0);
-    float twistPhase = time * 0.021;
-
-    vec3 offset = pos; float dr = 1.0; vec3 z = pos; float trap = 1e10;
-    for (int i = 0; i < 10; i++) {
-        z = clamp(z, -foldLimit, foldLimit) * 2.0 - z;
-        float r2 = dot(z, z);
-        if (r2 < minRadius2) { float t2 = fixedRadius2/minRadius2; z *= t2; dr *= t2; }
-        else if (r2 < fixedRadius2) { float t2 = fixedRadius2/r2; z *= t2; dr *= t2; }
-        float fi = float(i);
-        z.xz *= rot(twistAmp * sin(twistPhase + fi * 0.73));
-        z.yz *= rot(twistAmp * 0.7 * cos(twistPhase * 0.83 + fi * 1.1));
-        z.xy *= rot(twistAmp * 0.4 * sin(twistPhase * 0.67 + fi * 0.51 + 1.5));
-        z = z * scale + offset;
-        dr = dr * abs(scale) + 1.0;
-        trap = min(trap, length(z.xz));
-        trap = min(trap, abs(z.y));
+vec2 phantomField(vec3 p,Phantom ph){
+  if(ph.presence<0.02) return vec2(0.0);
+  vec3 local=p-ph.center;
+  float maxR=ph.scale*3.5;
+  if(dot(local,local)>maxR*maxR) return vec2(0.0);
+  vec3 fwd=ph.facing;
+  vec3 right=normalize(cross(fwd,vec3(0,1,0.1)));
+  vec3 up=cross(right,fwd);
+  float x=dot(local,right)/ph.scale, y=dot(local,up)/ph.scale, z=dot(local,fwd)/ph.scale;
+  float deform=0.0, darkness=0.0;
+  if(ph.kind<0.45){
+    float face=length(vec3(x*0.8,y*0.65,z))-1.0;
+    float eyeL=length(vec3(abs(x)-0.32,y-0.15,z+0.1))-0.12;
+    float pupilL=length(vec3(abs(x)-0.32,y-0.15,z+0.05))-0.04;
+    float nose=length(vec2(x*2.0,z+0.15))-0.08;
+    nose=max(nose,-(y+0.05)); nose=max(nose,y-0.15);
+    float mouth=length(vec2(x*1.2,y+0.35))-0.2;
+    mouth=max(mouth,abs(z+0.1)-0.05);
+    deform=-0.015*max(0.,1.-face*1.5)-0.012*max(0.,1.-eyeL*8.)
+          -0.004*max(0.,1.-abs(nose)*10.)-0.003*max(0.,1.-abs(mouth)*8.);
+    darkness=0.6*max(0.,1.-pupilL*15.);
+  }else if(ph.kind<0.7){
+    float es=0.25+0.1*sin(ph.center.x);
+    float eyeL=length(vec3(abs(x)-es,y,z))-0.1;
+    float pupilL=length(vec3(abs(x)-es,y,z+0.04))-0.03;
+    deform=-0.01*max(0.,1.-eyeL*8.);
+    darkness=0.5*max(0.,1.-pupilL*18.);
+  }else if(ph.kind<0.88){
+    float hand=1e10;
+    for(int f=0;f<5;f++){
+      float a2=(float(f)-2.)*0.3+0.05*sin(ph.center.y+float(f));
+      float ca=cos(a2),sa=sin(a2);
+      float fx=x*ca+y*sa,fy=-x*sa+y*ca;
+      hand=min(hand,length(vec2(fx,max(0.,abs(fy-0.3)-0.2)))-0.04);
     }
-    return vec2(length(z) / abs(dr), trap);
+    hand=min(hand,length(vec2(x,y+0.05))-0.2);
+    deform=-0.008*max(0.,1.-hand*6.);
+  }else{
+    float body=length(vec3(x*1.2,y,z))-0.3;
+    float head=length(vec3(x*1.5,y-0.35,z+0.1))-0.15;
+    float eyeL=length(vec3(abs(x)-0.08,y-0.38,z+0.2))-0.03;
+    deform=-0.008*max(0.,1.-body*4.)-0.006*max(0.,1.-head*6.)-0.004*max(0.,1.-eyeL*12.);
+    darkness=0.4*max(0.,1.-eyeL*20.);
+  }
+  return vec2(deform,darkness)*ph.presence;
 }
 
-vec2 kaliIFS(vec3 p, float time) {
-    float scale = mix(1.8, 2.25, 0.5 + 0.5 * sin(time * 0.037))
-                + 0.06 * sin(time * 0.0083 + 1.0);
-    vec3 offset = vec3(
-        1.0 + 0.12*sin(time*0.029) + 0.05*sin(time*0.0067),
-        0.92 + 0.12*cos(time*0.033) + 0.04*cos(time*0.0053+0.7),
-        1.05 + 0.1*sin(time*0.041+2.0) + 0.05*sin(time*0.0079+1.3));
-    float twistAmp = 0.06 + 0.04*sin(time*0.0059) + 0.025*cos(time*0.023+2.0);
-    float twistPhase = time * 0.015;
-    float trap = 1e10; vec3 z = p; float dr = 1.0;
-    for (int i = 0; i < 8; i++) {
-        z = abs(z);
-        if (z.x-z.y < 0.0) z.xy = z.yx;
-        if (z.x-z.z < 0.0) z.xz = z.zx;
-        if (z.y-z.z < 0.0) z.yz = z.zy;
-        float fi = float(i);
-        z.xz *= rot(twistAmp * sin(twistPhase + fi*0.61));
-        z.xy *= rot(twistAmp * 0.6 * cos(twistPhase*0.77 + fi*0.89));
-        z = z * scale - offset * (scale - 1.0);
-        dr = dr * scale + 1.0;
-        trap = min(trap, length(z.xy));
-        trap = min(trap, abs(z.z));
+// --- Fractals ---
+vec2 mandelbox(vec3 pos,float time){
+  float scale=mix(2.3,2.9,0.5+0.5*sin(time*0.053))+0.08*sin(time*0.017+0.5);
+  float foldLimit=mix(0.95,1.15,0.5+0.5*sin(time*0.041+1.0))+0.04*cos(time*0.013);
+  float minR2=mix(0.2,0.5,0.5+0.5*cos(time*0.047))+0.06*sin(time*0.011+2.0);
+  float fixR2=1.0+0.05*sin(time*0.0091);
+  float twA=0.08+0.06*sin(time*0.0071)+0.03*sin(time*0.019+1.0);
+  float twP=time*0.021;
+  vec3 off=pos; float dr=1.0; vec3 z=pos; float trap=1e10;
+  for(int i=0;i<MBOX_ITER;i++){
+    z=clamp(z,-foldLimit,foldLimit)*2.0-z;
+    float r2=dot(z,z);
+    if(r2<minR2){float t2=fixR2/minR2;z*=t2;dr*=t2;}
+    else if(r2<fixR2){float t2=fixR2/r2;z*=t2;dr*=t2;}
+    float fi=float(i);
+    z.xz*=rot(twA*sin(twP+fi*0.73));
+    z.yz*=rot(twA*0.7*cos(twP*0.83+fi*1.1));
+    z.xy*=rot(twA*0.4*sin(twP*0.67+fi*0.51+1.5));
+    z=z*scale+off; dr=dr*abs(scale)+1.0;
+    trap=min(trap,length(z.xz)); trap=min(trap,abs(z.y));
+  }
+  return vec2(length(z)/abs(dr),trap);
+}
+
+vec2 kaliIFS(vec3 p,float time){
+  float scale=mix(1.8,2.25,0.5+0.5*sin(time*0.037))+0.06*sin(time*0.0083+1.0);
+  vec3 off=vec3(1.+.12*sin(time*.029)+.05*sin(time*.0067),
+    .92+.12*cos(time*.033)+.04*cos(time*.0053+.7),
+    1.05+.1*sin(time*.041+2.)+.05*sin(time*.0079+1.3));
+  float twA=.06+.04*sin(time*.0059)+.025*cos(time*.023+2.);
+  float twP=time*.015;
+  float trap=1e10; vec3 z=p; float dr=1.0;
+  for(int i=0;i<KALI_ITER;i++){
+    z=abs(z);
+    if(z.x-z.y<0.)z.xy=z.yx;
+    if(z.x-z.z<0.)z.xz=z.zx;
+    if(z.y-z.z<0.)z.yz=z.zy;
+    float fi=float(i);
+    z.xz*=rot(twA*sin(twP+fi*.61));
+    z.xy*=rot(twA*.6*cos(twP*.77+fi*.89));
+    z=z*scale-off*(scale-1.); dr=dr*scale+1.;
+    trap=min(trap,length(z.xy)); trap=min(trap,abs(z.z));
+  }
+  return vec2(length(z)/dr,trap);
+}
+
+vec3 scene(vec3 p,float time){
+  vec3 p1=p;
+  p1.xy*=rot(time*.009+.02*sin(time*.0061));
+  p1.yz*=rot(time*.006+.015*cos(time*.0047));
+  vec3 p2=p;
+  p2.xz*=rot(time*.011+2.+.02*sin(time*.0073));
+  p2.yz*=rot(sin(time*.008)*.35+.01*cos(time*.0037));
+  vec2 d1=mandelbox(p1,time);
+  vec2 d2=kaliIFS(p2*.55,time); d2.x/=.55;
+  float k=.2+.12*sin(time*.015)+.06*sin(time*.0043+1.);
+  float h=clamp(.5+.5*(d2.x-d1.x)/k,0.,1.);
+  float dist=mix(d2.x,d1.x,h)-k*h*(1.-h);
+  float trap=mix(d2.y,d1.y,h);
+  float totalDark=0.0;
+  if(u_par>0.01){
+    for(int i=0;i<4;i++){
+      Phantom ph=getPhantom(float(i),time);
+      vec2 pr=phantomField(p,ph);
+      dist+=pr.x*u_par; totalDark+=pr.y*u_par;
     }
-    return vec2(length(z) / dr, trap);
+    totalDark=min(totalDark,1.0);
+  }
+  return vec3(dist,trap,totalDark);
 }
 
-vec2 scene(vec3 p, float time) {
-    vec3 p1 = p;
-    p1.xy *= rot(time*0.009 + 0.02*sin(time*0.0061));
-    p1.yz *= rot(time*0.006 + 0.015*cos(time*0.0047));
-    vec3 p2 = p;
-    p2.xz *= rot(time*0.011 + 2.0 + 0.02*sin(time*0.0073));
-    p2.yz *= rot(sin(time*0.008)*0.35 + 0.01*cos(time*0.0037));
+float sceneDist(vec3 p,float time){return scene(p,time).x;}
 
-    vec2 d1 = mandelbox(p1, time);
-    vec2 d2 = kaliIFS(p2*0.55, time); d2.x /= 0.55;
-
-    float k = 0.2 + 0.12*sin(time*0.015) + 0.06*sin(time*0.0043+1.0);
-    float h = clamp(0.5 + 0.5*(d2.x-d1.x)/k, 0.0, 1.0);
-    return vec2(mix(d2.x,d1.x,h) - k*h*(1.0-h), mix(d2.y,d1.y,h));
+float calcAO(vec3 pos,vec3 nor,float time){
+  ${S.ao===0?'return 1.0;':`float occ=0.,sca=1.;
+  for(int i=0;i<${S.ao};i++){
+    float h=.008+.12*float(i)/${Math.max(S.ao-1,1).toFixed(1)};
+    occ+=(h-sceneDist(pos+h*nor,time))*sca; sca*=.8;
+  }
+  return clamp(1.-3.*occ,0.,1.);`}
 }
 
-float sceneDist(vec3 p, float time) { return scene(p, time).x; }
-
-float calcAO(vec3 pos, vec3 nor, float time) {
-    float occ = 0.0, sca = 1.0;
-    for (int i = 0; i < 4; i++) {
-        float h = 0.008 + 0.12*float(i)/3.0;
-        occ += (h - sceneDist(pos + h*nor, time)) * sca;
-        sca *= 0.8;
-    }
-    return clamp(1.0 - 3.0*occ, 0.0, 1.0);
+vec3 calcNormal(vec3 p,float time){
+  vec2 e=vec2(0.0004,0);
+  return normalize(vec3(
+    sceneDist(p+e.xyy,time)-sceneDist(p-e.xyy,time),
+    sceneDist(p+e.yxy,time)-sceneDist(p-e.yxy,time),
+    sceneDist(p+e.yyx,time)-sceneDist(p-e.yyx,time)));
 }
 
-vec3 calcNormal(vec3 p, float time) {
-    vec2 e = vec2(0.0004, 0.0);
-    return normalize(vec3(
-        sceneDist(p+e.xyy,time)-sceneDist(p-e.xyy,time),
-        sceneDist(p+e.yxy,time)-sceneDist(p-e.yxy,time),
-        sceneDist(p+e.yyx,time)-sceneDist(p-e.yyx,time)));
+void main(){
+  vec2 uv=(gl_FragCoord.xy-.5*u_res)/u_res.y;
+  float time=u_time;
+  vec3 ro=u_ro;
+  vec3 rd=normalize(uv.x*u_right+uv.y*u_up+u_zoom*u_fwd);
+
+  float t_march=0.; float d; vec3 p;
+  int steps=0; float trap=0.; float phantomDark=0.;
+
+  for(int i=0;i<STEPS;i++){
+    p=ro+t_march*rd;
+    vec3 res=scene(p,time);
+    d=res.x; trap=res.y; phantomDark=res.z;
+    if(abs(d)<0.0003||t_march>20.) break;
+    // Adaptive stepping: bigger steps when far from surface
+    t_march += d * (0.7 + 0.25 * smoothstep(0.0, 0.1, abs(d)));
+    steps=i;
+  }
+
+  vec3 col=vec3(0);
+  if(t_march<20.){
+    vec3 nor=calcNormal(p,time);
+    float ao=calcAO(p,nor,time);
+    float colorTime=time*.022;
+    float satW1=sin(time*.0052),satW2=sin(time*.003+1.7),satW3=sin(time*.016+.5);
+    float satRaw=satW1*.4+satW2*.35+satW3*.25+u_satBias;
+    float saturation=smoothstep(-.2,.7,satRaw);
+    float warmth=.5+.5*sin(time*.0041+.3);
+    vec3 sandT=vec3(.35,.30,.25)*(.8+.2*warmth);
+    vec3 stoneT=vec3(.28,.28,.30)*(.8+.2*(1.-warmth));
+    vec3 neutralBase=mix(stoneT,sandT,warmth);
+    float regime=sin(time*.011);
+    vec3 warm_c=palette(trap*.4+colorTime,vec3(.5,.45,.35),vec3(.5,.4,.3),vec3(1,.8,.6),vec3(0,.15,.3));
+    vec3 cool_c=palette(trap*.4+colorTime*.8,vec3(.35,.4,.5),vec3(.3,.4,.5),vec3(.6,.8,1),vec3(.3,.15,0));
+    vec3 jewel_c=palette(trap*.5+colorTime*1.2,vec3(.5,.35,.4),vec3(.5,.5,.45),vec3(.8,1,.7),vec3(.05,.3,.55));
+    float ww=max(0.,regime),wc=max(0.,-regime),wj=.5+.5*sin(time*.0073+2.);
+    vec3 vividC=mix(mix(cool_c,warm_c,ww/(ww+wc+.001)),jewel_c,wj*.35);
+    float pv=sin(dot(p,vec3(3.7,2.3,1.9))+time*.04)*.5+.5;
+    float pv2=cos(dot(p,vec3(1.3,4.1,2.7))-time*.03)*.5+.5;
+    vividC=mix(vividC,vividC.gbr,pv*.25);
+    vividC=mix(vividC,vividC.brg,pv2*.15);
+    vec3 matColor=mix(neutralBase,vividC*(1.+saturation*.3),saturation);
+    matColor*=1.-phantomDark*.7;
+    vec3 vAcc=palette(trap*.7+colorTime*1.5+.5,vec3(.5),vec3(.6,.6,.5),vec3(1,1,.8),vec3(0,.33,.67));
+    vec3 mAcc=vec3(dot(vAcc,vec3(.299,.587,.114)))*1.1;
+    vec3 accent=mix(mAcc,vAcc,saturation)*(1.-phantomDark*.5);
+    vec3 L1=normalize(vec3(sin(time*.037),.7+.3*cos(time*.029),cos(time*.043)));
+    vec3 L2=normalize(vec3(-cos(time*.031+1.),-.4,sin(time*.037+2.)));
+    float diff1=max(dot(nor,L1),0.),diff2=max(dot(nor,L2),0.);
+    float spec=pow(max(dot(reflect(-L1,nor),-rd),0.),mix(20.,40.,saturation));
+    float fres=pow(1.-max(dot(nor,-rd),0.),3.5);
+    float sss=max(0.,dot(rd,-nor+L1*.3))*.12;
+    float ambL=mix(.10,.07,saturation);
+    col=matColor*(ambL+diff1*.65)*ao;
+    col+=matColor*.5*diff2*.2*ao;
+    col+=accent*spec*mix(.3,.5,saturation);
+    col+=accent*fres*mix(.1,.2,saturation);
+    col+=matColor*sss;
+    col+=accent*pow(float(steps)/float(STEPS),2.)*.35;
+    vec3 fogTint=mix(neutralBase*.08,mix(vec3(.005,.005,.012),matColor*.04,.4),saturation);
+    float fog=1.-exp(-t_march*.12*u_fogMul);
+    col=mix(col,fogTint,fog*.8);
+  }else{
+    col=.012*(.5+.5*cos(time*.012+vec3(0,1,2)));
+    col+=smoothstep(.997,1.,hash(vec3(floor(uv*250.),1.)))*.15;
+  }
+  vec2 q=gl_FragCoord.xy/u_res;
+  col*=.45+.55*pow(16.*q.x*q.y*(1.-q.x)*(1.-q.y),.18);
+  col+=hash(vec3(gl_FragCoord.xy,fract(time*60.)))*.025-.012;
+  col=(col*(2.51*col+.03))/(col*(2.43*col+.59)+.14);
+  col=pow(clamp(col,0.,1.),vec3(.88));
+  float ca=.001*length(uv);col.r*=1.+ca;col.b*=1.-ca;
+  fragColor=vec4(col,1);
+}`;
 }
 
-void main() {
-    vec2 uv = (gl_FragCoord.xy - 0.5*u_res) / u_res.y;
-    float time = u_time;
-    vec3 ro = u_ro;
-    vec3 rd = normalize(uv.x*u_right + uv.y*u_up + u_zoom*u_fwd);
+// ============================================================
+// GL HELPERS
+// ============================================================
 
-    float t_march = 0.0; float d; vec3 p; int steps = 0; float trap = 0.0;
-    for (int i = 0; i < 100; i++) {
-        p = ro + t_march*rd;
-        vec2 res = scene(p, time);
-        d = res.x; trap = res.y;
-        if (abs(d) < 0.0003 || t_march > 20.0) break;
-        t_march += d * 0.75;
-        steps = i;
-    }
-
-    vec3 col = vec3(0.0);
-    if (t_march < 20.0) {
-        vec3 nor = calcNormal(p, time);
-        float ao = calcAO(p, nor, time);
-        float colorTime = time * 0.022;
-
-        // ======================================================
-        // SATURATION ENVELOPE
-        //
-        // Multiple slow waves combine to create long periods of
-        // muted stone/sand, punctuated by blooms of vivid color.
-        // The waves are asymmetric — color rises faster than it
-        // fades, like a flower opening.
-        // ======================================================
-
-        // Base saturation wave: ~2 minute full cycle
-        float satWave1 = sin(time * 0.0052);
-        // Secondary wave: ~3.5 minute cycle, offset
-        float satWave2 = sin(time * 0.003 + 1.7);
-        // Fast accent pulse: ~40 second bloom
-        float satWave3 = sin(time * 0.016 + 0.5);
-
-        // Combine: mostly low, with occasional peaks
-        // The max(0, ...) means it spends more time desaturated
-        float satRaw = satWave1 * 0.4 + satWave2 * 0.35 + satWave3 * 0.25;
-
-        // Reshape: push towards 0 (grey) most of the time,
-        // let it bloom to 1 (vivid) occasionally
-        // smoothstep creates a sharper transition — grey grey grey then POP
-        float saturation = smoothstep(-0.2, 0.7, satRaw);
-
-        // When desaturated, what base tone? Shift between warm sand and cool grey
-        float warmth = 0.5 + 0.5 * sin(time * 0.0041 + 0.3);
-        // Warm sand base
-        vec3 sandTone = vec3(0.35, 0.30, 0.25) * (0.8 + 0.2 * warmth);
-        // Cool stone base
-        vec3 stoneTone = vec3(0.28, 0.28, 0.30) * (0.8 + 0.2 * (1.0 - warmth));
-        // Blend between sand and stone
-        vec3 neutralBase = mix(stoneTone, sandTone, warmth);
-
-        // ======================================================
-        // VIVID COLOR (same palette system as before)
-        // ======================================================
-
-        float regime = sin(time * 0.011);
-
-        vec3 warm = palette(trap*0.4+colorTime,
-            vec3(.5,.45,.35),vec3(.5,.4,.3),vec3(1,.8,.6),vec3(0,.15,.3));
-        vec3 cool = palette(trap*0.4+colorTime*0.8,
-            vec3(.35,.4,.5),vec3(.3,.4,.5),vec3(.6,.8,1),vec3(.3,.15,0));
-        vec3 jewel = palette(trap*0.5+colorTime*1.2,
-            vec3(.5,.35,.4),vec3(.5,.5,.45),vec3(.8,1,.7),vec3(.05,.3,.55));
-
-        float ww = max(0.0,regime), wc = max(0.0,-regime);
-        float wj = 0.5+0.5*sin(time*0.0073+2.0);
-        vec3 vividColor = mix(
-            mix(cool, warm, ww/(ww+wc+.001)),
-            jewel, wj*0.35);
-
-        float pv = sin(dot(p,vec3(3.7,2.3,1.9))+time*0.04)*0.5+0.5;
-        float pv2 = cos(dot(p,vec3(1.3,4.1,2.7))-time*0.03)*0.5+0.5;
-        vividColor = mix(vividColor, vividColor.gbr, pv*0.25);
-        vividColor = mix(vividColor, vividColor.brg, pv2*0.15);
-
-        // When saturation blooms, make colors EXTRA vivid — push contrast
-        vec3 boostedVivid = vividColor * (1.0 + saturation * 0.3);
-
-        // ======================================================
-        // BLEND: neutral ↔ vivid based on saturation envelope
-        // ======================================================
-
-        // The material color transitions from neutral stone/sand to full vivid
-        vec3 matColor = mix(neutralBase, boostedVivid, saturation);
-
-        // Accent also desaturates in muted mode
-        vec3 vividAccent = palette(trap*0.7+colorTime*1.5+0.5,
-            vec3(.5),vec3(.6,.6,.5),vec3(1,1,.8),vec3(0,.33,.67));
-        vec3 mutedAccent = vec3(dot(vividAccent, vec3(0.299, 0.587, 0.114))) * 1.1;
-        vec3 accent = mix(mutedAccent, vividAccent, saturation);
-
-        // ======================================================
-        // LIGHTING — slightly warmer/cooler based on saturation
-        // ======================================================
-
-        vec3 L1 = normalize(vec3(sin(time*.037),.7+.3*cos(time*.029),cos(time*.043)));
-        vec3 L2 = normalize(vec3(-cos(time*.031+1.),-.4,sin(time*.037+2.)));
-
-        float diff1 = max(dot(nor,L1),0.0);
-        float diff2 = max(dot(nor,L2),0.0);
-        float spec = pow(max(dot(reflect(-L1,nor),-rd),0.0), mix(20.0, 40.0, saturation));
-        float fres = pow(1.0-max(dot(nor,-rd),0.0), 3.5);
-        float sss = max(0.0,dot(rd,-nor+L1*0.3))*0.12;
-
-        // Ambient is warmer in muted mode, cooler in vivid
-        float ambientLevel = mix(0.10, 0.07, saturation);
-        col = matColor * (ambientLevel + diff1 * 0.65) * ao;
-        col += matColor * 0.5 * diff2 * 0.2 * ao;
-        col += accent * spec * mix(0.3, 0.5, saturation);
-        col += accent * fres * mix(0.1, 0.2, saturation);
-        col += matColor * sss;
-        col += accent * pow(float(steps)/100.0, 2.0) * 0.35;
-
-        // Fog also shifts tone
-        vec3 fogTint = mix(
-            neutralBase * 0.08,           // muted: warm/grey fog
-            mix(vec3(.005,.005,.012), matColor*0.04, 0.4),  // vivid: colored fog
-            saturation
-        );
-        float fog = 1.0-exp(-t_march*0.12);
-        col = mix(col, fogTint, fog*0.8);
-
-    } else {
-        float bgP = time*0.012;
-        col = 0.012*(0.5+0.5*cos(bgP+vec3(0,1,2)))
-            + smoothstep(0.997,1.0,hash(vec3(floor(uv*250.0),1.0)))*0.15;
-    }
-
-    vec2 q = gl_FragCoord.xy/u_res;
-    col *= 0.45+0.55*pow(16.0*q.x*q.y*(1.0-q.x)*(1.0-q.y),0.18);
-    col += hash(vec3(gl_FragCoord.xy,fract(time*60.0)))*0.025-0.012;
-    col = (col*(2.51*col+0.03))/(col*(2.43*col+0.59)+0.14);
-    col = pow(clamp(col,0.0,1.0),vec3(0.88));
-    float ca = 0.001*length(uv);
-    col.r *= 1.0+ca; col.b *= 1.0-ca;
-    fragColor = vec4(col,1.0);
+function createShader(type, src) {
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+    console.error('Shader compile error:', gl.getShaderInfoLog(s));
+    gl.deleteShader(s);
+    return null;
+  }
+  return s;
 }
-`;
 
-// — GL —
-function createShader(gl,type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(s));gl.deleteShader(s);return null;}return s;}
-function createProgram(gl,v,f){const p=gl.createProgram();gl.attachShader(p,v);gl.attachShader(p,f);gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS)){console.error(gl.getProgramInfoLog(p));return null;}return p;}
-const vsh=createShader(gl,gl.VERTEX_SHADER,vertSrc);
-const fsh=createShader(gl,gl.FRAGMENT_SHADER,fragSrc);
-const program=createProgram(gl,vsh,fsh);
-const posLoc=gl.getAttribLocation(program,'a_pos');
-const uRes=gl.getUniformLocation(program,'u_res');
-const uTime=gl.getUniformLocation(program,'u_time');
-const uRo=gl.getUniformLocation(program,'u_ro');
-const uFwd=gl.getUniformLocation(program,'u_fwd');
-const uRight=gl.getUniformLocation(program,'u_right');
-const uUp=gl.getUniformLocation(program,'u_up');
-const uZoom=gl.getUniformLocation(program,'u_zoom');
-const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
-gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
-const vao=gl.createVertexArray();gl.bindVertexArray(vao);
-gl.enableVertexAttribArray(posLoc);gl.vertexAttribPointer(posLoc,2,gl.FLOAT,false,0,0);
+function linkProgram(vs, fs) {
+  const p = gl.createProgram();
+  gl.attachShader(p, vs);
+  gl.attachShader(p, fs);
+  gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+    console.error('Link error:', gl.getProgramInfoLog(p));
+    return null;
+  }
+  return p;
+}
 
-const v3={
-add:(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]],
-sub:(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],
-scale:(a,s)=>[a[0]*s,a[1]*s,a[2]*s],
-cross:(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],
-normalize:(a)=>{const l=Math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2])||1;return[a[0]/l,a[1]/l,a[2]/l];},
-lerp:(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t],
+function buildProgram(vertSrc, fragSrc) {
+  const v = createShader(gl.VERTEX_SHADER, vertSrc);
+  const f = createShader(gl.FRAGMENT_SHADER, fragSrc);
+  if (!v || !f) return null;
+  const p = linkProgram(v, f);
+  gl.deleteShader(v);
+  gl.deleteShader(f);
+  return p;
+}
+
+// Fullscreen quad VAO
+const quadBuf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+const vao = gl.createVertexArray();
+gl.bindVertexArray(vao);
+gl.enableVertexAttribArray(0);
+gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+function drawQuad() {
+  gl.bindVertexArray(vao);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+}
+
+// ============================================================
+// FBO (for bloom pipeline)
+// ============================================================
+
+function createFBO(w, h, internalFmt, type) {
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, internalFmt, w, h, 0, gl.RGBA, type, null);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  const fbo = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  return { fbo, tex, w, h };
+}
+
+function destroyFBO(f) {
+  if (!f) return;
+  gl.deleteTexture(f.tex);
+  gl.deleteFramebuffer(f.fbo);
+}
+
+function resizeFBO(old, w, h, intFmt, type) {
+  if (old && old.w === w && old.h === h) return old;
+  destroyFBO(old);
+  return createFBO(w, h, intFmt, type);
+}
+
+// Detect float texture support
+const extHalf = gl.getExtension('EXT_color_buffer_half_float');
+const extFloat = gl.getExtension('EXT_color_buffer_float');
+const canFloat = !!(extHalf || extFloat);
+// Pick best available format
+const fboFmt = canFloat ? gl.RGBA16F : gl.RGBA8;
+const fboType = canFloat ? gl.HALF_FLOAT : gl.UNSIGNED_BYTE;
+
+let fboScene = null, fboBloomA = null, fboBloomB = null;
+
+// ============================================================
+// BUILD PROGRAMS
+// ============================================================
+
+let fractalProg = null, fu = {};
+
+function buildFractalShader() {
+  if (fractalProg) gl.deleteProgram(fractalProg);
+  fractalProg = buildProgram(VERT_QUAD, generateFractalFrag());
+  if (!fractalProg) return;
+  fu = {};
+  ['u_res','u_time','u_ro','u_fwd','u_right','u_up','u_zoom','u_par','u_satBias','u_fogMul'].forEach(n => {
+    fu[n] = gl.getUniformLocation(fractalProg, n);
+  });
+  shaderDirty = false;
+}
+
+let threshProg=null, threshU={};
+let blurProg=null, blurU={};
+let compositeProg=null, compositeU={};
+
+function buildPostPrograms() {
+  threshProg = buildProgram(VERT_UV, BLOOM_THRESH_FRAG);
+  if (threshProg) {
+    threshU.tex = gl.getUniformLocation(threshProg, 'u_tex');
+    threshU.threshold = gl.getUniformLocation(threshProg, 'u_threshold');
+  }
+  blurProg = buildProgram(VERT_UV, BLUR_FRAG);
+  if (blurProg) {
+    blurU.tex = gl.getUniformLocation(blurProg, 'u_tex');
+    blurU.dir = gl.getUniformLocation(blurProg, 'u_dir');
+  }
+  compositeProg = buildProgram(VERT_UV, COMPOSITE_FRAG);
+  if (compositeProg) {
+    compositeU.scene = gl.getUniformLocation(compositeProg, 'u_scene');
+    compositeU.bloom = gl.getUniformLocation(compositeProg, 'u_bloom');
+    compositeU.bloomIntensity = gl.getUniformLocation(compositeProg, 'u_bloomIntensity');
+  }
+}
+
+buildFractalShader();
+buildPostPrograms();
+
+// ============================================================
+// CAMERA (CPU side)
+// ============================================================
+
+const v3 = {
+  add:       (a,b) => [a[0]+b[0],a[1]+b[1],a[2]+b[2]],
+  sub:       (a,b) => [a[0]-b[0],a[1]-b[1],a[2]-b[2]],
+  scale:     (a,s) => [a[0]*s,a[1]*s,a[2]*s],
+  dot:       (a,b) => a[0]*b[0]+a[1]*b[1]+a[2]*b[2],
+  cross:     (a,b) => [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],
+  normalize: (a)   => { const l=Math.hypot(a[0],a[1],a[2])||1; return [a[0]/l,a[1]/l,a[2]/l]; },
+  lerp:      (a,b,t) => [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t],
 };
-function fract(x){return x-Math.floor(x);}
-function hash3(n){return[fract(Math.sin(n)*43758.5453),fract(Math.sin(n+1)*22578.1459),fract(Math.sin(n+2)*19642.349)];}
+
+function fract(x) { return x - Math.floor(x); }
+function hash3(n) {
+  return [fract(Math.sin(n)*43758.5453), fract(Math.sin(n+1)*22578.1459), fract(Math.sin(n+2)*19642.349)];
+}
 
 let camPos=[0,0,0],camFwd=[0,0,1],camRight=[1,0,0],camUp=[0,1,0],camInit=false;
-let paused=false,time=0;
-let mouse=[0,0],targetMouse=[0,0];
-let depthAccum=0,userRoll=0,rollSmooth=0;
-let rightDragging=false,rightDragStartX=0,rightDragStartRoll=0;
-let pinchStartDist=0,pinchStartAngle=0,pinchStartDepth=0,pinchStartRoll=0;
-let wallPrev=0,started=false,fpsArr=[];
-const MAX_DT=0.02,TIME_SPEED=0.7;
+let paused=false, time=0;
+let mouse=[0,0], targetMouse=[0,0];
+let depthAccum=0, userRoll=0, rollSmooth=0;
+let rightDragging=false, rightDragStartX=0, rightDragStartRoll=0;
+let pinchStartDist=0, pinchStartAngle=0, pinchStartDepth=0, pinchStartRoll=0;
+let wallPrev=0, started=false, fpsArr=[];
+const MAX_DT = 0.02;
 
-function rawCameraPath(t){return[1.8*Math.cos(t*0.097)+0.5*Math.sin(t*0.151),0.8*Math.sin(t*0.067)+0.35*Math.cos(t*0.127),1.8*Math.sin(t*0.109)+0.5*Math.cos(t*0.137)];}
-function lookTarget(t){const c=9,ph=Math.floor(t/c),lt=fract(t/c),s=lt*lt*lt*(lt*(lt*6-15)+10),a=hash3(ph*17.31),b=hash3((ph+1)*17.31);return[(a[0]*3-1.5)+(b[0]*3-1.5-(a[0]*3-1.5))*s,(a[1]*3-1.5)+(b[1]*3-1.5-(a[1]*3-1.5))*s,(a[2]*3-1.5)+(b[2]*3-1.5-(a[2]*3-1.5))*s];}
-
-function computeCamera(time,dt){
-let dp=rawCameraPath(time);dp=v3.add(dp,v3.scale(camFwd,depthAccum));
-let ta=lookTarget(time);ta=v3.add(ta,[mouse[0]*0.5,-mouse[1]*0.5,0]);
-const az=1.2+0.6*Math.pow(0.5+0.5*Math.sin(time*0.027),2);
-const roll=Math.sin(time*0.013)*0.1+rollSmooth;
-let df=v3.normalize(v3.sub(ta,dp));
-const up=[Math.sin(roll),Math.cos(roll),0];
-let dr=v3.normalize(v3.cross(df,up)),du=v3.cross(dr,df);
-if(!camInit){camPos=dp.slice();camFwd=df.slice();camRight=dr.slice();camUp=du.slice();camInit=true;}
-else{const pr=1-Math.exp(-dt*1.5),or=1-Math.exp(-dt*1.2);
-camPos=v3.lerp(camPos,dp,pr);camFwd=v3.normalize(v3.lerp(camFwd,df,or));
-camRight=v3.normalize(v3.lerp(camRight,dr,or));camUp=v3.normalize(v3.lerp(camUp,du,or));}
-return az;}
-
-function resize(){const d=Math.min(window.devicePixelRatio,1);canvas.width=window.innerWidth*d;canvas.height=window.innerHeight*d;gl.viewport(0,0,canvas.width,canvas.height);}
-resize();window.addEventListener('resize',resize);
-canvas.addEventListener('mousemove',(e)=>{if(!rightDragging){targetMouse[0]=(e.clientX/window.innerWidth)*2-1;targetMouse[1]=(e.clientY/window.innerHeight)*2-1;}if(rightDragging){userRoll=rightDragStartRoll+(e.clientX-rightDragStartX)/window.innerWidth*Math.PI*2;}});
-canvas.addEventListener('mouseleave',()=>{targetMouse[0]=0;targetMouse[1]=0;rightDragging=false;});
-canvas.addEventListener('mousedown',(e)=>{if(e.button===2){rightDragging=true;rightDragStartX=e.clientX;rightDragStartRoll=userRoll;e.preventDefault();}});
-canvas.addEventListener('mouseup',(e)=>{if(e.button===2)rightDragging=false;if(e.button===0&&!rightDragging)paused=!paused;});
-canvas.addEventListener('contextmenu',(e)=>e.preventDefault());
-canvas.addEventListener('wheel',(e)=>{e.preventDefault();let d=e.deltaY;if(e.deltaMode===1)d*=40;if(e.deltaMode===2)d*=800;if(e.shiftKey)userRoll+=d*0.002;else depthAccum+=d*0.002;},{passive:false});
-function tDist(t){const dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.sqrt(dx*dx+dy*dy);}
-function tAngle(t){return Math.atan2(t[1].clientY-t[0].clientY,t[1].clientX-t[0].clientX);}
-canvas.addEventListener('touchstart',(e)=>{e.preventDefault();if(e.touches.length===2){pinchStartDist=tDist(e.touches);pinchStartAngle=tAngle(e.touches);pinchStartDepth=depthAccum;pinchStartRoll=userRoll;}},{passive:false});
-canvas.addEventListener('touchmove',(e)=>{e.preventDefault();if(e.touches.length===1){targetMouse[0]=(e.touches[0].clientX/window.innerWidth)*2-1;targetMouse[1]=(e.touches[0].clientY/window.innerHeight)*2-1;}if(e.touches.length===2){depthAccum=pinchStartDepth-(tDist(e.touches)/pinchStartDist-1)*4;userRoll=pinchStartRoll+(tAngle(e.touches)-pinchStartAngle);const cx=(e.touches[0].clientX+e.touches[1].clientX)/2,cy=(e.touches[0].clientY+e.touches[1].clientY)/2;targetMouse[0]=(cx/window.innerWidth)*2-1;targetMouse[1]=(cy/window.innerHeight)*2-1;}},{passive:false});
-canvas.addEventListener('touchend',(e)=>{if(e.touches.length===0){targetMouse[0]=0;targetMouse[1]=0;}if(e.changedTouches.length>=3)paused=!paused;});
-document.addEventListener('keydown',(e)=>{if(e.key===' '){paused=!paused;e.preventDefault();}if(e.key==='r'||e.key==='R'){depthAccum=0;userRoll=0;}if(e.key==='='||e.key==='+')depthAccum-=0.3;if(e.key==='-'||e.key==='_')depthAccum+=0.3;if(e.key==='[')userRoll-=0.15;if(e.key===']')userRoll+=0.15;});
-
-function frame(wn){
-requestAnimationFrame(frame);
-if(!started){wallPrev=wn;started=true;return;}
-const wd=(wn-wallPrev)/1000;wallPrev=wn;
-const dt=Math.max(0,Math.min(wd,MAX_DT));
-if(wd>0&&wd<1){fpsArr.push(wd);if(fpsArr.length>60)fpsArr.shift();document.getElementById('fps').textContent=(fpsArr.length/fpsArr.reduce((a,b)=>a+b)|0)+' fps';}
-if(!paused)time+=dt*TIME_SPEED;
-const sr=1-Math.exp(-dt*1.5);
-mouse[0]+=(targetMouse[0]-mouse[0])*sr;
-mouse[1]+=(targetMouse[1]-mouse[1])*sr;
-rollSmooth+=(userRoll-rollSmooth)*(1-Math.exp(-dt*2.5));
-const zoom=computeCamera(time,dt);
-gl.useProgram(program);
-gl.uniform2f(uRes,canvas.width,canvas.height);
-gl.uniform1f(uTime,time);
-gl.uniform3f(uRo,camPos[0],camPos[1],camPos[2]);
-gl.uniform3f(uFwd,camFwd[0],camFwd[1],camFwd[2]);
-gl.uniform3f(uRight,camRight[0],camRight[1],camRight[2]);
-gl.uniform3f(uUp,camUp[0],camUp[1],camUp[2]);
-gl.uniform1f(uZoom,zoom);
-gl.bindVertexArray(vao);
-gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+function rawCameraPath(t) {
+  return [1.8*Math.cos(t*.097)+.5*Math.sin(t*.151), .8*Math.sin(t*.067)+.35*Math.cos(t*.127), 1.8*Math.sin(t*.109)+.5*Math.cos(t*.137)];
 }
+
+function lookTarget(t) {
+  const c=9, ph=Math.floor(t/c), lt=fract(t/c);
+  const s=lt*lt*lt*(lt*(lt*6-15)+10);
+  const a=hash3(ph*17.31), b=hash3((ph+1)*17.31);
+  return [(a[0]*3-1.5)+(b[0]*3-1.5-(a[0]*3-1.5))*s,
+          (a[1]*3-1.5)+(b[1]*3-1.5-(a[1]*3-1.5))*s,
+          (a[2]*3-1.5)+(b[2]*3-1.5-(a[2]*3-1.5))*s];
+}
+
+function computeCamera(time, dt) {
+  let dp = rawCameraPath(time);
+  dp = v3.add(dp, v3.scale(camFwd, depthAccum));
+  let ta = lookTarget(time);
+  ta = v3.add(ta, [mouse[0]*.5, -mouse[1]*.5, 0]);
+  const az = 1.2 + .6*Math.pow(.5+.5*Math.sin(time*.027), 2);
+  const roll = Math.sin(time*.013)*.1 + rollSmooth;
+  let df = v3.normalize(v3.sub(ta, dp));
+  const up = [Math.sin(roll), Math.cos(roll), 0];
+  let dr = v3.normalize(v3.cross(df, up));
+  let du = v3.cross(dr, df);
+  if (!camInit) {
+    camPos=dp.slice(); camFwd=df.slice(); camRight=dr.slice(); camUp=du.slice(); camInit=true;
+  } else {
+    const pr=1-Math.exp(-dt*1.5), or_=1-Math.exp(-dt*1.2);
+    camPos=v3.lerp(camPos,dp,pr);
+    camFwd=v3.normalize(v3.lerp(camFwd,df,or_));
+    camRight=v3.normalize(v3.lerp(camRight,dr,or_));
+    camUp=v3.normalize(v3.lerp(camUp,du,or_));
+  }
+  return az;
+}
+
+// ============================================================
+// RESIZE
+// ============================================================
+
+function doResize() {
+  const dpr = Math.min(window.devicePixelRatio * settings.res, 3.0);
+  canvas.width = Math.round(window.innerWidth * dpr);
+  canvas.height = Math.round(window.innerHeight * dpr);
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  // Resize bloom FBOs
+  fboScene = resizeFBO(fboScene, canvas.width, canvas.height, fboFmt, fboType);
+  const bw = Math.round(canvas.width/2), bh = Math.round(canvas.height/2);
+  fboBloomA = resizeFBO(fboBloomA, bw, bh, fboFmt, fboType);
+  fboBloomB = resizeFBO(fboBloomB, bw, bh, fboFmt, fboType);
+}
+doResize();
+window.addEventListener('resize', doResize);
+
+// ============================================================
+// INPUT
+// ============================================================
+
+canvas.addEventListener('mousemove', e => {
+  if (!rightDragging) {
+    targetMouse[0]=(e.clientX/window.innerWidth)*2-1;
+    targetMouse[1]=(e.clientY/window.innerHeight)*2-1;
+  }
+  if (rightDragging) userRoll=rightDragStartRoll+(e.clientX-rightDragStartX)/window.innerWidth*Math.PI*2;
+});
+canvas.addEventListener('mouseleave', () => { targetMouse[0]=0; targetMouse[1]=0; rightDragging=false; });
+canvas.addEventListener('mousedown', e => {
+  if (e.button===2) { rightDragging=true; rightDragStartX=e.clientX; rightDragStartRoll=userRoll; e.preventDefault(); }
+});
+canvas.addEventListener('mouseup', e => {
+  if (e.button===2) rightDragging=false;
+  if (e.button===0 && !rightDragging && !panelOpen) paused=!paused;
+});
+canvas.addEventListener('contextmenu', e => e.preventDefault());
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  let d=e.deltaY;
+  if (e.deltaMode===1) d*=40;
+  if (e.deltaMode===2) d*=800;
+  if (e.shiftKey) userRoll+=d*.002; else depthAccum+=d*.002;
+}, {passive:false});
+
+function tDist(t) { const dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+function tAngle(t) { return Math.atan2(t[1].clientY-t[0].clientY,t[1].clientX-t[0].clientX); }
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  if (e.touches.length===2) {
+    pinchStartDist=tDist(e.touches); pinchStartAngle=tAngle(e.touches);
+    pinchStartDepth=depthAccum; pinchStartRoll=userRoll;
+  }
+}, {passive:false});
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (e.touches.length===1) {
+    targetMouse[0]=(e.touches[0].clientX/window.innerWidth)*2-1;
+    targetMouse[1]=(e.touches[0].clientY/window.innerHeight)*2-1;
+  }
+  if (e.touches.length===2) {
+    depthAccum=pinchStartDepth-(tDist(e.touches)/pinchStartDist-1)*4;
+    userRoll=pinchStartRoll+(tAngle(e.touches)-pinchStartAngle);
+    const cx=(e.touches[0].clientX+e.touches[1].clientX)/2;
+    const cy=(e.touches[0].clientY+e.touches[1].clientY)/2;
+    targetMouse[0]=(cx/window.innerWidth)*2-1;
+    targetMouse[1]=(cy/window.innerHeight)*2-1;
+  }
+}, {passive:false});
+
+canvas.addEventListener('touchend', e => {
+  if (e.touches.length===0) { targetMouse[0]=0; targetMouse[1]=0; }
+  if (e.changedTouches.length>=3) paused=!paused;
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key===' ') { paused=!paused; e.preventDefault(); }
+  if (e.key==='r'||e.key==='R') { depthAccum=0; userRoll=0; }
+  if (e.key==='='||e.key==='+') depthAccum-=.3;
+  if (e.key==='-'||e.key==='_') depthAccum+=.3;
+  if (e.key==='['||e.key===',') userRoll-=.15;
+  if (e.key===']'||e.key==='.') userRoll+=.15;
+  if ((e.key==='s'||e.key==='S') && !e.ctrlKey && !e.metaKey) togglePanel();
+  if (e.key==='p'||e.key==='P') takeScreenshot();
+});
+
+// ============================================================
+// RENDER LOOP
+// ============================================================
+
+function frame(wn) {
+  requestAnimationFrame(frame);
+  if (!started) { wallPrev=wn; started=true; return; }
+  const wd=(wn-wallPrev)/1000; wallPrev=wn;
+  const dt=Math.max(0, Math.min(wd, MAX_DT));
+
+  // FPS
+  if (wd>0 && wd<1) {
+    fpsArr.push(wd);
+    if (fpsArr.length>60) fpsArr.shift();
+    document.getElementById('fps').textContent = `${(fpsArr.length/fpsArr.reduce((a,b)=>a+b))|0} fps`;
+  }
+
+  if (shaderDirty) buildFractalShader();
+  if (!paused) time += dt * 0.7 * settings.speed;
+
+  const sr=1-Math.exp(-dt*1.5);
+  mouse[0]+=(targetMouse[0]-mouse[0])*sr;
+  mouse[1]+=(targetMouse[1]-mouse[1])*sr;
+  rollSmooth+=(userRoll-rollSmooth)*(1-Math.exp(-dt*2.5));
+  const zoom = computeCamera(time, dt);
+
+  const useBloom = settings.bloom > 0.005 && threshProg && blurProg && compositeProg;
+
+  // === PASS 1: Render fractal ===
+  if (useBloom) {
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fboScene.fbo);
+    gl.viewport(0, 0, fboScene.w, fboScene.h);
+  } else {
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+
+  gl.useProgram(fractalProg);
+  const rw = useBloom ? fboScene.w : canvas.width;
+  const rh = useBloom ? fboScene.h : canvas.height;
+  gl.uniform2f(fu.u_res, rw, rh);
+  gl.uniform1f(fu.u_time, time);
+  gl.uniform3f(fu.u_ro, camPos[0], camPos[1], camPos[2]);
+  gl.uniform3f(fu.u_fwd, camFwd[0], camFwd[1], camFwd[2]);
+  gl.uniform3f(fu.u_right, camRight[0], camRight[1], camRight[2]);
+  gl.uniform3f(fu.u_up, camUp[0], camUp[1], camUp[2]);
+  gl.uniform1f(fu.u_zoom, zoom);
+  gl.uniform1f(fu.u_par, settings.par);
+  gl.uniform1f(fu.u_satBias, settings.sat);
+  gl.uniform1f(fu.u_fogMul, settings.fog);
+  drawQuad();
+
+  // === BLOOM ===
+  if (useBloom) {
+    const bw = fboBloomA.w, bh = fboBloomA.h;
+    const radius = settings.bradius;
+
+    // Threshold + downsample
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fboBloomA.fbo);
+    gl.viewport(0, 0, bw, bh);
+    gl.useProgram(threshProg);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, fboScene.tex);
+    gl.uniform1i(threshU.tex, 0);
+    gl.uniform1f(threshU.threshold, settings.bthresh);
+    drawQuad();
+
+    // Two iterations of separable blur for wider glow
+    for (let pass = 0; pass < 2; pass++) {
+      const spread = (pass + 1) * radius;
+      // Horizontal: A -> B
+      gl.bindFramebuffer(gl.FRAMEBUFFER, fboBloomB.fbo);
+      gl.viewport(0, 0, bw, bh);
+      gl.useProgram(blurProg);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, fboBloomA.tex);
+      gl.uniform1i(blurU.tex, 0);
+      gl.uniform2f(blurU.dir, spread/bw, 0);
+      drawQuad();
+      // Vertical: B -> A
+      gl.bindFramebuffer(gl.FRAMEBUFFER, fboBloomA.fbo);
+      gl.viewport(0, 0, bw, bh);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, fboBloomB.tex);
+      gl.uniform1i(blurU.tex, 0);
+      gl.uniform2f(blurU.dir, 0, spread/bh);
+      drawQuad();
+    }
+
+    // Composite to screen
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.useProgram(compositeProg);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, fboScene.tex);
+    gl.uniform1i(compositeU.scene, 0);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, fboBloomA.tex);
+    gl.uniform1i(compositeU.bloom, 1);
+    gl.uniform1f(compositeU.bloomIntensity, settings.bloom);
+    drawQuad();
+  }
+
+  // Screenshot after all rendering completes
+  if (wantScreenshot) { wantScreenshot = false; doScreenshot(); }
+}
+
 requestAnimationFrame(frame);
 </script>
 </body>
