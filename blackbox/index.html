@@ -384,6 +384,8 @@
 </head>
 <body>
 
+<a class="skip-link" href="#main">Skip to content</a>
+
 <div class="page page--blackbox">
 
   <nav class="sub-topbar">
@@ -394,7 +396,7 @@
 
   <hr>
 
-  <div class="content">
+  <main id="main" class="content">
     <section class="section">
       <h1>BlackBox Audio Recorder</h1>
       <p>BlackBox is an always-on audio recorder for macOS. It runs quietly in your menu bar, continuously capturing audio from any input device and saving uncompressed WAV files to your Mac.</p>
@@ -432,7 +434,7 @@
         <div class="pipe-node">
           <span class="thread-badge rt-thread">CoreAudio / ALSA</span>
           <div class="pipe-box rt">
-            <div class="icon">&#x1F399;</div>
+            <div class="icon" role="img" aria-label="Microphone">&#x1F399;</div>
             <div class="label">Audio Device</div>
             <div class="sublabel">Hardware input</div>
           </div>
@@ -446,7 +448,7 @@
         <div class="pipe-node">
           <span class="thread-badge rt-thread">RT Thread</span>
           <div class="pipe-box rt">
-            <div class="icon">&#x26A1;</div>
+            <div class="icon" role="img" aria-label="Lightning bolt">&#x26A1;</div>
             <div class="label">cpal Callback</div>
             <div class="sublabel">Zero alloc &middot; Zero I/O</div>
           </div>
@@ -460,7 +462,7 @@
         <div class="pipe-node">
           <span class="thread-badge lockfree">Lock-Free</span>
           <div class="pipe-box ring">
-            <div class="icon">&#x1F4AB;</div>
+            <div class="icon" role="img" aria-label="Spinning">&#x1F4AB;</div>
             <div class="label">SPSC Ring Buffer</div>
             <div class="sublabel">5s runway &middot; wait-free</div>
           </div>
@@ -474,7 +476,7 @@
         <div class="pipe-node">
           <span class="thread-badge writer-thread">Writer Thread</span>
           <div class="pipe-box writer">
-            <div class="icon">&#x1F4DD;</div>
+            <div class="icon" role="img" aria-label="Writing">&#x1F4DD;</div>
             <div class="label">Writer Thread</div>
             <div class="sublabel">Bit convert &middot; Peak meter</div>
           </div>
@@ -488,7 +490,7 @@
         <div class="pipe-node">
           <span class="thread-badge disk">Disk I/O</span>
           <div class="pipe-box wav">
-            <div class="icon">&#x1F4BE;</div>
+            <div class="icon" role="img" aria-label="Disk">&#x1F4BE;</div>
             <div class="label">WAV Files</div>
             <div class="sublabel">Single or split mode</div>
           </div>
@@ -560,7 +562,7 @@
       <!-- Ring buffer animation -->
       <p class="tech-subsection-label">Ring Buffer &mdash; Live Simulation</p>
       <div class="ring-canvas-wrap">
-        <canvas id="ringBuf" width="240" height="240"></canvas>
+        <canvas id="ringBuf" width="240" height="240" role="img" aria-label="Animated visualization of a ring buffer with write and read heads cycling through 48 slots"></canvas>
         <div class="ring-stats">
           <div class="ring-stat">
             <span class="stat-label">Write Head (RT)</span>
@@ -635,7 +637,7 @@
         <li><a href="https://github.com/tibbon/audio_blackbox">Source on GitHub</a></li>
       </ul>
     </section>
-  </div>
+  </main>
 
   <hr>
 
@@ -663,6 +665,7 @@
   const cx = 120, cy = 120, R = 92, r = 55;
   const SLOTS = 48;
   const TAU = Math.PI * 2;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let writeIdx = 0, readIdx = 0, t = 0;
 
   const cssColor = prop =>
@@ -754,10 +757,15 @@
     if (rw) rw.textContent = runwayS + 's';
 
     drawRing();
-    requestAnimationFrame(animate);
+    if (!reducedMotion) requestAnimationFrame(animate);
   }
 
-  animate();
+  if (reducedMotion) {
+    writeIdx = 16; // Show a static fill state
+    drawRing();
+  } else {
+    animate();
+  }
 })();
 </script>
 </body>
