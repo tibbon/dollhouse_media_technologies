@@ -6,10 +6,447 @@
 <meta name="description" content="BlackBox Audio Recorder – Always-on audio recording for your Mac">
 <title>BlackBox Audio Recorder</title>
 <link rel="stylesheet" href="../site.css">
+<style>
+  /* ── Pipeline accent tokens (light + dark safe) ── */
+  :root {
+    --rt-color: #d95a1b;
+    --ring-color: #b8860b;
+    --writer-color: #0f8c6e;
+    --wav-color: #4f46e5;
+    --surface: rgba(0,0,0,0.03);
+    --surface-border: var(--rule);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light) {
+      --rt-color: #ff6b35;
+      --ring-color: #fbbf24;
+      --writer-color: #00d4aa;
+      --wav-color: #818cf8;
+      --surface: rgba(255,255,255,0.03);
+    }
+  }
+
+  :root.dark {
+    --rt-color: #ff6b35;
+    --ring-color: #fbbf24;
+    --writer-color: #00d4aa;
+    --wav-color: #818cf8;
+    --surface: rgba(255,255,255,0.03);
+  }
+
+  :root.light {
+    --rt-color: #d95a1b;
+    --ring-color: #b8860b;
+    --writer-color: #0f8c6e;
+    --wav-color: #4f46e5;
+    --surface: rgba(0,0,0,0.03);
+  }
+
+  /* ── Page width override — wider than --narrow for pipeline, tighter than .page ── */
+  .page--blackbox { max-width: 1000px; }
+
+  /* ── Compact sections for short content ── */
+  .section--compact {
+    padding-top: clamp(28px, 4vw, 48px);
+    padding-bottom: clamp(28px, 4vw, 48px);
+  }
+  .section--compact .section-label {
+    margin-bottom: clamp(12px, 2vw, 20px);
+  }
+
+  /* ── Pipeline diagram ── */
+  .pipeline-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 40px 0;
+    overflow-x: auto;
+  }
+
+  .pipe-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .pipe-box {
+    border: 2px solid var(--rule);
+    border-radius: 10px;
+    padding: 12px 10px;
+    text-align: center;
+    background: var(--surface);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .pipe-box:hover {
+    transform: translateY(-2px);
+  }
+
+  .pipe-box.rt { border-color: var(--rt-color); }
+  .pipe-box.ring { border-color: var(--ring-color); }
+  .pipe-box.writer { border-color: var(--writer-color); }
+  .pipe-box.wav { border-color: var(--wav-color); }
+
+  .pipe-box .icon { font-size: 20px; margin-bottom: 4px; }
+
+  .pipe-box .label {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: var(--text);
+  }
+
+  .pipe-box .sublabel {
+    font-size: 9px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+  }
+
+  .thread-badge {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid;
+  }
+
+  .thread-badge.rt-thread { border-color: var(--rt-color); color: var(--rt-color); }
+  .thread-badge.writer-thread { border-color: var(--writer-color); color: var(--writer-color); }
+  .thread-badge.lockfree { border-color: var(--ring-color); color: var(--ring-color); }
+  .thread-badge.disk { border-color: var(--wav-color); color: var(--wav-color); }
+
+  /* Animated arrows */
+  .pipe-arrow {
+    display: flex;
+    align-items: center;
+    width: 36px;
+    height: 4px;
+    flex-shrink: 0;
+  }
+
+  .pipe-arrow .line {
+    height: 2px;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1px;
+  }
+
+  .pipe-arrow .line::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--rule);
+  }
+
+  .pipe-arrow .line::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 40%; height: 100%;
+    border-radius: 1px;
+    animation: pipe-flow 1.5s linear infinite;
+  }
+
+  .pipe-arrow.rt .line::after { background: var(--rt-color); }
+  .pipe-arrow.ring .line::after { background: var(--ring-color); }
+  .pipe-arrow.writer .line::after { background: var(--writer-color); }
+
+  .pipe-arrow .head {
+    width: 0; height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    flex-shrink: 0;
+  }
+
+  .pipe-arrow.rt .head { border-left: 8px solid var(--rt-color); }
+  .pipe-arrow.ring .head { border-left: 8px solid var(--ring-color); }
+  .pipe-arrow.writer .head { border-left: 8px solid var(--writer-color); }
+
+  @keyframes pipe-flow {
+    0% { left: -40%; }
+    100% { left: 140%; }
+  }
+
+  /* ── Detail cards ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+  }
+
+  .card:hover { border-color: var(--text-secondary); }
+
+  .card .card-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .card .card-accent.rt { background: var(--rt-color); }
+  .card .card-accent.ring { background: var(--ring-color); }
+  .card .card-accent.writer { background: var(--writer-color); }
+  .card .card-accent.wav { background: var(--wav-color); }
+
+  .card h3 {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+  }
+
+  .card h3 .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .card .zero-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0;
+  }
+
+  .card .zero-tag {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 5px;
+    border: 1px solid var(--rt-color);
+    color: var(--rt-color);
+    background: transparent;
+  }
+
+  .card p, .card li {
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: none;
+  }
+
+  .card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .card ul li {
+    padding: 3px 0 3px 14px;
+    position: relative;
+  }
+
+  .card ul li::before {
+    content: '\203A';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .card code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10px;
+    background: var(--rule);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--text);
+  }
+
+  /* ── Ring buffer visualization ── */
+  .ring-canvas-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    padding: 28px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    margin-top: 24px;
+  }
+
+  .ring-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ring-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .ring-stat .stat-label {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .ring-stat .stat-val {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .ring-stat .stat-val.gold { color: var(--ring-color); }
+  .ring-stat .stat-val.green { color: var(--writer-color); }
+  .ring-stat .stat-val.orange { color: var(--rt-color); }
+
+  /* ── Performance table ── */
+  .tech-subsection-label {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 40px;
+    margin-bottom: 16px;
+  }
+
+  .perf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+  }
+
+  .perf-table th {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--rule);
+    color: var(--text-secondary);
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 9px;
+  }
+
+  .perf-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    color: var(--text);
+  }
+
+  .headroom-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .headroom-bar .bar {
+    height: 5px;
+    border-radius: 3px;
+    background: var(--writer-color);
+    min-width: 3px;
+  }
+
+  .headroom-bar .val {
+    color: var(--writer-color);
+    font-weight: 600;
+    font-size: 11px;
+  }
+
+  /* ── Why it's fast grid ── */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .why-item {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 18px;
+    transition: border-color 0.3s ease;
+  }
+
+  .why-item:hover { border-color: var(--text-secondary); }
+
+  .why-item .num {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--rt-color);
+    opacity: 0.25;
+    margin-bottom: 6px;
+  }
+
+  .why-item h4 {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .why-item p {
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: none;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .pipeline-diagram {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .pipe-arrow {
+      width: 4px;
+      height: 36px;
+      flex-direction: column;
+    }
+    .pipe-arrow .line {
+      width: 2px;
+      height: 100%;
+    }
+    .pipe-arrow .head {
+      border-top: none; border-bottom: none;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+    }
+    .pipe-arrow.rt .head { border-top: 8px solid var(--rt-color); border-left-color: transparent; border-right-color: transparent; }
+    .pipe-arrow.ring .head { border-top: 8px solid var(--ring-color); border-left-color: transparent; border-right-color: transparent; }
+    .pipe-arrow.writer .head { border-top: 8px solid var(--writer-color); border-left-color: transparent; border-right-color: transparent; }
+    .pipe-arrow .flow-label { display: none; }
+    .ring-canvas-wrap { flex-direction: column; }
+  }
+</style>
 </head>
 <body>
 
-<div class="page page--narrow">
+<div class="page page--blackbox">
 
   <nav class="sub-topbar">
     <a href="/" class="home-link"><strong>D</strong>/<strong>M</strong>/<strong>T</strong></a>
@@ -20,7 +457,7 @@
   <hr>
 
   <div class="content">
-    <section class="section">
+    <section class="section section--compact">
       <h1>BlackBox Audio Recorder</h1>
       <p>BlackBox is an always-on audio recorder for macOS. It runs quietly in your menu bar, continuously capturing audio from any input device and saving uncompressed WAV files to your Mac.</p>
       <p>Built for musicians, podcasters, sound designers, and anyone who never wants to miss a moment of audio.</p>
@@ -28,7 +465,7 @@
 
     <hr>
 
-    <section class="section">
+    <section class="section section--compact">
       <p class="section-label">Features</p>
       <ul class="feature-list">
         <li>Menu bar app &ndash; stays out of your way until you need it</li>
@@ -38,7 +475,7 @@
         <li>Multi-channel support &ndash; record up to 64 channels from pro audio interfaces</li>
         <li>Split mode &ndash; one WAV file per channel for easy mixing</li>
         <li>Real-time level metering per channel</li>
-        <li>Automatic silence detection &ndash; silently discards empty recordings</li>
+        <li>Automatic silence gate &ndash; pauses recording during silence</li>
         <li>Disk space monitoring &ndash; stops safely before your drive fills up</li>
         <li>Lock-free audio engine &ndash; zero-drop recording even under heavy system load</li>
         <li>Fully offline &ndash; no accounts, no cloud, no telemetry</li>
@@ -48,13 +485,225 @@
     <hr>
 
     <section class="section">
+      <p class="section-label">Technical Details</p>
+
+      <p>A lock-free, real-time audio recording engine in Rust. The core design separates the time-critical audio callback from all disk I/O using a wait-free SPSC ring buffer, achieving 2,000x+ real-time headroom on stereo and 19x even at 64ch/192kHz.</p>
+
+      <!-- Pipeline diagram -->
+      <div class="pipeline-diagram">
+        <div class="pipe-node">
+          <span class="thread-badge rt-thread">CoreAudio / ALSA</span>
+          <div class="pipe-box rt">
+            <div class="icon">&#x1F399;</div>
+            <div class="label">Audio Device</div>
+            <div class="sublabel">Hardware input</div>
+          </div>
+        </div>
+
+        <div class="pipe-arrow rt">
+          <div class="line"></div>
+          <div class="head"></div>
+        </div>
+
+        <div class="pipe-node">
+          <span class="thread-badge rt-thread">RT Thread</span>
+          <div class="pipe-box rt">
+            <div class="icon">&#x26A1;</div>
+            <div class="label">cpal Callback</div>
+            <div class="sublabel">Zero alloc &middot; Zero I/O</div>
+          </div>
+        </div>
+
+        <div class="pipe-arrow ring">
+          <div class="line"></div>
+          <div class="head"></div>
+        </div>
+
+        <div class="pipe-node">
+          <span class="thread-badge lockfree">Lock-Free</span>
+          <div class="pipe-box ring">
+            <div class="icon">&#x1F4AB;</div>
+            <div class="label">SPSC Ring Buffer</div>
+            <div class="sublabel">5s runway &middot; wait-free</div>
+          </div>
+        </div>
+
+        <div class="pipe-arrow writer">
+          <div class="line"></div>
+          <div class="head"></div>
+        </div>
+
+        <div class="pipe-node">
+          <span class="thread-badge writer-thread">Writer Thread</span>
+          <div class="pipe-box writer">
+            <div class="icon">&#x1F4DD;</div>
+            <div class="label">Writer Thread</div>
+            <div class="sublabel">Bit convert &middot; Peak meter</div>
+          </div>
+        </div>
+
+        <div class="pipe-arrow writer">
+          <div class="line"></div>
+          <div class="head"></div>
+        </div>
+
+        <div class="pipe-node">
+          <span class="thread-badge disk">Disk I/O</span>
+          <div class="pipe-box wav">
+            <div class="icon">&#x1F4BE;</div>
+            <div class="label">WAV Files</div>
+            <div class="sublabel">Single or split mode</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail cards -->
+      <div class="cards-grid">
+
+        <div class="card">
+          <div class="card-accent rt"></div>
+          <h3><span class="dot" style="background:var(--rt-color)"></span>RT Callback (cpal)</h3>
+          <p>The real-time audio callback runs on the OS audio thread &mdash; the most latency-sensitive code path in the entire app. It does <strong>exactly three things</strong>:</p>
+          <ul>
+            <li>Receives an incoming buffer of interleaved <code>f32</code> samples from the audio device</li>
+            <li>Pushes the raw samples into the <code>rtrb</code> ring buffer via a wait-free write</li>
+            <li>Checks one <code>AtomicBool</code> to signal file rotation timing</li>
+          </ul>
+          <p style="margin-top:10px;">It is designed to guarantee <strong>zero of each</strong>:</p>
+          <div class="zero-list">
+            <span class="zero-tag">Zero file I/O</span>
+            <span class="zero-tag">Zero mutex locks</span>
+            <span class="zero-tag">Zero heap allocs</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-accent ring"></div>
+          <h3><span class="dot" style="background:var(--ring-color)"></span>SPSC Ring Buffer (rtrb)</h3>
+          <p>The bridge between the RT and writer threads. Uses the <code>rtrb</code> crate &mdash; a wait-free single-producer single-consumer ring buffer designed for audio.</p>
+          <ul>
+            <li>Sized for <strong>5 full seconds</strong> of audio at the device&rsquo;s sample rate &times; channel count</li>
+            <li>At 2ch/48kHz that&rsquo;s ~1.8 MB; at 64ch/192kHz it&rsquo;s ~234 MB</li>
+            <li>Provides massive I/O runway &mdash; even during file rotation, there&rsquo;s 4,990+ ms of buffer before any risk of drop</li>
+            <li>No locks, no atomics beyond the internal read/write cursors &mdash; <strong>true wait-free</strong></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-accent writer"></div>
+          <h3><span class="dot" style="background:var(--writer-color)"></span>Writer Thread</h3>
+          <p>A dedicated thread that does <strong>all the heavy lifting</strong> away from the audio callback:</p>
+          <ul>
+            <li>Pops raw <code>f32</code> samples from the ring buffer</li>
+            <li>Converts to configured bit depth (16/24/32-bit integer PCM)</li>
+            <li>Writes WAV directly (custom <code>RawWavWriter</code>)</li>
+            <li>Tracks per-channel peak levels at zero extra cost (exposed via FFI for the SwiftUI meters)</li>
+            <li>Handles file rotation with crash-safe WAV writes</li>
+            <li>Monitors disk space &mdash; auto-stops if below threshold</li>
+            <li>Runs silence gate &mdash; pauses recording during silence</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-accent wav"></div>
+          <h3><span class="dot" style="background:var(--wav-color)"></span>WAV Output &amp; Rotation</h3>
+          <p>Two output strategies &mdash; <code>single</code> (one multichannel file) or <code>split</code> (one WAV per channel).</p>
+          <ul>
+            <li>Continuous mode rotates files at a configurable cadence (default 300s)</li>
+            <li>Rotation overhead: <strong>&lt;1ms</strong> in single mode, ~10ms for 64-channel split</li>
+            <li>Ring buffer runway during rotation: <strong>4,990+ ms</strong> remaining</li>
+            <li>Crash-safe writes ensure valid WAV headers even on unexpected termination</li>
+            <li>Silence gate pauses recording during silence, resumes on signal</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Ring buffer animation -->
+      <p class="tech-subsection-label">Ring Buffer &mdash; Live Simulation</p>
+      <div class="ring-canvas-wrap">
+        <canvas id="ringBuf" width="240" height="240"></canvas>
+        <div class="ring-stats">
+          <div class="ring-stat">
+            <span class="stat-label">Write Head (RT)</span>
+            <span class="stat-val orange" id="writeHead">0</span>
+          </div>
+          <div class="ring-stat">
+            <span class="stat-label">Read Head (Writer)</span>
+            <span class="stat-val green" id="readHead">0</span>
+          </div>
+          <div class="ring-stat">
+            <span class="stat-label">Fill Level</span>
+            <span class="stat-val gold" id="fillLevel">0%</span>
+          </div>
+          <div class="ring-stat">
+            <span class="stat-label">Buffer Runway</span>
+            <span class="stat-val gold" id="runway">5.0s</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance table -->
+      <p class="tech-subsection-label">Real-Time Headroom (Apple Silicon, 24-bit)</p>
+      <table class="perf-table">
+        <thead>
+          <tr>
+            <th>Config</th>
+            <th>Mode</th>
+            <th>Throughput</th>
+            <th>Headroom</th>
+          </tr>
+        </thead>
+        <tbody id="perfBody"></tbody>
+      </table>
+
+      <!-- Why it's fast -->
+      <p class="tech-subsection-label">Why It&rsquo;s Highly Optimized</p>
+      <div class="why-grid">
+        <div class="why-item">
+          <div class="num">01</div>
+          <h4>RT / Writer Thread Separation</h4>
+          <p>The audio callback never touches the filesystem. All I/O, encoding, and monitoring happens on a separate thread. This eliminates the #1 cause of audio glitches: blocking the RT thread on disk.</p>
+        </div>
+        <div class="why-item">
+          <div class="num">02</div>
+          <h4>Wait-Free SPSC Ring Buffer</h4>
+          <p>The rtrb crate provides a lock-free, wait-free SPSC queue. No mutexes, no condition variables, no syscalls on the hot path. Just atomic load/store on read/write cursors.</p>
+        </div>
+        <div class="why-item">
+          <div class="num">03</div>
+          <h4>Zero Allocation in RT Path</h4>
+          <p>The callback pushes raw f32 samples directly into a pre-allocated ring buffer. No Vec growth, no Box, no String formatting. The ring buffer is sized once at startup and never resized.</p>
+        </div>
+        <div class="why-item">
+          <div class="num">04</div>
+          <h4>5-Second Buffer Runway</h4>
+          <p>The ring buffer holds 5 full seconds of audio. File rotation takes &lt;10ms worst case (64ch split). That&rsquo;s 4,990+ ms of headroom &mdash; enough to absorb any OS scheduling jitter or disk I/O spike.</p>
+        </div>
+        <div class="why-item">
+          <div class="num">05</div>
+          <h4>Rust&rsquo;s Zero-Cost Abstractions</h4>
+          <p>No garbage collector, no runtime overhead. Rust compiles to the same tight machine code as hand-tuned C, with memory safety guaranteed at compile time.</p>
+        </div>
+        <div class="why-item">
+          <div class="num">06</div>
+          <h4>Batch I/O on Writer Thread</h4>
+          <p>The writer thread processes samples in bulk from the ring buffer, amortizing syscall overhead. Peak metering piggybacks on the write pass at zero extra cost.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <hr>
+
+    <section class="section section--compact">
       <p class="section-label">Requirements</p>
       <p>macOS 15.0 (Sequoia) or later.</p>
     </section>
 
     <hr>
 
-    <section class="section">
+    <section class="section section--compact">
       <p class="section-label">Links</p>
       <ul>
         <li><a href="/blackbox/support">Support &amp; FAQ</a></li>
@@ -81,5 +730,148 @@
 </div>
 
 <script src="/site.js" defer></script>
+<script>
+// ── Performance table ──
+(function() {
+  var perfData = [
+    { config: '2ch / 48kHz', mode: 'pipeline', throughput: '205M samples/s', headroom: 2139 },
+    { config: '32ch / 48kHz', mode: 'single', throughput: '473M samples/s', headroom: 308 },
+    { config: '32ch / 48kHz', mode: 'split (32 files)', throughput: '259M samples/s', headroom: 169 },
+    { config: '64ch / 48kHz', mode: 'split (64 files)', throughput: '243M samples/s', headroom: 79 },
+    { config: '32ch / 192kHz', mode: 'single', throughput: '538M samples/s', headroom: 87 },
+    { config: '64ch / 192kHz', mode: 'single', throughput: '551M samples/s', headroom: 45 },
+    { config: '64ch / 192kHz', mode: 'split (64 files)', throughput: '236M samples/s', headroom: 19 }
+  ];
+
+  var maxH = 2139;
+  var tbody = document.getElementById('perfBody');
+  if (!tbody) return;
+
+  perfData.forEach(function(row) {
+    var barW = Math.max(3, (row.headroom / maxH) * 180);
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>' + row.config + '</td>' +
+      '<td>' + row.mode + '</td>' +
+      '<td>' + row.throughput + '</td>' +
+      '<td><span class="headroom-bar"><span class="bar" style="width:' + barW + 'px"></span><span class="val">' + row.headroom + '\u00d7</span></span></td>';
+    tbody.appendChild(tr);
+  });
+})();
+
+// ── Ring buffer animation ──
+(function() {
+  var canvas = document.getElementById('ringBuf');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var cx = 120, cy = 120, R = 92, r = 55;
+  var SLOTS = 48;
+  var writeIdx = 0, readIdx = 0;
+  var t = 0;
+
+  // Read CSS custom property colors
+  function getCSSColor(prop) {
+    return getComputedStyle(document.documentElement).getPropertyValue(prop).trim();
+  }
+
+  function fillCount() {
+    if (writeIdx >= readIdx) return writeIdx - readIdx;
+    return SLOTS - readIdx + writeIdx;
+  }
+
+  function drawRing() {
+    var ringColor = getCSSColor('--ring-color') || '#fbbf24';
+    var rtColor = getCSSColor('--rt-color') || '#ff6b35';
+    var writerColor = getCSSColor('--writer-color') || '#00d4aa';
+    var textSec = getCSSColor('--text-secondary') || '#71717a';
+    var ruleColor = getCSSColor('--rule') || '#e4e4e7';
+
+    ctx.clearRect(0, 0, 240, 240);
+
+    for (var i = 0; i < SLOTS; i++) {
+      var a0 = (i / SLOTS) * Math.PI * 2 - Math.PI / 2;
+      var a1 = ((i + 0.85) / SLOTS) * Math.PI * 2 - Math.PI / 2;
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, a0, a1);
+      ctx.arc(cx, cy, r, a1, a0, true);
+      ctx.closePath();
+
+      var filled = false;
+      if (writeIdx >= readIdx) {
+        filled = i >= readIdx && i < writeIdx;
+      } else {
+        filled = i >= readIdx || i < writeIdx;
+      }
+
+      if (filled) {
+        var grad = ctx.createRadialGradient(cx, cy, r, cx, cy, R);
+        grad.addColorStop(0, ringColor + '99');
+        grad.addColorStop(1, ringColor + '33');
+        ctx.fillStyle = grad;
+      } else {
+        ctx.fillStyle = ruleColor + '20';
+      }
+      ctx.fill();
+    }
+
+    // Write head
+    var wa = (writeIdx / SLOTS) * Math.PI * 2 - Math.PI / 2;
+    var wx = cx + Math.cos(wa) * (R + 12);
+    var wy = cy + Math.sin(wa) * (R + 12);
+    ctx.beginPath();
+    ctx.arc(wx, wy, 4, 0, Math.PI * 2);
+    ctx.fillStyle = rtColor;
+    ctx.fill();
+
+    // Read head
+    var ra = (readIdx / SLOTS) * Math.PI * 2 - Math.PI / 2;
+    var rx = cx + Math.cos(ra) * (R + 12);
+    var ry = cy + Math.sin(ra) * (R + 12);
+    ctx.beginPath();
+    ctx.arc(rx, ry, 4, 0, Math.PI * 2);
+    ctx.fillStyle = writerColor;
+    ctx.fill();
+
+    // Center label
+    ctx.fillStyle = ruleColor + '18';
+    ctx.beginPath();
+    ctx.arc(cx, cy, r - 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = ringColor;
+    ctx.font = '600 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('rtrb', cx, cy - 5);
+    ctx.fillStyle = textSec;
+    ctx.font = '400 8px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+    ctx.fillText('SPSC', cx, cy + 7);
+  }
+
+  function animate() {
+    t++;
+    if (t % 2 === 0) writeIdx = (writeIdx + 1) % SLOTS;
+    if (t % 3 === 0) readIdx = (readIdx + 1) % SLOTS;
+
+    var fill = fillCount();
+    var pct = Math.round((fill / SLOTS) * 100);
+    var runwayS = (5 * (1 - fill / SLOTS)).toFixed(1);
+
+    var wh = document.getElementById('writeHead');
+    var rh = document.getElementById('readHead');
+    var fl = document.getElementById('fillLevel');
+    var rw = document.getElementById('runway');
+    if (wh) wh.textContent = writeIdx;
+    if (rh) rh.textContent = readIdx;
+    if (fl) fl.textContent = pct + '%';
+    if (rw) rw.textContent = runwayS + 's';
+
+    drawRing();
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+})();
+</script>
 </body>
 </html>
