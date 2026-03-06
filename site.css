@@ -1,5 +1,6 @@
 /* ── Reset ── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+button, input, select, textarea { font: inherit; }
 html { scroll-behavior: smooth; }
 html, body { width: 100%; height: 100%; }
 
@@ -70,7 +71,7 @@ hr {
 
 /* ── Sections ── */
 .section {
-  padding: clamp(60px, 8vw, 120px) 0;
+  padding: clamp(20px, 3vw, 36px) 0;
 }
 
 .section-label {
@@ -79,7 +80,7 @@ hr {
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--text-secondary);
-  margin-bottom: clamp(24px, 3vw, 48px);
+  margin-bottom: clamp(12px, 1.5vw, 20px);
   transition: color 0.4s ease;
 }
 
@@ -126,7 +127,7 @@ h1 {
   font-weight: 800;
   letter-spacing: -0.02em;
   text-transform: uppercase;
-  margin-bottom: clamp(16px, 2vw, 24px);
+  margin-bottom: clamp(12px, 1.5vw, 18px);
 }
 
 h2 {
@@ -142,7 +143,12 @@ h3 {
   margin-bottom: 8px;
 }
 
-p, li {
+.content h3:not(:first-child) {
+  margin-top: 1.75rem;
+}
+
+.content > section > p,
+.content > section > ul > li {
   max-width: 65ch;
 }
 
@@ -157,10 +163,6 @@ p, li {
 }
 
 .content section {
-  margin-bottom: clamp(32px, 4vw, 56px);
-}
-
-.content section:last-child {
   margin-bottom: 0;
 }
 
@@ -216,7 +218,7 @@ a:hover {
 
 /* ── Footer ── */
 .site-footer {
-  padding: clamp(60px, 10vw, 140px) 0 clamp(28px, 4vw, 48px);
+  padding: clamp(20px, 3vw, 36px) 0 clamp(16px, 2vw, 28px);
 }
 
 .footer-inner {
@@ -263,20 +265,18 @@ a:hover {
   background: none;
   border: none;
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   font-size: 0.65rem;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0.5em 1em;
   cursor: pointer;
-  transition: background 0.3s, color 0.3s;
+  transition: background 0.4s, color 0.4s;
   opacity: 0.5;
 }
 
 .mode-switcher button + button {
   border-left: 1px solid var(--text);
-  transition: background 0.3s, color 0.3s, border-color 0.4s;
 }
 
 .mode-switcher button.active {

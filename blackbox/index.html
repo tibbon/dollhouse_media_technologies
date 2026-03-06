@@ -27,7 +27,7 @@
     }
   }
 
-  :root.dark {
+  :root.dark, :root.dmt {
     --rt-color: #ff6b35;
     --ring-color: #fbbf24;
     --writer-color: #00d4aa;
@@ -45,15 +45,6 @@
 
   /* ── Page width override — wider than --narrow for pipeline, tighter than .page ── */
   .page--blackbox { max-width: 1000px; }
-
-  /* ── Compact sections for short content ── */
-  .section--compact {
-    padding-top: clamp(28px, 4vw, 48px);
-    padding-bottom: clamp(28px, 4vw, 48px);
-  }
-  .section--compact .section-label {
-    margin-bottom: clamp(12px, 2vw, 20px);
-  }
 
   /* ── Pipeline diagram ── */
   .pipeline-diagram {
@@ -245,7 +236,6 @@
     font-size: 12px;
     line-height: 1.7;
     color: var(--text-secondary);
-    max-width: none;
   }
 
   .card ul {
@@ -329,49 +319,6 @@
     margin-bottom: 16px;
   }
 
-  .perf-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-    font-size: 11px;
-  }
-
-  .perf-table th {
-    text-align: left;
-    padding: 10px 12px;
-    border-bottom: 2px solid var(--rule);
-    color: var(--text-secondary);
-    font-weight: 500;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    font-size: 9px;
-  }
-
-  .perf-table td {
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--rule);
-    color: var(--text);
-  }
-
-  .headroom-bar {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .headroom-bar .bar {
-    height: 5px;
-    border-radius: 3px;
-    background: var(--writer-color);
-    min-width: 3px;
-  }
-
-  .headroom-bar .val {
-    color: var(--writer-color);
-    font-weight: 600;
-    font-size: 11px;
-  }
-
   /* ── Why it's fast grid ── */
   .why-grid {
     display: grid;
@@ -411,7 +358,6 @@
     font-size: 11px;
     line-height: 1.7;
     color: var(--text-secondary);
-    max-width: none;
   }
 
   /* ── Mobile ── */
@@ -457,7 +403,7 @@
   <hr>
 
   <div class="content">
-    <section class="section section--compact">
+    <section class="section">
       <h1>BlackBox Audio Recorder</h1>
       <p>BlackBox is an always-on audio recorder for macOS. It runs quietly in your menu bar, continuously capturing audio from any input device and saving uncompressed WAV files to your Mac.</p>
       <p>Built for musicians, podcasters, sound designers, and anyone who never wants to miss a moment of audio.</p>
@@ -465,7 +411,7 @@
 
     <hr>
 
-    <section class="section section--compact">
+    <section class="section">
       <p class="section-label">Features</p>
       <ul class="feature-list">
         <li>Menu bar app &ndash; stays out of your way until you need it</li>
@@ -643,20 +589,6 @@
         </div>
       </div>
 
-      <!-- Performance table -->
-      <p class="tech-subsection-label">Real-Time Headroom (Apple Silicon, 24-bit)</p>
-      <table class="perf-table">
-        <thead>
-          <tr>
-            <th>Config</th>
-            <th>Mode</th>
-            <th>Throughput</th>
-            <th>Headroom</th>
-          </tr>
-        </thead>
-        <tbody id="perfBody"></tbody>
-      </table>
-
       <!-- Why it's fast -->
       <p class="tech-subsection-label">Why It&rsquo;s Highly Optimized</p>
       <div class="why-grid">
@@ -696,14 +628,14 @@
 
     <hr>
 
-    <section class="section section--compact">
+    <section class="section">
       <p class="section-label">Requirements</p>
       <p>macOS 15.0 (Sequoia) or later.</p>
     </section>
 
     <hr>
 
-    <section class="section section--compact">
+    <section class="section">
       <p class="section-label">Links</p>
       <ul>
         <li><a href="/blackbox/support">Support &amp; FAQ</a></li>
@@ -731,34 +663,6 @@
 
 <script src="/site.js" defer></script>
 <script>
-// ── Performance table ──
-(function() {
-  var perfData = [
-    { config: '2ch / 48kHz', mode: 'pipeline', throughput: '205M samples/s', headroom: 2139 },
-    { config: '32ch / 48kHz', mode: 'single', throughput: '473M samples/s', headroom: 308 },
-    { config: '32ch / 48kHz', mode: 'split (32 files)', throughput: '259M samples/s', headroom: 169 },
-    { config: '64ch / 48kHz', mode: 'split (64 files)', throughput: '243M samples/s', headroom: 79 },
-    { config: '32ch / 192kHz', mode: 'single', throughput: '538M samples/s', headroom: 87 },
-    { config: '64ch / 192kHz', mode: 'single', throughput: '551M samples/s', headroom: 45 },
-    { config: '64ch / 192kHz', mode: 'split (64 files)', throughput: '236M samples/s', headroom: 19 }
-  ];
-
-  var maxH = 2139;
-  var tbody = document.getElementById('perfBody');
-  if (!tbody) return;
-
-  perfData.forEach(function(row) {
-    var barW = Math.max(3, (row.headroom / maxH) * 180);
-    var tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td>' + row.config + '</td>' +
-      '<td>' + row.mode + '</td>' +
-      '<td>' + row.throughput + '</td>' +
-      '<td><span class="headroom-bar"><span class="bar" style="width:' + barW + 'px"></span><span class="val">' + row.headroom + '\u00d7</span></span></td>';
-    tbody.appendChild(tr);
-  });
-})();
-
 // ── Ring buffer animation ──
 (function() {
   var canvas = document.getElementById('ringBuf');
