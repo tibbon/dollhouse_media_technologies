@@ -401,12 +401,12 @@
   <main id="main" class="content">
     <section class="section">
       <h1>Recording Engine</h1>
-      <p>A lock-free, real-time audio recording engine in Rust. The core design separates the time-critical audio callback from all disk I/O using a wait-free SPSC ring buffer, achieving 2,000x+ real-time headroom on stereo and 19x even at 64ch/192kHz.</p>
+      <p>A lock-free, real-time audio recording engine in Rust. The core design separates the time-critical audio callback from all disk I/O using a wait-free SPSC ring buffer, achieving 2,000x+ real-time headroom on stereo and about 14x even at 64ch/192kHz (Apple Silicon, production write path, one multichannel file).</p>
 
       <!-- Pipeline diagram -->
       <div class="pipeline-diagram">
         <div class="pipe-node">
-          <span class="thread-badge rt-thread">CoreAudio / ALSA</span>
+          <span class="thread-badge rt-thread">CoreAudio</span>
           <div class="pipe-box rt">
             <div class="icon" role="img" aria-label="Microphone">&#x1F399;</div>
             <div class="label">Audio Device</div>
@@ -523,10 +523,10 @@
           <h3><span class="dot" style="background:var(--wav-color)"></span>WAV Output &amp; Rotation</h3>
           <p>Two output strategies &mdash; <code>single</code> (one multichannel file) or <code>split</code> (one WAV per channel).</p>
           <ul>
-            <li>Continuous mode rotates files at a configurable cadence (default 300s)</li>
+            <li>Continuous mode rotates files at a configurable cadence (hourly by default in the app; 1 second to 24 hours)</li>
             <li>Rotation overhead: <strong>&lt;1ms</strong> in single mode, ~10ms for 64-channel split</li>
             <li>Ring buffer runway during rotation: <strong>4,990+ ms</strong> remaining</li>
-            <li>Crash-safe writes ensure valid WAV headers even on unexpected termination</li>
+            <li>Crash-safe writes: the WAV header is refreshed every 10 seconds, so after an unexpected termination the file is still readable, losing at most the last few seconds</li>
             <li>Silence gate pauses recording during silence, resumes on signal</li>
           </ul>
         </div>

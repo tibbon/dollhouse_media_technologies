@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="BlackBox Audio Recorder – Always-on audio recording for your Mac">
+<meta name="description" content="BlackBox Audio Recorder: always-on multichannel audio recording for macOS. Records every channel of your audio interface to crash-safe WAV from the menu bar.">
 <title>BlackBox Audio Recorder</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
@@ -28,6 +28,8 @@
       <h1>BlackBox Audio Recorder</h1>
       <p>BlackBox is an always-on audio recorder for macOS. It runs quietly in your menu bar, continuously capturing audio from any input device and saving uncompressed WAV files to your Mac.</p>
       <p>Built for musicians, podcasters, sound designers, and anyone who never wants to miss a moment of audio.</p>
+      <p><a href="https://apps.apple.com/app/apple-store/id6759437659?pt=445919&amp;ct=website&amp;mt=8"><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-mac-app-store/black/en-us" alt="Download on the Mac App Store" height="40"></a></p>
+      <p>$49.99 one-time, no subscription. Requires macOS 15.0 (Sequoia) or later.</p>
     </section>
 
     <hr>
@@ -36,18 +38,17 @@
       <p class="section-label">Features</p>
       <ul class="feature-list">
         <li>Menu bar app &ndash; stays out of your way until you need it</li>
-        <li>Continuous recording with automatic file rotation (no audio lost on crash)</li>
+        <li>Continuous recording with automatic file rotation &ndash; a crash or power cut costs seconds of audio, not the whole session</li>
         <li>Configurable bit depth: 16-bit, 24-bit, or 32-bit WAV</li>
         <li>Records at your device&rsquo;s native sample rate</li>
-        <li>Multi-channel support &ndash; record up to 64 channels from pro audio interfaces</li>
+        <li>Multi-channel recording &ndash; tested to 64 channels, supports up to 255 simultaneously</li>
         <li>Split mode &ndash; one WAV file per channel for easy mixing</li>
         <li>Real-time level metering per channel</li>
         <li>Automatic silence gate &ndash; pauses recording during silence</li>
         <li>Disk space monitoring &ndash; stops safely before your drive fills up</li>
-        <li>Lock-free audio engine &ndash; zero-drop recording even under heavy system load</li>
+        <li>Lock-free audio engine &ndash; the audio thread never touches the disk, takes a lock, or allocates</li>
         <li>Fully offline &ndash; no accounts, no cloud, no telemetry</li>
       </ul>
-      <p>Requires macOS 15.0 (Sequoia) or later.</p>
     </section>
 
     <hr>
@@ -55,7 +56,7 @@
     <section class="section">
       <p class="section-label">Links</p>
       <ul>
-        <li><a href="https://apps.apple.com/us/app/blackbox-audio-recorder/id6759437659">Download on the Mac App Store</a></li>
+        <li><a href="https://apps.apple.com/app/apple-store/id6759437659?pt=445919&amp;ct=website&amp;mt=8">Download on the Mac App Store</a></li>
         <li><a href="/blackbox/architecture">How it works &ndash; Recording engine architecture</a></li>
         <li><a href="/blackbox/support">Support &amp; FAQ</a></li>
         <li><a href="/blackbox/privacy">Privacy Policy</a></li>
