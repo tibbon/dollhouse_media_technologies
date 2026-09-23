@@ -36,16 +36,25 @@
       <p class="section-label">Frequently Asked Questions</p>
 
       <h3>BlackBox isn&rsquo;t recording any audio</h3>
-      <p>Make sure you&rsquo;ve granted microphone access. Go to <strong>System Settings &gt; Privacy &amp; Security &gt; Microphone</strong> and ensure BlackBox is enabled. You can also check the input device in BlackBox&rsquo;s Settings.</p>
-
-      <h3>I see &ldquo;samples dropped&rdquo; warnings</h3>
-      <p>This can happen if your system is under heavy load. Try closing other applications or reducing the number of recording channels. A small number of drops at the very start of recording is normal and does not affect audio quality.</p>
-
-      <h3>My recordings are silent</h3>
-      <p>Check that the correct input device is selected in Settings. You can use the Level Meter window to verify that audio is reaching BlackBox. Also ensure the silence gate isn&rsquo;t set too aggressively&nbsp;&mdash; try lowering the threshold or disabling it temporarily.</p>
+      <p>Make sure you&rsquo;ve granted microphone access. Go to <strong>System Settings &gt; Privacy &amp; Security &gt; Microphone</strong> and ensure BlackBox is enabled. Then check the input device in the BlackBox menu, and open the Level Meter window to confirm audio is reaching BlackBox.</p>
 
       <h3>Where are my recordings saved?</h3>
-      <p>By default, recordings are saved to <code>~/Library/Containers/com.dollhousemediatech.blackbox/Data/Documents/BlackBox Recordings/</code>. You can change this in Settings &gt; Output, or click &ldquo;Show in Finder&rdquo; from the menu bar.</p>
+      <p>By default, recordings are saved to <code>~/Library/Containers/com.dollhousemediatech.blackbox/Data/Documents/BlackBox Recordings/</code>. You can change this in <strong>Settings &gt; Output</strong>, or click &ldquo;Show in Finder&rdquo; in the menu bar.</p>
+
+      <h3>A recording is missing</h3>
+      <p>With <strong>Enable silence detection</strong> on (<strong>Settings &gt; Recording</strong>), BlackBox deletes a finished recording that contains only silence. If quiet material such as room tone or distant speech is disappearing, move the threshold slider toward <strong>Sensitive</strong> or turn silence detection off.</p>
+
+      <h3>BlackBox or my Mac crashed during a recording</h3>
+      <p>Your audio is still on disk. BlackBox writes each file as <code>&hellip;.recording.wav</code> and refreshes its header every 10 seconds, so the file opens in most audio apps and loses at most the last few seconds. Rename it to end in <code>.wav</code>. With continuous recording on, earlier files in the session were already finished and are unaffected.</p>
+
+      <h3>What happens when my Mac sleeps?</h3>
+      <p>By default, BlackBox stops the recording when your Mac sleeps and starts a new one when it wakes. You can choose <strong>Stop recording</strong> instead in <strong>Settings &gt; General</strong>, and turn on <strong>Prevent idle sleep while recording</strong> to keep an idle Mac awake.</p>
+
+      <h3>Why did my recording stop with &ldquo;quality degraded&rdquo;?</h3>
+      <p>BlackBox holds five seconds of audio in memory while it writes to disk. If the disk or system stalls longer than that, audio is lost, and BlackBox warns you. If too much is lost it stops the recording rather than keep saving a damaged one. Close other heavy applications, record fewer channels, or record to a faster drive.</p>
+
+      <h3>Is there a limit on file size?</h3>
+      <p>Yes. A WAV file can&rsquo;t describe more than 4&nbsp;GB of audio, which is about 4 hours of stereo at 24-bit/48&nbsp;kHz, and less with more channels in one file. For long sessions, turn on <strong>Enable continuous recording</strong> in <strong>Settings &gt; Output</strong> so BlackBox starts a new file on a schedule (hourly by default), or use split mode for one file per channel.</p>
 
       <h3>What audio format does BlackBox use?</h3>
       <p>BlackBox records uncompressed WAV files at your device&rsquo;s native sample rate. You can choose 16-bit, 24-bit (default), or 32-bit depth in Settings.</p>
