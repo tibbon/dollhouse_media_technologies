@@ -29,6 +29,11 @@
   .clip-switch button:first-child { border-radius: 4px 0 0 4px; }
   .clip-switch button:last-child { border-radius: 0 4px 4px 0; border-left: 0; }
   .clips button[aria-pressed="true"] { color: var(--bg); background: var(--accent); border-color: var(--accent); }
+  .video { position: relative; margin: 1rem 0 0.75rem; aspect-ratio: 16 / 9; background: #000; border-radius: 6px; overflow: hidden; }
+  .video iframe, .video button { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; background: none; }
+  .video button { cursor: pointer; }
+  .video img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .video-badge { position: absolute; left: 50%; bottom: 12%; transform: translateX(-50%); padding: 0.45rem 1.1rem; color: var(--bg); background: var(--accent); border-radius: 4px; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -53,6 +58,19 @@
       <p>$25 plus any sales tax or VAT, one time. No subscription, account, serial number or activation. If it isn&rsquo;t for you, get a full refund within 14 days, no questions asked.</p>
       <p>The demo is the whole plugin, free, with no email, key or account. It fades to your dry signal after 10 minutes of audio each time it&rsquo;s loaded; reload it to keep going. Already bought TenTen? The demo installs over your paid copy, so skip it, or run your paid installer again to get the full version back.</p>
       <p>Published by Dollhouse Media Technologies, LLC. Sold through Link (Stripe). By buying or installing the demo you agree to the <a href="eula.html">License Agreement</a>; see also the <a href="refunds.html">Refund Policy</a> and <a href="privacy.html">Privacy Policy</a>.</p>
+    </section>
+
+    <hr>
+
+    <section class="section" id="watch">
+      <p class="section-label">Watch</p>
+      <div class="video" data-video="Mk7SZOsB_wM">
+        <button type="button" aria-label="Play the one-minute TenTen video, from YouTube">
+          <img src="video-poster.jpg" alt="TenTen: a glitchy 1970s pitch shifter and delay, circuitbent and worn" width="1280" height="720" loading="lazy">
+          <span class="video-badge">Play the video</span>
+        </button>
+      </div>
+      <p>A one-minute tour. Pressing play loads the video from YouTube, which gets your IP address and may set cookies; see the <a href="privacy.html">Privacy Policy</a>. Or <a href="https://youtu.be/Mk7SZOsB_wM">watch it on YouTube</a>.</p>
     </section>
 
     <hr>
@@ -315,6 +333,19 @@
     }));
   });
 })();
+</script>
+<script>
+document.querySelectorAll(".video").forEach((box) => {
+  box.querySelector("button").addEventListener("click", () => {
+    const frame = document.createElement("iframe");
+    frame.src = `https://www.youtube-nocookie.com/embed/${box.dataset.video}?autoplay=1&rel=0`;
+    frame.title = "TenTen video";
+    frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    frame.allowFullscreen = true;
+    frame.referrerPolicy = "strict-origin-when-cross-origin";
+    box.replaceChildren(frame);
+  });
+});
 </script>
 <script src="/site.js" defer></script>
 </body>
