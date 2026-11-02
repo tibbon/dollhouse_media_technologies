@@ -124,6 +124,10 @@
     max-width: 720px;
   }
 
+  .product-card + .product-card {
+    margin-top: clamp(32px, 4vw, 48px);
+  }
+
   .product-type {
     display: inline-block;
     font-size: 0.7rem;
@@ -283,6 +287,14 @@
   <!-- Products -->
   <section class="section">
     <p class="section-label">Products</p>
+    <div class="product-card">
+      <p class="product-type">Software</p>
+      <h3 class="product-name"><a href="/tenten/">TenTen</a></h3>
+      <p class="product-description">
+        A glitchy pitch shifter and delay plugin for macOS, modelled on a 1970s rack. VST3, AU, CLAP and standalone.
+      </p>
+      <a href="/tenten/" class="product-link">Learn More</a>
+    </div>
     <div class="product-card">
       <p class="product-type">Software</p>
       <div style="display: flex; align-items: center; gap: 0.75rem;">
