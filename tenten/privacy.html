@@ -36,8 +36,8 @@
       <ul>
         <li>The TenTen plugin does not collect or send personal data. It has no telemetry or accounts.</li>
         <li>Your payment is handled by Stripe's seller of record ("Link" on your receipt), not by us. We never see your card details.</li>
-        <li>To deliver your download, our store keeps your email address and order details.</li>
-        <li>We use this only to deliver and re-send your download, honor refunds, answer you and keep business records. We do not sell it, share it for advertising, or send marketing.</li>
+        <li>To deliver your download, our store keeps your email address and order details, and for about 90 days the IP addresses that use your download links.</li>
+        <li>We use this only to deliver and re-send your download, spot shared or abused links, honor refunds, answer you and keep business records. We do not sell it, share it for advertising, or send marketing.</li>
       </ul>
       <h3>What we collect</h3>
       <p>We collect only what buying, downloading and support need.</p>
@@ -45,15 +45,17 @@
         <tr><th>Data</th><th>When we get it</th><th>Why</th></tr>
         <tr><td>Email address</td><td>From Stripe when your purchase completes</td><td>Send your download link, re-send it, answer support requests, tell you about problems with your purchase</td></tr>
         <tr><td>Order number, amount, currency, purchase date, refund status</td><td>From Stripe when your purchase completes</td><td>Match downloads and refunds to a purchase</td></tr>
+        <tr><td>IP addresses and download records (time, order, file)</td><td>When you use a download link</td><td>Deliver your download, and spot links that have been shared or abused</td></tr>
+        <tr><td>Number of downloads and date of the last one</td><td>When you use a download link</td><td>The same</td></tr>
         <tr><td>Anything you write to us</td><td>When you email support</td><td>Answer you</td></tr>
         <tr><td>Bounce or complaint reports</td><td>From our email provider, if a message to you fails or is reported as spam</td><td>Keep email working; addresses that bounce or complain are suppressed from further sending</td></tr>
       </table>
-      <p>We do not record the IP addresses that open your download links, we do not count your downloads, and our pages use no analytics or advertising cookies. Your IP address still reaches our providers, as with any website: AWS when you open a download link or ask for a new one, and GitHub when you visit a page on this site. They may keep it in their own operational and security logs, under their own terms; we have not turned on any AWS logging that would record it for us. The plugin can read a public version file on our website at most once a day to tell you about updates. That sends no account or device identifiers, GitHub sees your IP address in the same way, and you can turn this off in the plugin's About panel.</p>
+      <p>We keep the IP address of each download for about 90 days, then it is deleted automatically. Our pages use no analytics or advertising cookies. As with any website, GitHub sees your IP address when you visit a page on this site and may keep it in its own logs; AWS, which runs our store, may do the same. The plugin can read a public version file on our website at most once a day to tell you about updates. That sends no account or device identifiers, GitHub sees your IP address in the same way, and you can turn this off in the plugin's About panel.</p>
       <h3>How we use it, and our legal basis</h3>
       <p>For buyers in the EU and UK, the law asks us to name a legal basis for each use.</p>
       <ul>
         <li><strong>To deliver what you bought</strong> (sending and re-sending your download, refunds): performance of our contract with you.</li>
-        <li><strong>To protect the store</strong> (limiting how often links can be re-sent, keeping links from working after a refund, error logs): our legitimate interest in keeping the service working.</li>
+        <li><strong>To protect download links and the store</strong> (download records, limiting how often links can be re-sent, keeping links from working after a refund, error logs): our legitimate interest in stopping links being shared and keeping the service working.</li>
         <li><strong>To answer your messages</strong>: performance of our contract, or our legitimate interest in helping you.</li>
         <li><strong>To keep business and tax records</strong>: legal obligation.</li>
       </ul>
@@ -68,7 +70,8 @@
       <h3>How long we keep it</h3>
       <table class="legal-table">
         <tr><th>Data</th><th>How long</th></tr>
-        <tr><td>Email address and order details</td><td>For as long as we offer re-downloads of your version, or until you ask us to delete them</td></tr>
+        <tr><td>Email address, order details, download count and last-download date</td><td>For as long as we offer re-downloads of your version, or until you ask us to delete them</td></tr>
+        <tr><td>IP addresses and download records</td><td>About 90 days</td></tr>
         <tr><td>Store error logs</td><td>90 days</td></tr>
         <tr><td>Support emails</td><td>2 years after the last message</td></tr>
         <tr><td>Business and tax records</td><td>As long as the law requires, typically 7 years</td></tr>
