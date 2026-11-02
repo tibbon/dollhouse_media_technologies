@@ -16,6 +16,14 @@
     border: 0; border-radius: 4px; font-weight: 600;
   }
   .legal-marks { margin: 0 0 0.75rem; font-size: 0.72rem; line-height: 1.5; color: var(--text-secondary); }
+  .clips { list-style: none; margin: 1rem 0 0; padding: 0; }
+  .clip { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; padding: 0.5rem 0; border-top: 1px solid var(--rule); }
+  .clip-name { flex: 1 1 12rem; }
+  .clips button { font: inherit; font-size: 0.85rem; padding: 0.25rem 0.65rem; color: var(--text); background: transparent; border: 1px solid var(--text-secondary); cursor: pointer; }
+  .clip-play { min-width: 4.5rem; border-radius: 4px; }
+  .clip-switch button:first-child { border-radius: 4px 0 0 4px; }
+  .clip-switch button:last-child { border-radius: 0 4px 4px 0; border-left: 0; }
+  .clips button[aria-pressed="true"] { color: var(--bg); background: var(--accent); border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -39,6 +47,100 @@
       <p><a class="buy" href="https://buy.stripe.com/3cI28sfbUakd9O5bhMew800">Buy for $25</a></p>
       <p>$25 plus any sales tax or VAT, one time. No subscription, account, serial number or activation. If it isn&rsquo;t for you, get a full refund within 14 days, no questions asked.</p>
       <p>Published by Dollhouse Media Technologies, LLC. Sold through Link (Stripe). By buying you agree to the <a href="eula.html">License Agreement</a>; see also the <a href="refunds.html">Refund Policy</a> and <a href="privacy.html">Privacy Policy</a>.</p>
+    </section>
+
+    <hr>
+
+    <section class="section" id="listen">
+      <p class="section-label">Listen</p>
+      <p>Twelve recordings, each through one preset. Switch between Dry and TenTen while it plays. Each pair plays at the same gain, with nothing else added.</p>
+      <ul class="clips">
+        <li class="clip" data-base="audio/01-guitar-slapback-30-ms">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><strong>Guitar</strong> Slapback 30 ms</span>
+          <span class="clip-switch" role="group" aria-label="Guitar: Slapback 30 ms, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/02-guitar-major-third-above">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><strong>Guitar</strong> Major Third Above</span>
+          <span class="clip-switch" role="group" aria-label="Guitar: Major Third Above, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/03-acoustic-dual-detune">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><strong>Acoustic</strong> Dual Detune</span>
+          <span class="clip-switch" role="group" aria-label="Acoustic: Dual Detune, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/04-piano-cross-fed-detune-wash">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><strong>Piano</strong> Cross-Fed Detune Wash</span>
+          <span class="clip-switch" role="group" aria-label="Piano: Cross-Fed Detune Wash, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/05-piano-tired-unit">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><strong>Piano</strong> Tired Unit</span>
+          <span class="clip-switch" role="group" aria-label="Piano: Tired Unit, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/06-drums-dropping-snare">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><strong>Drums</strong> Dropping Snare</span>
+          <span class="clip-switch" role="group" aria-label="Drums: Dropping Snare, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/07-drums-corrupted-ram">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><strong>Drums</strong> Corrupted RAM</span>
+          <span class="clip-switch" role="group" aria-label="Drums: Corrupted RAM, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/08-drum-machine-falling-spiral">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><strong>Drum Machine</strong> Falling Spiral</span>
+          <span class="clip-switch" role="group" aria-label="Drum Machine: Falling Spiral, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/09-modular-whole-tone-staircase">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><strong>Modular</strong> Whole-Tone Staircase</span>
+          <span class="clip-switch" role="group" aria-label="Modular: Whole-Tone Staircase, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/10-bass-droid-chatter">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><strong>Bass</strong> Droid Chatter</span>
+          <span class="clip-switch" role="group" aria-label="Bass: Droid Chatter, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/11-polysynth-seasick-chorus">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><strong>Polysynth</strong> Seasick Chorus</span>
+          <span class="clip-switch" role="group" aria-label="Polysynth: Seasick Chorus, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/12-synth-bass-slow-clock-lo-fi">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><strong>Synth Bass</strong> Slow Clock Lo-Fi</span>
+          <span class="clip-switch" role="group" aria-label="Synth Bass: Slow Clock Lo-Fi, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+      </ul>
+      <noscript><p>The player needs JavaScript.</p></noscript>
     </section>
 
     <hr>
@@ -136,6 +238,64 @@
   <button data-mode="dark">Dark</button>
 </div>
 
+<script>
+(() => {
+  let ctx, playing, request = 0;
+  const stop = () => {
+    if (!playing) return;
+    const p = playing;
+    playing = null;
+    p.sources.forEach((s) => { s.onended = null; s.stop(); });
+    p.play.textContent = "Play";
+  };
+  const level = (mode, wanted) => (mode === wanted ? 1 : 0);
+  document.querySelectorAll(".clip").forEach((clip) => {
+    const play = clip.querySelector(".clip-play");
+    const modes = clip.querySelectorAll("[data-mode]");
+    let mode = "tenten", buffers;
+    const load = async () => {
+      buffers ||= await Promise.all(["tenten", "dry"].map(async (kind) => {
+        const r = await fetch(`${clip.dataset.base}-${kind}.m4a`);
+        if (!r.ok) throw new Error(r.status);
+        return ctx.decodeAudioData(await r.arrayBuffer());
+      }));
+      return buffers;
+    };
+    play.addEventListener("click", async () => {
+      if (playing && playing.play === play) return stop();
+      stop();
+      ctx ||= new (window.AudioContext || window.webkitAudioContext)();
+      await ctx.resume();
+      const mine = ++request;
+      play.textContent = "Loading";
+      let decoded;
+      try { decoded = await load(); } catch (e) { play.textContent = "Retry"; return; }
+      if (mine !== request) { play.textContent = "Play"; return; }
+      const at = ctx.currentTime + 0.05;
+      const gains = {};
+      const sources = ["tenten", "dry"].map((kind, i) => {
+        const s = ctx.createBufferSource();
+        const g = ctx.createGain();
+        g.gain.value = level(kind, mode);
+        s.buffer = decoded[i];
+        s.connect(g).connect(ctx.destination);
+        s.start(at);
+        gains[kind] = g;
+        return s;
+      });
+      sources[0].onended = stop;
+      playing = { play, sources, gains, clip };
+      play.textContent = "Stop";
+    });
+    modes.forEach((b) => b.addEventListener("click", () => {
+      mode = b.dataset.mode;
+      modes.forEach((m) => m.setAttribute("aria-pressed", String(m === b)));
+      if (playing && playing.clip === clip)
+        ["tenten", "dry"].forEach((kind) => playing.gains[kind].gain.setTargetAtTime(level(kind, mode), ctx.currentTime, 0.005));
+    }));
+  });
+})();
+</script>
 <script src="/site.js" defer></script>
 </body>
 </html>
