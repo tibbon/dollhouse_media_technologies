@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="../site.css">
 <style>
   .legal-marks { margin: 0 0 0.75rem; font-size: 0.72rem; line-height: 1.5; color: var(--text-secondary); }
+  .legal-table { width: 100%; margin: 0 0 1.25rem; border-collapse: collapse; font-size: 0.9rem; }
+  .legal-table th, .legal-table td { padding: 0.5rem 0.6rem 0.5rem 0; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
 </style>
 </head>
 <body>
@@ -28,18 +30,65 @@
 
   <main id="main" class="content">
     <section class="section">
-      <h1>Privacy Policy</h1>
-      <p>Effective 2 November 2026. This covers DMT TenTen and its purchase and download pages, run by Dollhouse Media Technologies, LLC, Providence, Rhode Island.</p>
-      <h3>The plugin</h3>
-      <p>TenTen has no telemetry, analytics or accounts, and it sends nothing about you or your music. It can read a public version file on this website at most once a day, to tell you when a new version is out. That is an ordinary web request, so the website&rsquo;s host sees your IP address as it would for any page. You can turn this off in the plugin&rsquo;s About panel.</p>
-      <h3>When you buy</h3>
-      <p>Payment is handled by Stripe and Link, who act as merchant of record under their own privacy policies (<a href="https://stripe.com/privacy">Stripe</a>, <a href="https://link.com/privacy">Link</a>). We never see your full card details.</p>
-      <p>We keep your email address, order number, amount, currency, purchase date and refund status, so we can email your download links, send new ones when you ask, honour refunds and keep business records. Our store runs on Amazon Web Services in the United States, which also sends those emails.</p>
-      <p>We don&rsquo;t sell your information or use it for marketing.</p>
-      <h3>Keeping and deleting it</h3>
-      <p>We keep purchase records for as long as you may need your downloads and as our legal and tax records require. To see, correct or delete your information, email <a href="mailto:support@dollhousemediatech.com">support@dollhousemediatech.com</a>. Deleting your record means we can no longer re-send your download links.</p>
-      <h3>This website</h3>
-      <p>This website has no analytics or advertising and is hosted on GitHub Pages, which keeps ordinary server logs. Our download pages pass a private link token to our store; it stays out of the website&rsquo;s logs.</p>
+      <h1>TenTen Privacy Policy</h1>
+      <p>This policy explains what personal data Dollhouse Media Technologies, LLC ("we", "us"), a Rhode Island limited liability company, collects when you buy or download TenTen, use it, or contact us, and what we do with it. We are responsible (the "controller") for the data our own store and support inbox keep. Effective 2 November 2026.</p>
+      <h3>In short</h3>
+      <ul>
+        <li>The TenTen plugin does not collect or send personal data. It has no telemetry or accounts.</li>
+        <li>Your payment is handled by Stripe's seller of record ("Link" on your receipt), not by us. We never see your card details.</li>
+        <li>To deliver your download, our store keeps your email address and order details.</li>
+        <li>We use this only to deliver and re-send your download, honor refunds, answer you and keep business records. We do not sell it, share it for advertising, or send marketing.</li>
+      </ul>
+      <h3>What we collect</h3>
+      <p>We collect only what buying, downloading and support need.</p>
+      <table class="legal-table">
+        <tr><th>Data</th><th>When we get it</th><th>Why</th></tr>
+        <tr><td>Email address</td><td>From Stripe when your purchase completes</td><td>Send your download link, re-send it, answer support requests, tell you about problems with your purchase</td></tr>
+        <tr><td>Order number, amount, currency, purchase date, refund status</td><td>From Stripe when your purchase completes</td><td>Match downloads and refunds to a purchase</td></tr>
+        <tr><td>Anything you write to us</td><td>When you email support</td><td>Answer you</td></tr>
+        <tr><td>Bounce or complaint reports</td><td>From our email provider, if a message to you fails or is reported as spam</td><td>Keep email working; addresses that bounce or complain are suppressed from further sending</td></tr>
+      </table>
+      <p>We do not log the IP addresses that open your download links, we do not count your downloads, and our pages use no analytics or advertising cookies. The plugin can read a public version file on our website at most once a day to tell you about updates. That sends no account or device identifiers; GitHub, which hosts the website, sees your IP address as it would for any web page, and we don't receive it. You can turn this off in the plugin's About panel.</p>
+      <h3>How we use it, and our legal basis</h3>
+      <p>For buyers in the EU and UK, the law asks us to name a legal basis for each use.</p>
+      <ul>
+        <li><strong>To deliver what you bought</strong> (sending and re-sending your download, refunds): performance of our contract with you.</li>
+        <li><strong>To protect the store</strong> (limiting how often links can be re-sent, keeping links from working after a refund, error logs): our legitimate interest in keeping the service working.</li>
+        <li><strong>To answer your messages</strong>: performance of our contract, or our legitimate interest in helping you.</li>
+        <li><strong>To keep business and tax records</strong>: legal obligation.</li>
+      </ul>
+      <p>We do not sell personal data, share it for targeted advertising, or make automated decisions about you.</p>
+      <h3>Who else handles your data</h3>
+      <ul>
+        <li><strong>Stripe and Link.</strong> Stripe's seller of record sells TenTen to you, takes payment, and handles tax and refunds requested through Link. It is responsible for that data under its own privacy policies (<a href="https://stripe.com/privacy">Stripe</a>, <a href="https://link.com/privacy">Link</a>), not this one. It sends us your email address and order details so we can deliver your download.</li>
+        <li><strong>Our service providers</strong>, who process data only on our instructions: Amazon Web Services, which runs our store, holds purchase records and download files, and sends download emails through Amazon SES, in its US East (Northern Virginia) region; and Google Workspace, which hosts our support email. When you ask for a new link, we look up your email address in our records on AWS.</li>
+        <li><strong>GitHub</strong>, which hosts this website on GitHub Pages and may see your IP address when you visit, under its own privacy terms. Your private download token stays in your browser and is not sent to GitHub.</li>
+        <li><strong>Others, only when needed:</strong> if the law or a valid legal request requires it, to protect our rights or someone's safety, or to a buyer of the business, who would remain bound by this policy.</li>
+      </ul>
+      <h3>How long we keep it</h3>
+      <table class="legal-table">
+        <tr><th>Data</th><th>How long</th></tr>
+        <tr><td>Email address and order details</td><td>For as long as we offer re-downloads of your version, or until you ask us to delete them</td></tr>
+        <tr><td>Store error logs</td><td>90 days</td></tr>
+        <tr><td>Support emails</td><td>2 years after the last message</td></tr>
+        <tr><td>Business and tax records</td><td>As long as the law requires, typically 7 years</td></tr>
+      </table>
+      <p>If you ask us to delete your email address, we can no longer re-send your download.</p>
+      <h3>Your rights</h3>
+      <p>Wherever you live, you can ask us to show you the data we hold about you, correct it, delete it, or give you a copy. We answer within 30 days. To protect you, we may ask you to write from the email address you bought with.</p>
+      <ul>
+        <li><strong>EU and UK:</strong> you also have the right to object to our use based on legitimate interests, to restrict our use, and to complain to your data protection authority.</li>
+        <li><strong>US states with privacy laws</strong> (such as California): you can ask what we collect and why, and ask us to correct or delete it. We do not sell or share personal data as those laws define it, and we will not treat you differently for using these rights.</li>
+      </ul>
+      <p>To use any of these rights, email <a href="mailto:support@dollhousemediatech.com">support@dollhousemediatech.com</a>.</p>
+      <h3>Other terms</h3>
+      <ul>
+        <li><strong>Where data is stored.</strong> Our store and providers are in the United States. If you buy from outside the US, your data is transferred there so we can deliver your purchase.</li>
+        <li><strong>Security.</strong> Download links expire and stop working after a refund, requests for new links are rate-limited and only ever emailed to the purchase address, access to our systems is restricted to us, and our stored data is encrypted at rest.</li>
+        <li><strong>Children.</strong> TenTen is not aimed at children, and we do not knowingly collect data from anyone under 13 (under 16 in the EU and UK).</li>
+        <li><strong>Changes.</strong> If we change this policy we will post the new version with a new effective date, and email buyers about significant changes.</li>
+        <li><strong>Contact.</strong> Dollhouse Media Technologies, LLC, Providence, Rhode Island, <a href="mailto:support@dollhousemediatech.com">support@dollhousemediatech.com</a>.</li>
+      </ul>
     </section>
   </main>
 
