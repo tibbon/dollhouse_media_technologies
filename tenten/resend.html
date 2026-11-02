@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>OddMoon TenTen – Re-send Download</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="../site.css">
+<style>
+  .resend-form { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+  .resend-form input {
+    flex: 1 1 16rem; padding: 0.5rem 0.75rem; color: var(--text); background: transparent;
+    border: 1px solid var(--rule); border-radius: 4px;
+  }
+  .resend-form button {
+    padding: 0.5rem 1rem; color: var(--bg); background: var(--accent); border: 0; border-radius: 4px; cursor: pointer;
+  }
+  .resend-form button:disabled { opacity: 0.6; cursor: default; }
+</style>
+</head>
+<body>
+
+<div class="page page--narrow">
+
+  <nav class="sub-topbar">
+    <a href="/" class="home-link"><strong>D</strong>/<strong>M</strong>/<strong>T</strong></a>
+    <span class="sep">/</span>
+    <span class="crumb">TenTen Re-send Download</span>
+  </nav>
+
+  <hr>
+
+  <main id="main" class="content">
+    <section class="section">
+      <h1>Get your download links</h1>
+      <p>Enter the email address you bought TenTen with, and we'll send fresh links to it.</p>
+      <form id="form" class="resend-form">
+        <input id="email" type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email address">
+        <button id="send" type="submit">Email my links</button>
+      </form>
+      <p id="message" aria-live="polite"></p>
+    </section>
+
+    <hr>
+
+    <section class="section">
+      <p class="section-label">Need help?</p>
+      <p>Lost access to that address, or nothing arrived after a few minutes? Check your spam folder, then email <a href="mailto:support@dollhousemediatech.com">support@dollhousemediatech.com</a>.</p>
+    </section>
+  </main>
+
+  <hr>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-location">Providence, Rhode Island</span>
+      <span class="footer-copy">&copy; 2024&ndash;2026 <strong>D</strong>ollhouse <strong>M</strong>edia <strong>T</strong>echnologies</span>
+    </div>
+  </footer>
+
+</div>
+
+<div class="mode-switcher">
+  <button data-mode="light">Light</button>
+  <button data-mode="dark">Dark</button>
+</div>
+
+<script src="/site.js" defer></script>
+<script>
+(function () {
+  var store = "https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws";
+  var form = document.getElementById("form");
+  var send = document.getElementById("send");
+  var message = document.getElementById("message");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    send.disabled = true;
+    message.textContent = "Sending\u2026";
+    fetch(store + "/resend", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: document.getElementById("email").value })
+    }).then(function (r) {
+      return r.json().then(function (body) {
+        message.textContent = r.ok ? body.message : (body.error || "That didn't work. Please try again.");
+      });
+    }).catch(function () {
+      message.textContent = "We couldn't reach the server. Check your connection and try again.";
+    }).then(function () {
+      send.disabled = false;
+    });
+  });
+})();
+</script>
+</body>
+</html>
