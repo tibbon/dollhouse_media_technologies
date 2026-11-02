@@ -75,8 +75,8 @@
     return;
   }
   var url = store + "/download?t=" + encodeURIComponent(token);
-  fetch(url, { redirect: "manual", cache: "no-store" }).then(function (r) {
-    if (r.type === "opaqueredirect") {
+  fetch(url + "&check=1", { cache: "no-store" }).then(function (r) {
+    if (r.status === 204) {
       show("Your download is starting", "Check your browser's downloads. If nothing happens, use the link below.", false);
       el("again-link").href = url;
       el("again").hidden = false;
