@@ -301,6 +301,7 @@
     p.sources.forEach((s) => { s.onended = null; s.stop(); });
     p.play.textContent = "Play";
   };
+  document.addEventListener("tenten:video", () => { request++; stop(); });
   const level = (mode, wanted) => (mode === wanted ? 1 : 0);
   document.querySelectorAll(".clip").forEach((clip) => {
     const play = clip.querySelector(".clip-play");
@@ -317,6 +318,7 @@
     play.addEventListener("click", async () => {
       if (playing && playing.play === play) return stop();
       stop();
+      document.dispatchEvent(new Event("tenten:clip"));
       ctx ||= new (window.AudioContext || window.webkitAudioContext)();
       await ctx.resume();
       const mine = ++request;
@@ -351,14 +353,37 @@
 </script>
 <script>
 document.querySelectorAll(".video").forEach((box) => {
+  let player, ready = false, pauseWhenReady = false;
+  document.addEventListener("tenten:clip", () => {
+    if (ready) player.pauseVideo();
+    else if (player) pauseWhenReady = true;
+  });
   box.querySelector("button").addEventListener("click", () => {
+    document.dispatchEvent(new Event("tenten:video"));
     const frame = document.createElement("iframe");
-    frame.src = `https://www.youtube-nocookie.com/embed/${box.dataset.video}?autoplay=1&rel=0`;
+    frame.src = `https://www.youtube-nocookie.com/embed/${box.dataset.video}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(location.origin)}`;
     frame.title = "TenTen video";
     frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
     frame.allowFullscreen = true;
     frame.referrerPolicy = "strict-origin-when-cross-origin";
     box.replaceChildren(frame);
+    player = {};
+    window.onYouTubeIframeAPIReady = () => {
+      player = new YT.Player(frame, {
+        host: "https://www.youtube-nocookie.com",
+        events: {
+          onReady: () => { ready = true; },
+          onStateChange: (e) => {
+            if (e.data !== YT.PlayerState.PLAYING) return;
+            if (pauseWhenReady) { pauseWhenReady = false; player.pauseVideo(); }
+            else document.dispatchEvent(new Event("tenten:video"));
+          },
+        },
+      });
+    };
+    const api = document.createElement("script");
+    api.src = "https://www.youtube.com/iframe_api";
+    document.head.append(api);
   });
 });
 </script>
