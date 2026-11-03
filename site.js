@@ -13,7 +13,6 @@
     document.querySelectorAll('.mode-switcher button').forEach(b =>
       b.classList.toggle('active', b.dataset.mode === mode)
     );
-    localStorage.setItem('theme', mode);
   }
 
   // Restore saved or detect OS preference
@@ -29,6 +28,7 @@
     const btn = e.target.closest('.mode-switcher button');
     if (!btn) return;
     applyMode(btn.dataset.mode);
+    localStorage.setItem('theme', btn.dataset.mode);
   });
 
   // OS preference change

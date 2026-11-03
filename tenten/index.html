@@ -3,277 +3,281 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="TenTen is a glitchy pitch shifter and delay plugin for macOS, modelled on a 1970s rack. Detune, spirals, stutter and breakdowns on purpose. VST3, AU, CLAP and standalone. $25, no DRM.">
-<title>TenTen – Dollhouse Media Technologies, LLC</title>
+<meta name="theme-color" content="#15161a">
+<meta name="description" content="TenTen is a glitchy 1970s pitch shifter and delay plugin for Mac and Windows. Detune, spirals, stutter and breakdowns on purpose. Hear it, try the free demo, or buy it for $25.">
+<meta property="og:type" content="product">
+<meta property="og:site_name" content="TenTen">
+<meta property="og:title" content="TenTen: pitch shifting with the glitches left in">
+<meta property="og:description" content="A glitchy 1970s pitch shifter and delay plugin for Mac and Windows. Twelve sounds to hear, a free demo, $25.">
+<meta property="og:url" content="https://dollhousemediatech.com/tenten/">
+<meta property="og:image" content="https://dollhousemediatech.com/tenten/video-poster.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://dollhousemediatech.com/tenten/">
+<title>TenTen: glitchy 1970s pitch shifter and delay plugin</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="../site.css">
 <style>
-  .shot { display: block; width: 100%; height: auto; margin: 1.25rem 0; border-radius: 6px; }
-  .buy {
-    display: inline-block; padding: 0.6rem 1.25rem; color: var(--bg); background: var(--accent);
-    border: 0; border-radius: 4px; font-weight: 600;
+  :root, :root.light, :root.dark, :root.dmt {
+    --bg: #15161a; --text: #ececea; --text-secondary: #a3a3a8; --accent: #e0a63c; --rule: #2c2e35;
+    --panel: #1e2025; --led: #ff4326; color-scheme: dark;
   }
-  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-  .try {
-    display: inline-block; padding: calc(0.6rem - 1px) 1.25rem; color: var(--text);
-    border: 1px solid var(--text-secondary); border-radius: 4px; font-weight: 600;
-  }
-  .legal-marks { margin: 0 0 0.75rem; font-size: 0.72rem; line-height: 1.5; color: var(--text-secondary); }
-  .clips { list-style: none; margin: 1rem 0 0; padding: 0; }
-  .clip { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; padding: 0.5rem 0; border-top: 1px solid var(--rule); }
-  .clip-name { flex: 1 1 12rem; }
-  .clips button { font: inherit; font-size: 0.85rem; padding: 0.25rem 0.65rem; color: var(--text); background: transparent; border: 1px solid var(--text-secondary); cursor: pointer; }
-  .clip-play { min-width: 4.5rem; border-radius: 4px; }
+  html, body { height: auto; }
+  [id] { scroll-margin-top: 4rem; }
+  .bar { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+  .bar-in { display: flex; align-items: center; gap: 1.1rem; max-width: 1040px; margin: 0 auto; padding: 0.55rem clamp(20px, 5vw, 48px); }
+  .bar-name { font-weight: 800; color: var(--text); margin-right: auto; }
+  .bar a { color: var(--text); font-size: 0.9rem; }
+  .bar a.bar-buy { color: #15161a; background: var(--accent); padding: 0.3rem 0.8rem; border-radius: 4px; font-weight: 700; }
+  .tt { max-width: 1040px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
+  .tt section { padding: clamp(28px, 5vw, 56px) 0; }
+  .hero { padding-bottom: clamp(16px, 3vw, 28px) !important; }
+  .eyebrow { margin: 0 0 0.3rem; color: var(--accent); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; }
+  .tt h1 { margin: 0; font-size: clamp(2.8rem, 8vw, 4.6rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; text-transform: none; }
+  .tt .lede { margin: 0.5rem 0 1rem; font-size: clamp(1.45rem, 3.6vw, 2.2rem); font-weight: 700; line-height: 1.2; color: var(--text); }
+  .tt .pitch { max-width: 42rem; margin: 0 0 1.5rem; font-size: 1.1rem; line-height: 1.55; color: var(--text); }
+  .shot { display: block; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--rule); }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin: 1.5rem 0 0.6rem; }
+  .buy, .try { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 4px; font-weight: 700; }
+  .buy { color: #15161a; background: var(--accent); }
+  .try { padding: calc(0.7rem - 1px) 1.4rem; color: var(--text); border: 1px solid var(--text-secondary); }
+  .buy:hover, .try:hover { text-decoration: none; filter: brightness(1.12); }
+  .try.other { order: 1; padding: 0; border: 0; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary); text-decoration: underline; }
+  .terms { margin: 0; font-size: 0.9rem; color: var(--text-secondary); }
+  .tt h2 { margin: 0 0 1.25rem; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.01em; }
+  .clips { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 0.75rem; list-style: none; margin: 0; padding: 0; }
+  .clip { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 0.65rem 0.8rem; margin: 0; padding: 0.85rem; background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; }
+  .clip-name { font-weight: 700; line-height: 1.25; }
+  .clip-src { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .clips button { font: inherit; cursor: pointer; color: var(--text); background: transparent; border: 1px solid var(--text-secondary); }
+  .clip-play { min-width: 4.6rem; padding: 0.5rem 0.6rem; border-radius: 4px; font-weight: 700 !important; }
+  .clip-switch { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
+  .clip-switch button { padding: 0.3rem 0.5rem; font-size: 0.85rem; }
   .clip-switch button:first-child { border-radius: 4px 0 0 4px; }
   .clip-switch button:last-child { border-radius: 0 4px 4px 0; border-left: 0; }
-  .clips button[aria-pressed="true"] { color: var(--bg); background: var(--accent); border-color: var(--accent); }
-  .video { position: relative; margin: 1rem 0 0.75rem; aspect-ratio: 16 / 9; background: #000; border-radius: 6px; overflow: hidden; }
+  .clips button[aria-pressed="true"] { color: #15161a; background: var(--accent); border-color: var(--accent); font-weight: 700; }
+  .clip.is-playing { border-color: var(--led); }
+  .clip.is-playing .clip-play { color: #fff; background: var(--led); border-color: var(--led); }
+  .demo-note { margin: 1.5rem 0 0; font-size: 1.05rem; }
+  .video { position: relative; aspect-ratio: 16 / 9; background: #000; border-radius: 8px; overflow: hidden; }
   .video iframe, .video button { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; background: none; }
   .video button { cursor: pointer; }
   .video img { display: block; width: 100%; height: 100%; object-fit: cover; }
-  .video-badge { position: absolute; left: 50%; bottom: 12%; transform: translateX(-50%); padding: 0.45rem 1.1rem; color: var(--bg); background: var(--accent); border-radius: 4px; font-weight: 600; }
+  .video-badge { position: absolute; left: 50%; bottom: 10%; transform: translateX(-50%); padding: 0.5rem 1.1rem; color: #15161a; background: var(--accent); border-radius: 4px; font-weight: 700; white-space: nowrap; }
+  .blocks { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(20px, 3vw, 36px) clamp(24px, 4vw, 48px); }
+  .tt h3 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 800; }
+  .blocks p, .break p { margin: 0; line-height: 1.55; }
+  .break { display: grid; grid-template-columns: 2fr 3fr; gap: 1.25rem clamp(24px, 4vw, 48px); align-items: center; margin-top: clamp(28px, 4vw, 48px); }
+  .break h3 { font-size: clamp(1.5rem, 3vw, 2rem); color: var(--led); }
+  .closing { margin: clamp(24px, 4vw, 40px) 0 0; font-size: 1.05rem; }
+  .specs { width: 100%; border-collapse: collapse; }
+  .specs th, .specs td { padding: 0.65rem 0; border-top: 1px solid var(--rule); text-align: left; vertical-align: top; line-height: 1.45; }
+  .specs th { width: 9rem; padding-right: 1rem; font-weight: 700; color: var(--accent); }
+  details { border-top: 1px solid var(--rule); }
+  summary { padding: 0.8rem 0; font-weight: 700; cursor: pointer; }
+  details p { margin: 0 0 1rem; max-width: 46rem; line-height: 1.55; }
+  .end { text-align: center; }
+  .end .actions { justify-content: center; }
+  .end .lede { margin-top: 0; }
+  .links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; margin: 0 0 1rem; padding: 0; list-style: none; font-size: 0.9rem; }
+  .fine { margin: 0 0 0.6rem; font-size: 0.72rem; line-height: 1.5; color: var(--text-secondary); }
+  .tt > hr { border-top-color: var(--rule); }
+  @media (max-width: 700px) { .break { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 </head>
 <body>
 
-<div class="page page--narrow">
+<nav class="bar" aria-label="TenTen">
+  <div class="bar-in">
+    <a class="bar-name" href="#main">TenTen</a>
+    <a href="#listen">Listen</a>
+    <a href="#demo">Demo</a>
+    <a class="bar-buy" href="https://buy.stripe.com/3cI28sfbUakd9O5bhMew800">Buy $25</a>
+  </div>
+</nav>
 
-  <nav class="sub-topbar">
-    <a href="/" class="home-link"><strong>D</strong>/<strong>M</strong>/<strong>T</strong></a>
-    <span class="sep">/</span>
-    <span class="crumb">TenTen</span>
-  </nav>
-
-  <hr>
-
-  <main id="main" class="content">
-    <section class="section">
+<div class="tt">
+  <main id="main">
+    <section class="hero">
+      <p class="eyebrow">The Glitchalizer</p>
       <h1>TenTen</h1>
-      <p><strong>The Glitchalizer.</strong> Pitch shifting the way it sounded in the 1970s: grainy, unstable and full of surprises.</p>
-      <p>TenTen is a pitch shifter and delay plugin modelled on a 1970s glitchy pitch-shifting delay rack, with everything that made it strange left in. Your audio goes through a 10-bit converter into a tiny memory, and two read points crossfade to change the pitch. Each shift stutters, warbles and grits up in its own way. Most pitch shifters work hard to hide that. TenTen lets you turn it up.</p>
-      <img class="shot" src="panel.png" alt="The TenTen plugin window: four large knobs for input level, manual pitch, feedback and anti-feedback, delay buttons, and red LED pitch readouts" width="942" height="587">
-      <p class="actions"><a class="buy" href="https://buy.stripe.com/3cI28sfbUakd9O5bhMew800">Buy for $25</a> <a class="try" href="https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws/demo?f=mac" rel="nofollow">Try the free demo (Mac)</a> <a class="try" href="https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws/demo?f=windows" rel="nofollow">Try the free demo (Windows)</a></p>
-      <p>$25 plus any sales tax or VAT, one time. No subscription, account, serial number or activation. If it isn&rsquo;t for you, get a full refund within 14 days, no questions asked.</p>
-      <p>The demo is the whole plugin, free, with no email, key or account. It fades to your dry signal after 10 minutes of audio each time it&rsquo;s loaded; reload it to keep going. On Windows it&rsquo;s a zip you install yourself, like the paid version. Already bought TenTen? The demo replaces your paid copy, so skip it, or install your paid version again to get the full one back.</p>
-      <p>Published by Dollhouse Media Technologies, LLC. Sold through Link (Stripe). By buying or installing the demo you agree to the <a href="eula.html">License Agreement</a>; see also the <a href="refunds.html">Refund Policy</a> and <a href="privacy.html">Privacy Policy</a>.</p>
+      <p class="lede">Pitch shifting with the glitches left in.</p>
+      <p class="pitch">A 1970s rack pitch shifter and delay, rebuilt in software chip by chip, flaws and all. It stutters, warbles, drifts and falls apart beautifully. Most pitch shifters work hard to hide that. This one hands you the controls.</p>
+      <img class="shot" src="panel.png" alt="TenTen's front panel on the Falling Spiral preset: red LED pitch readout at 0.92, four large knobs, delay buttons with the 30 ms lamp lit" width="1880" height="590">
+      <p class="actions"><a class="buy" href="https://buy.stripe.com/3cI28sfbUakd9O5bhMew800">Buy for $25</a> <a class="try demo-mac" href="https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws/demo?f=mac" rel="nofollow">Demo for Mac</a> <a class="try demo-win" href="https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws/demo?f=windows" rel="nofollow">Demo for Windows</a></p>
+      <p class="terms">$25 once, plus local tax. No subscription, account or activation. 14-day refund.</p>
     </section>
 
-    <hr>
-
-    <section class="section" id="watch">
-      <p class="section-label">Watch</p>
-      <div class="video" data-video="Mk7SZOsB_wM">
-        <button type="button" aria-label="Play the one-minute TenTen video, from YouTube">
-          <img src="video-poster.jpg" alt="TenTen: a glitchy 1970s pitch shifter and delay, circuitbent and worn" width="1280" height="720" loading="lazy">
-          <span class="video-badge">Play the video</span>
-        </button>
-      </div>
-      <p>A one-minute tour. Pressing play loads the video from YouTube, which gets your IP address and may set cookies; see the <a href="privacy.html">Privacy Policy</a>. Or <a href="https://youtu.be/Mk7SZOsB_wM">watch it on YouTube</a>.</p>
-    </section>
-
-    <hr>
-
-    <section class="section" id="listen">
-      <p class="section-label">Listen</p>
-      <p>Twelve recordings, each through one preset. Switch between Dry and TenTen while it plays. Each pair plays at the same gain, with nothing else added.</p>
+    <section id="listen">
+      <h2>Listen</h2>
       <ul class="clips">
         <li class="clip" data-base="audio/01-guitar-slapback-30-ms">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><strong>Guitar</strong> Slapback 30 ms</span>
+          <span class="clip-name"><span class="clip-src">Guitar</span> Slapback 30 ms</span>
           <span class="clip-switch" role="group" aria-label="Guitar: Slapback 30 ms, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
         <li class="clip" data-base="audio/02-guitar-major-third-above">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><strong>Guitar</strong> Major Third Above</span>
+          <span class="clip-name"><span class="clip-src">Guitar</span> Major Third Above</span>
           <span class="clip-switch" role="group" aria-label="Guitar: Major Third Above, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
         <li class="clip" data-base="audio/03-acoustic-dual-detune">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><strong>Acoustic</strong> Dual Detune</span>
+          <span class="clip-name"><span class="clip-src">Acoustic</span> Dual Detune</span>
           <span class="clip-switch" role="group" aria-label="Acoustic: Dual Detune, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
         <li class="clip" data-base="audio/04-piano-cross-fed-detune-wash">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><strong>Piano</strong> Cross-Fed Detune Wash</span>
+          <span class="clip-name"><span class="clip-src">Piano</span> Cross-Fed Detune Wash</span>
           <span class="clip-switch" role="group" aria-label="Piano: Cross-Fed Detune Wash, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
         <li class="clip" data-base="audio/05-piano-tired-unit">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><strong>Piano</strong> Tired Unit</span>
+          <span class="clip-name"><span class="clip-src">Piano</span> Tired Unit</span>
           <span class="clip-switch" role="group" aria-label="Piano: Tired Unit, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
         <li class="clip" data-base="audio/06-drums-dropping-snare">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><strong>Drums</strong> Dropping Snare</span>
+          <span class="clip-name"><span class="clip-src">Drums</span> Dropping Snare</span>
           <span class="clip-switch" role="group" aria-label="Drums: Dropping Snare, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
         <li class="clip" data-base="audio/07-drums-corrupted-ram">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><strong>Drums</strong> Corrupted RAM</span>
+          <span class="clip-name"><span class="clip-src">Drums</span> Corrupted RAM</span>
           <span class="clip-switch" role="group" aria-label="Drums: Corrupted RAM, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
         <li class="clip" data-base="audio/08-drum-machine-falling-spiral">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><strong>Drum Machine</strong> Falling Spiral</span>
+          <span class="clip-name"><span class="clip-src">Drum Machine</span> Falling Spiral</span>
           <span class="clip-switch" role="group" aria-label="Drum Machine: Falling Spiral, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
         <li class="clip" data-base="audio/09-modular-whole-tone-staircase">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><strong>Modular</strong> Whole-Tone Staircase</span>
+          <span class="clip-name"><span class="clip-src">Modular</span> Whole-Tone Staircase</span>
           <span class="clip-switch" role="group" aria-label="Modular: Whole-Tone Staircase, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
         <li class="clip" data-base="audio/10-bass-droid-chatter">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><strong>Bass</strong> Droid Chatter</span>
+          <span class="clip-name"><span class="clip-src">Bass</span> Droid Chatter</span>
           <span class="clip-switch" role="group" aria-label="Bass: Droid Chatter, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
         <li class="clip" data-base="audio/11-polysynth-seasick-chorus">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><strong>Polysynth</strong> Seasick Chorus</span>
+          <span class="clip-name"><span class="clip-src">Polysynth</span> Seasick Chorus</span>
           <span class="clip-switch" role="group" aria-label="Polysynth: Seasick Chorus, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
         <li class="clip" data-base="audio/12-synth-bass-slow-clock-lo-fi">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><strong>Synth Bass</strong> Slow Clock Lo-Fi</span>
+          <span class="clip-name"><span class="clip-src">Synth Bass</span> Slow Clock Lo-Fi</span>
           <span class="clip-switch" role="group" aria-label="Synth Bass: Slow Clock Lo-Fi, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
       </ul>
       <noscript><p>The player needs JavaScript.</p></noscript>
+      <div id="demo">
+        <p class="demo-note">The demo is the whole plugin. It fades to dry after 10 minutes; reload it and carry on. No email needed.</p>
+        <p class="actions"><a class="try demo-mac" href="https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws/demo?f=mac" rel="nofollow">Demo for Mac</a> <a class="try demo-win" href="https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws/demo?f=windows" rel="nofollow">Demo for Windows</a></p>
+      </div>
     </section>
 
-    <hr>
-
-    <section class="section">
-      <p class="section-label">Put it on</p>
-      <ul class="feature-list">
-        <li><strong>A vocal:</strong> a few cents of detune and a short delay for an instant double</li>
-        <li><strong>A guitar:</strong> two units pitched slightly apart, one each side, for a wide stereo sound</li>
-        <li><strong>A snare:</strong> the harder you hit, the further the pitch drops, and the feedback keeps it falling</li>
-        <li><strong>A send:</strong> repeats that climb or fall in spirals and staircases</li>
-        <li><strong>Anything you&rsquo;re ready to ruin:</strong> hard splices and failed memory bits, from robot chatter to corrupted data</li>
-      </ul>
+    <section id="watch">
+      <div class="video" data-video="Mk7SZOsB_wM">
+        <button type="button" aria-label="Play the TenTen video on YouTube">
+          <img src="video-poster.jpg" alt="TenTen: a glitchy 1970s pitch shifter and delay, circuitbent and worn" width="1280" height="720" loading="lazy">
+          <span class="video-badge">&#9654; YouTube</span>
+        </button>
+      </div>
     </section>
 
-    <hr>
-
-    <section class="section">
-      <p class="section-label">Sound</p>
-      <ul class="feature-list">
-        <li>Pitch from one octave down to one octave up, or a plain digital delay of up to 112.5&nbsp;ms</li>
-        <li>Feedback for spirals, staircases and combs, with an overdrive option that lets the repeats grow and scream</li>
-        <li>Four ways to steer the pitch: the manual knob, a slow anti-feedback wobble, a MIDI keyboard, or an automatable CV control with an envelope follower</li>
-        <li>Two complete units for stereo detune, with cross-feedback between them</li>
-        <li>A second output with its own delay tap, and linked multichannel use up to 16 channels</li>
-      </ul>
+    <section id="features">
+      <div class="blocks">
+        <div><h3>Thicken anything.</h3><p>A few cents of detune and a short delay, and one vocal becomes two. Split a guitar across two units and it goes wide.</p></div>
+        <div><h3>Snares that fall off a cliff.</h3><p>Hit harder and the pitch drops further. Feedback keeps it falling.</p></div>
+        <div><h3>Spirals and staircases.</h3><p>Send the repeats back through the shifter and they climb or tumble. Turn on overdrive and they grow and scream.</p></div>
+        <div><h3>Play it.</h3><p>Steer the pitch from a MIDI keyboard, a slow wobble, an envelope follower or automation.</p></div>
+        <div><h3>Decades of wear, under your control.</h3><p>Dial in drift, warm-up and age. Every instance gets its own part tolerances, so no two sound quite alike. Hit Stock for a factory-fresh unit.</p></div>
+      </div>
+      <div class="break">
+        <div><h3>Now break it.</h3><p>Kill memory bits. Remove the crossfades. Run the pointer backwards. Freeze it. Hardware never gave you these, except on its way to the repair bench.</p></div>
+        <img class="shot" src="bends.png" alt="TenTen's Bends page with memory bit kill switches lit on the Corrupted RAM preset" width="1880" height="790" loading="lazy">
+      </div>
+      <p class="closing">41 presets, from Vocal Doubler to Corrupted RAM. Every control has a tooltip, so you can skip the manual.</p>
     </section>
 
-    <hr>
-
-    <section class="section">
-      <p class="section-label">Character</p>
-      <ul class="feature-list">
-        <li>Drift, warm-up and decades of age, each under your control</li>
-        <li>Part tolerances that make each instance its own unit</li>
-        <li>A Stock switch for a factory-fresh, perfectly aligned unit</li>
-        <li>Bends that go where the original never went: faster splicing, no crossfades at all, a pointer that runs backwards, freeze</li>
-        <li>Broken on purpose: failed memory bits, crossfade faults and other real-world breakdowns, one click away</li>
-        <li>41 presets, from Vocal Doubler and Dual Detune to Droid Chatter and Corrupted RAM</li>
-        <li>A tooltip on every control, so you can explore without a manual</li>
-      </ul>
+    <section id="specs">
+      <h2>Specs</h2>
+      <table class="specs">
+        <tr><th scope="row">Mac</th><td>macOS 11 or later, Apple Silicon and Intel. VST3, AU, CLAP, standalone</td></tr>
+        <tr><th scope="row">Windows</th><td>64-bit Windows 11. VST3 and CLAP, in a zip you copy into place</td></tr>
+        <tr><th scope="row">Pitch and delay</th><td>One octave down to one octave up. Delay up to 112.5&nbsp;ms</td></tr>
+        <tr><th scope="row">Channels</th><td>Mono, stereo, linked up to 16. Second output with its own delay tap</td></tr>
+        <tr><th scope="row">License</th><td>One per person, on computers you own or control. Updates within your major version</td></tr>
+        <tr><th scope="row">Privacy</th><td>The plugin has no DRM and no telemetry. It checks a public version number at most once a day, and you can turn that off</td></tr>
+        <tr><th scope="row">Coming</th><td>Pro Tools / AAX</td></tr>
+      </table>
     </section>
 
-    <hr>
-
-    <section class="section">
-      <p class="section-label">What you get</p>
-      <ul class="feature-list">
-        <li>On Mac: VST3, Audio Unit and CLAP plugins, plus a standalone app</li>
-        <li>macOS 11 or later (Apple Silicon and Intel)</li>
-        <li>A signed and notarized Mac installer, or the plugins on their own in a zip to install yourself</li>
-        <li>On 64-bit Windows 11: VST3 and CLAP plugins in a zip to install yourself, not code-signed yet</li>
-        <li>Pro Tools / AAX support coming soon</li>
-        <li>Download links by email as soon as you&rsquo;ve paid, and new links whenever you need them</li>
-        <li>A personal license, one per person who uses it, on computers you own or control</li>
-        <li>Updates within the major version you buy</li>
-        <li>No telemetry, no DRM. The plugin only ever checks a public version number, at most once a day, and you can turn that off</li>
-      </ul>
-      <p class="actions"><a class="buy" href="https://buy.stripe.com/3cI28sfbUakd9O5bhMew800">Buy for $25</a> <a class="try" href="https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws/demo?f=mac" rel="nofollow">Try the free demo (Mac)</a> <a class="try" href="https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws/demo?f=windows" rel="nofollow">Try the free demo (Windows)</a></p>
+    <section id="faq">
+      <h2>Questions</h2>
+      <details><summary>Why so much CPU?</summary><p>It runs the circuit instead of approximating it: 10-bit conversion, and logic stepping about 268,000 times a second per unit. A stereo track costs about twice a mono one. If a session gets tight, freeze or bounce the track.</p></details>
+      <details><summary>Does it add latency?</summary><p>1.3&nbsp;ms at 48&nbsp;kHz or 2.2&nbsp;ms at 44.1&nbsp;kHz, reported to your DAW so it compensates. Pitch shifting adds about 30&nbsp;ms more, as the original did, because that&rsquo;s part of the sound.</p></details>
+      <details><summary>Why might Windows flag it?</summary><p>It isn&rsquo;t code-signed yet, so some antivirus tools may flag it. Signing and an installer are coming.</p></details>
+      <details><summary>What&rsquo;s LINK.COM on my statement?</summary><p>That&rsquo;s us. Link handles payment and tax. Your download links arrive by email right after.</p></details>
+      <details><summary>I already own it. Should I install the demo?</summary><p>No, it replaces your paid copy. Reinstall the paid version to get it back.</p></details>
+      <details><summary>Lost your download links?</summary><p><a href="resend.html">Get them again.</a></p></details>
     </section>
 
-    <hr>
-
-    <section class="section" id="faq">
-      <p class="section-label">Questions</p>
-      <h2>Why does TenTen use more CPU than most plugins?</h2>
-      <p>Most pitch shifters are modern algorithms that aim for a clean result. TenTen works differently: it simulates the original unit&rsquo;s whole signal path. That includes its vintage 10-bit A/D and D/A conversion, its CMOS logic stepping through its timing about 268,000 times a second for each unit, and the analog stages around them. Those quirks are what make it sound the way it does, and they come from running the circuit rather than approximating it. TenTen runs one unit per output channel, so a stereo track costs about twice a mono one. Dual presets already fit in those two units, so they cost about the same as other stereo presets. If your session gets tight, freeze or bounce the track.</p>
-      <h2>Why does it have latency?</h2>
-      <p>The simulated circuit runs at its own internal rate, so TenTen converts your audio to that rate and back. Doing that cleanly takes about 1.3 ms at 48 kHz, or 2.2 ms at 44.1 kHz. TenTen reports this to your DAW, which compensates for it automatically during playback and mixing. You&rsquo;d only notice it when monitoring live through the plugin.</p>
-      <p>Pitch shifting also adds about 30 ms of its own, as the original hardware did. That delay is part of how the effect works and of how it sounds, so it stays in the signal.</p>
-      <h2>Does it run on Windows?</h2>
-      <p>Yes, on 64-bit Windows 11, as VST3 and CLAP plugins. They come in a zip with instructions, and you copy them into place yourself. They aren&rsquo;t code-signed yet, so some antivirus tools may flag them. Code signing for Windows is coming soon, along with an installer. The free demo for Windows comes the same way, as a zip.</p>
-    </section>
-
-    <hr>
-
-    <section class="section">
-      <p class="section-label">Buying</p>
-      <p>Link (Stripe) takes payment and handles sales tax and VAT, so your card statement shows a LINK.COM charge. Your download links arrive by email from Dollhouse Media Technologies.</p>
-    </section>
-    <hr>
-
-    <section class="section">
-      <p class="section-label">Links</p>
-      <ul>
-        <li><a href="resend.html">Get your download links again</a></li>
-        <li><a href="mailto:support@dollhousemediatech.com">Support: support@dollhousemediatech.com</a></li>
-        <li><a href="eula.html">License Agreement</a></li>
-        <li><a href="refunds.html">Refund Policy</a></li>
-        <li><a href="privacy.html">Privacy Policy</a></li>
-      </ul>
+    <section class="end">
+      <p class="lede">Go on, break something.</p>
+      <p class="actions"><a class="buy" href="https://buy.stripe.com/3cI28sfbUakd9O5bhMew800">Buy for $25</a> <a class="try demo-mac" href="https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws/demo?f=mac" rel="nofollow">Demo for Mac</a> <a class="try demo-win" href="https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws/demo?f=windows" rel="nofollow">Demo for Windows</a></p>
     </section>
   </main>
 
   <hr>
 
   <footer class="site-footer">
-    <p class="legal-marks">VST is a trademark of Steinberg Media Technologies GmbH, registered in Europe and other countries. Audio Units is a trademark of Apple Inc. Pro Tools and AAX are trademarks of Avid Technology, Inc. TenTen is not endorsed by them.</p>
+    <ul class="links">
+      <li><a href="mailto:support@dollhousemediatech.com">Support</a></li>
+      <li><a href="resend.html">Get your links again</a></li>
+      <li><a href="eula.html">License</a></li>
+      <li><a href="refunds.html">Refunds</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
+      <li><a href="/">Dollhouse Media Technologies</a></li>
+    </ul>
+    <p class="fine">Published by Dollhouse Media Technologies, LLC. Sold through Link (Stripe). Buying or installing the demo means agreeing to the <a href="eula.html">License Agreement</a>.</p>
+    <p class="fine">VST is a trademark of Steinberg Media Technologies GmbH, registered in Europe and other countries. Audio Units is a trademark of Apple Inc. Pro Tools and AAX are trademarks of Avid Technology, Inc. TenTen is not endorsed by them.</p>
     <div class="footer-inner">
       <span class="footer-location">Providence, Rhode Island</span>
       <span class="footer-copy">&copy; 2024&ndash;2026 <strong>D</strong>ollhouse <strong>M</strong>edia <strong>T</strong>echnologies, LLC</span>
     </div>
   </footer>
-
-</div>
-
-<div class="mode-switcher">
-  <button data-mode="light">Light</button>
-  <button data-mode="dark">Dark</button>
 </div>
 
 <script>
@@ -347,6 +351,22 @@ document.querySelectorAll(".video").forEach((box) => {
   });
 });
 </script>
+<script>
+(() => {
+  const ua = navigator.userAgent;
+  const phone = /iPhone|iPad|iPod|Android/.test(ua) || (/Mac/.test(ua) && navigator.maxTouchPoints > 1);
+  const os = phone ? null : /Windows/.test(ua) ? "win" : /Mac/.test(ua) ? "mac" : null;
+  document.querySelectorAll(".demo-mac, .demo-win").forEach((a) => {
+    const mine = a.classList.contains("demo-win") ? "win" : "mac";
+    if (os === mine) a.textContent = "Try the free demo";
+    else a.classList.add("other");
+  });
+  const sync = () => document.querySelectorAll(".clip").forEach((c) =>
+    c.classList.toggle("is-playing", c.querySelector(".clip-play").textContent === "Stop"));
+  document.querySelectorAll(".clip-play").forEach((b) => new MutationObserver(sync).observe(b, { childList: true }));
+})();
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"9a17bbd2febd4760945a1f30806acd66","spa":false}'></script>
 <script src="/site.js" defer></script>
 </body>
 </html>
