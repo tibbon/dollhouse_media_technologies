@@ -39,6 +39,12 @@
   .tt h1 { margin: 0; font-size: clamp(2.8rem, 8vw, 4.6rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; text-transform: none; }
   .tt .lede { margin: 0.5rem 0 1rem; font-size: clamp(1.45rem, 3.6vw, 2.2rem); font-weight: 700; line-height: 1.2; color: var(--text); }
   .tt .pitch { max-width: 42rem; margin: 0 0 1.5rem; font-size: 1.1rem; line-height: 1.55; color: var(--text); }
+  .formats { margin: 0 0 1.25rem; font-weight: 700; color: var(--text); }
+  .hear { margin: 0 0 1.5rem; }
+  .hear-btn { padding: 0.8rem 1.5rem; font: inherit; font-size: 1.1rem; font-weight: 800; color: #15161a; background: var(--led); border: 0; border-radius: 4px; cursor: pointer; }
+  .hear-btn:hover, .mini:hover { filter: brightness(1.12); }
+  .mini { margin-top: 0.7rem; padding: 0.35rem 0.75rem; font: inherit; font-size: 0.85rem; font-weight: 700; color: var(--text); background: transparent; border: 1px solid var(--text-secondary); border-radius: 4px; cursor: pointer; }
+  .mini.on { color: #15161a; background: var(--led); border-color: var(--led); }
   .shot { display: block; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--rule); }
   .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin: 1.5rem 0 0.6rem; }
   .buy, .try { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 4px; font-weight: 700; }
@@ -51,31 +57,32 @@
   .clips { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 0.75rem; list-style: none; margin: 0; padding: 0; }
   .clip { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 0.65rem 0.8rem; margin: 0; padding: 0.85rem; background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; }
   .clip-name { font-weight: 700; line-height: 1.25; }
-  .clip-src { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .clip-src { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); }
   .clips button { font: inherit; cursor: pointer; color: var(--text); background: transparent; border: 1px solid var(--text-secondary); }
   .clip-play { min-width: 4.6rem; padding: 0.5rem 0.6rem; border-radius: 4px; font-weight: 700 !important; }
   .clip-switch { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
   .clip-switch button { padding: 0.3rem 0.5rem; font-size: 0.85rem; }
   .clip-switch button:first-child { border-radius: 4px 0 0 4px; }
   .clip-switch button:last-child { border-radius: 0 4px 4px 0; border-left: 0; }
-  .clips button[aria-pressed="true"] { color: #15161a; background: var(--accent); border-color: var(--accent); font-weight: 700; }
+  .clip-switch button[aria-pressed="true"]:last-child { border-left: 1px solid var(--led); }
+  .clips button[aria-pressed="true"] { color: var(--led); border-color: var(--led); font-weight: 700; box-shadow: inset 0 0 0 1px var(--led); }
   .clip.is-playing { border-color: var(--led); }
-  .clip.is-playing .clip-play { color: #fff; background: var(--led); border-color: var(--led); }
+  .clip.is-playing .clip-play { color: #15161a; background: var(--led); border-color: var(--led); }
   .demo-note { margin: 1.5rem 0 0; font-size: 1.05rem; }
   .video { position: relative; aspect-ratio: 16 / 9; background: #000; border-radius: 8px; overflow: hidden; }
   .video iframe, .video button { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; background: none; }
   .video button { cursor: pointer; }
   .video img { display: block; width: 100%; height: 100%; object-fit: cover; }
-  .video-badge { position: absolute; left: 50%; bottom: 10%; transform: translateX(-50%); padding: 0.5rem 1.1rem; color: #15161a; background: var(--accent); border-radius: 4px; font-weight: 700; white-space: nowrap; }
+  .video-badge { position: absolute; left: 50%; bottom: 10%; transform: translateX(-50%); padding: 0.5rem 1.1rem; color: #fff; background: rgba(0,0,0,0.78); border: 1px solid #fff; border-radius: 4px; font-weight: 700; white-space: nowrap; }
   .blocks { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(20px, 3vw, 36px) clamp(24px, 4vw, 48px); }
   .tt h3 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 800; }
   .blocks p, .break p { margin: 0; line-height: 1.55; }
   .break { display: grid; grid-template-columns: 2fr 3fr; gap: 1.25rem clamp(24px, 4vw, 48px); align-items: center; margin-top: clamp(28px, 4vw, 48px); }
   .break h3 { font-size: clamp(1.5rem, 3vw, 2rem); color: var(--led); }
-  .closing { margin: clamp(24px, 4vw, 40px) 0 0; font-size: 1.05rem; }
+  .closing { margin: clamp(24px, 4vw, 40px) 0 0; font-size: clamp(1.15rem, 2.4vw, 1.45rem); font-weight: 700; line-height: 1.35; }
   .specs { width: 100%; border-collapse: collapse; }
   .specs th, .specs td { padding: 0.65rem 0; border-top: 1px solid var(--rule); text-align: left; vertical-align: top; line-height: 1.45; }
-  .specs th { width: 9rem; padding-right: 1rem; font-weight: 700; color: var(--accent); }
+  .specs th { width: 9rem; padding-right: 1rem; font-weight: 700; color: var(--text-secondary); }
   details { border-top: 1px solid var(--rule); }
   summary { padding: 0.8rem 0; font-weight: 700; cursor: pointer; }
   details p { margin: 0 0 1rem; max-width: 46rem; line-height: 1.55; }
@@ -86,6 +93,8 @@
   .fine { margin: 0 0 0.6rem; font-size: 0.72rem; line-height: 1.5; color: var(--text-secondary); }
   .tt > hr { border-top-color: var(--rule); }
   @media (max-width: 700px) { .break { grid-template-columns: 1fr; } }
+  @media (min-width: 900px) { .blocks { grid-template-columns: repeat(3, 1fr); } .blocks .wide { grid-column: span 2; } .blocks .wide p { max-width: 36rem; } }
+  @media (max-width: 600px) { .actions .buy { flex: 1 1 100%; text-align: center; } }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 </head>
@@ -106,33 +115,56 @@
       <p class="eyebrow">The Glitchalizer</p>
       <h1>TenTen</h1>
       <p class="lede">Pitch shifting with the glitches left in.</p>
-      <p class="pitch">A 1970s rack pitch shifter and delay, rebuilt in software chip by chip, flaws and all. It stutters, warbles, drifts and falls apart beautifully. Most pitch shifters work hard to hide that. This one hands you the controls.</p>
+      <p class="pitch">A 1970s rack pitch shifter and delay, rebuilt in software chip by chip, then circuit-bent. It stutters, warbles, drifts and sometimes falls apart mid-note. Most pitch shifters work hard to hide that. This one gives you a Bends page.</p>
+      <p class="formats">Plugin for Mac and Windows: VST3, AU, CLAP.</p>
+      <p class="hear"><button type="button" class="hear-btn" data-plays="audio/08-drum-machine-falling-spiral" data-label="Hear it: Falling Spiral">&#9654; Hear it: Falling Spiral</button></p>
       <img class="shot" src="panel.png" alt="TenTen's front panel on the Falling Spiral preset: red LED pitch readout at 0.92, four large knobs, delay buttons with the 30 ms lamp lit" width="1880" height="590">
       <p class="actions"><a class="buy" href="https://buy.stripe.com/3cI28sfbUakd9O5bhMew800">Buy for $25</a> <a class="try demo-mac" href="https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws/demo?f=mac" rel="nofollow">Demo for Mac</a> <a class="try demo-win" href="https://ztb5xfztb6k4mzzrnhuzccribm0bydsr.lambda-url.us-east-1.on.aws/demo?f=windows" rel="nofollow">Demo for Windows</a></p>
-      <p class="terms">$25 once, plus local tax. No subscription, account or activation. 14-day refund.</p>
+      <p class="terms">$25 once, plus local tax. No subscription, account or activation. Download links by email right away. 14-day refund.</p>
     </section>
 
     <section id="listen">
       <h2>Listen</h2>
       <ul class="clips">
-        <li class="clip" data-base="audio/01-guitar-slapback-30-ms">
+        <li class="clip" data-base="audio/07-drums-corrupted-ram">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><span class="clip-src">Guitar</span> Slapback 30 ms</span>
-          <span class="clip-switch" role="group" aria-label="Guitar: Slapback 30 ms, what you hear">
+          <span class="clip-name"><span class="clip-src">Drums</span> Corrupted RAM</span>
+          <span class="clip-switch" role="group" aria-label="Drums: Corrupted RAM, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
-        <li class="clip" data-base="audio/02-guitar-major-third-above">
+        <li class="clip" data-base="audio/10-bass-droid-chatter">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><span class="clip-src">Guitar</span> Major Third Above</span>
-          <span class="clip-switch" role="group" aria-label="Guitar: Major Third Above, what you hear">
+          <span class="clip-name"><span class="clip-src">Bass</span> Droid Chatter</span>
+          <span class="clip-switch" role="group" aria-label="Bass: Droid Chatter, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
-        <li class="clip" data-base="audio/03-acoustic-dual-detune">
+        <li class="clip" data-base="audio/08-drum-machine-falling-spiral">
           <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><span class="clip-src">Acoustic</span> Dual Detune</span>
-          <span class="clip-switch" role="group" aria-label="Acoustic: Dual Detune, what you hear">
+          <span class="clip-name"><span class="clip-src">Drum Machine</span> Falling Spiral</span>
+          <span class="clip-switch" role="group" aria-label="Drum Machine: Falling Spiral, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/06-drums-dropping-snare">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><span class="clip-src">Drums</span> Dropping Snare</span>
+          <span class="clip-switch" role="group" aria-label="Drums: Dropping Snare, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/09-modular-whole-tone-staircase">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><span class="clip-src">Modular</span> Whole-Tone Staircase</span>
+          <span class="clip-switch" role="group" aria-label="Modular: Whole-Tone Staircase, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/11-polysynth-seasick-chorus">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><span class="clip-src">Polysynth</span> Seasick Chorus</span>
+          <span class="clip-switch" role="group" aria-label="Polysynth: Seasick Chorus, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
@@ -150,52 +182,31 @@
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
-        <li class="clip" data-base="audio/06-drums-dropping-snare">
-          <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><span class="clip-src">Drums</span> Dropping Snare</span>
-          <span class="clip-switch" role="group" aria-label="Drums: Dropping Snare, what you hear">
-            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
-          </span>
-        </li>
-        <li class="clip" data-base="audio/07-drums-corrupted-ram">
-          <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><span class="clip-src">Drums</span> Corrupted RAM</span>
-          <span class="clip-switch" role="group" aria-label="Drums: Corrupted RAM, what you hear">
-            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
-          </span>
-        </li>
-        <li class="clip" data-base="audio/08-drum-machine-falling-spiral">
-          <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><span class="clip-src">Drum Machine</span> Falling Spiral</span>
-          <span class="clip-switch" role="group" aria-label="Drum Machine: Falling Spiral, what you hear">
-            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
-          </span>
-        </li>
-        <li class="clip" data-base="audio/09-modular-whole-tone-staircase">
-          <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><span class="clip-src">Modular</span> Whole-Tone Staircase</span>
-          <span class="clip-switch" role="group" aria-label="Modular: Whole-Tone Staircase, what you hear">
-            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
-          </span>
-        </li>
-        <li class="clip" data-base="audio/10-bass-droid-chatter">
-          <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><span class="clip-src">Bass</span> Droid Chatter</span>
-          <span class="clip-switch" role="group" aria-label="Bass: Droid Chatter, what you hear">
-            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
-          </span>
-        </li>
-        <li class="clip" data-base="audio/11-polysynth-seasick-chorus">
-          <button type="button" class="clip-play">Play</button>
-          <span class="clip-name"><span class="clip-src">Polysynth</span> Seasick Chorus</span>
-          <span class="clip-switch" role="group" aria-label="Polysynth: Seasick Chorus, what you hear">
-            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
-          </span>
-        </li>
         <li class="clip" data-base="audio/12-synth-bass-slow-clock-lo-fi">
           <button type="button" class="clip-play">Play</button>
           <span class="clip-name"><span class="clip-src">Synth Bass</span> Slow Clock Lo-Fi</span>
           <span class="clip-switch" role="group" aria-label="Synth Bass: Slow Clock Lo-Fi, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/03-acoustic-dual-detune">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><span class="clip-src">Acoustic</span> Dual Detune</span>
+          <span class="clip-switch" role="group" aria-label="Acoustic: Dual Detune, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/02-guitar-major-third-above">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><span class="clip-src">Guitar</span> Major Third Above</span>
+          <span class="clip-switch" role="group" aria-label="Guitar: Major Third Above, what you hear">
+            <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
+          </span>
+        </li>
+        <li class="clip" data-base="audio/01-guitar-slapback-30-ms">
+          <button type="button" class="clip-play">Play</button>
+          <span class="clip-name"><span class="clip-src">Guitar</span> Slapback 30 ms</span>
+          <span class="clip-switch" role="group" aria-label="Guitar: Slapback 30 ms, what you hear">
             <button type="button" data-mode="dry" aria-pressed="false">Dry</button><button type="button" data-mode="tenten" aria-pressed="true">TenTen</button>
           </span>
         </li>
@@ -210,25 +221,25 @@
     <section id="watch">
       <div class="video" data-video="Mk7SZOsB_wM">
         <button type="button" aria-label="Play the TenTen video on YouTube">
-          <img src="video-poster.jpg" alt="TenTen: a glitchy 1970s pitch shifter and delay, circuitbent and worn" width="1280" height="720" loading="lazy">
-          <span class="video-badge">&#9654; YouTube</span>
+          <img src="video-poster.jpg" alt="TenTen on the Tired Unit preset, with age and part tolerance turned up" width="1280" height="720" loading="lazy">
+          <span class="video-badge">&#9654; Watch it break</span>
         </button>
       </div>
     </section>
 
     <section id="features">
       <div class="blocks">
-        <div><h3>Thicken anything.</h3><p>A few cents of detune and a short delay, and one vocal becomes two. Split a guitar across two units and it goes wide.</p></div>
-        <div><h3>Snares that fall off a cliff.</h3><p>Hit harder and the pitch drops further. Feedback keeps it falling.</p></div>
-        <div><h3>Spirals and staircases.</h3><p>Send the repeats back through the shifter and they climb or tumble. Turn on overdrive and they grow and scream.</p></div>
-        <div><h3>Play it.</h3><p>Steer the pitch from a MIDI keyboard, a slow wobble, an envelope follower or automation.</p></div>
-        <div><h3>Decades of wear, under your control.</h3><p>Dial in drift, warm-up and age. Every instance gets its own part tolerances, so no two sound quite alike. Hit Stock for a factory-fresh unit.</p></div>
+        <div><h3>Thicken anything.</h3><p>A few cents of detune and a short delay, and one vocal becomes two. Split a guitar across two units and it goes wide.</p><button type="button" class="mini" data-plays="audio/03-acoustic-dual-detune" data-label="Dual Detune">&#9654; Dual Detune</button></div>
+        <div><h3>Snares that fall off a cliff.</h3><p>Hit harder and the pitch drops further. Feedback keeps it falling.</p><button type="button" class="mini" data-plays="audio/06-drums-dropping-snare" data-label="Dropping Snare">&#9654; Dropping Snare</button></div>
+        <div><h3>Spirals and staircases.</h3><p>Send the repeats back through the shifter and they climb or tumble. Turn on overdrive and they grow and scream.</p><button type="button" class="mini" data-plays="audio/09-modular-whole-tone-staircase" data-label="Whole-Tone Staircase">&#9654; Whole-Tone Staircase</button></div>
+        <div><h3>Play it.</h3><p>Play the pitch from a MIDI keyboard. Let it wobble on its own, let the envelope follower bend it with every hit, or draw it in with automation.</p><button type="button" class="mini" data-plays="audio/11-polysynth-seasick-chorus" data-label="Seasick Chorus">&#9654; Seasick Chorus</button></div>
+        <div class="wide"><h3>Decades of wear, under your control.</h3><p>Dial in drift, warm-up and age. Every instance is its own unit, with its own quirks, so no two sound quite alike. Hit Stock for a factory-fresh one.</p><button type="button" class="mini" data-plays="audio/05-piano-tired-unit" data-label="Tired Unit">&#9654; Tired Unit</button></div>
       </div>
       <div class="break">
-        <div><h3>Now break it.</h3><p>Kill memory bits. Remove the crossfades. Run the pointer backwards. Freeze it. Hardware never gave you these, except on its way to the repair bench.</p></div>
-        <img class="shot" src="bends.png" alt="TenTen's Bends page with memory bit kill switches lit on the Corrupted RAM preset" width="1880" height="790" loading="lazy">
+        <div><h3>Now break it.</h3><p>Kill memory bits. Remove the crossfades. Read the memory backwards. Freeze it. Some of this the original only did on its way to the repair bench. The rest it never did at all.</p><button type="button" class="mini" data-plays="audio/07-drums-corrupted-ram" data-label="Corrupted RAM">&#9654; Corrupted RAM</button></div>
+        <img class="shot" src="bends.png" alt="TenTen's Bends page with memory bit kill switches lit on the Corrupted RAM preset" width="1720" height="380" loading="lazy">
       </div>
-      <p class="closing">41 presets, from Vocal Doubler to Corrupted RAM. Every control has a tooltip, so you can skip the manual.</p>
+      <p class="closing">40+ presets, from Vocal Doubler to Corrupted RAM. Every control has a tooltip, so you can skip the manual.</p>
     </section>
 
     <section id="specs">
@@ -249,7 +260,7 @@
       <details><summary>Why so much CPU?</summary><p>It runs the circuit instead of approximating it: 10-bit conversion, and logic stepping about 268,000 times a second per unit. A stereo track costs about twice a mono one. If a session gets tight, freeze or bounce the track.</p></details>
       <details><summary>Does it add latency?</summary><p>1.3&nbsp;ms at 48&nbsp;kHz or 2.2&nbsp;ms at 44.1&nbsp;kHz, reported to your DAW so it compensates. Pitch shifting adds about 30&nbsp;ms more, as the original did, because that&rsquo;s part of the sound.</p></details>
       <details><summary>Why might Windows flag it?</summary><p>It isn&rsquo;t code-signed yet, so some antivirus tools may flag it. Signing and an installer are coming.</p></details>
-      <details><summary>What&rsquo;s LINK.COM on my statement?</summary><p>That&rsquo;s us. Link handles payment and tax. Your download links arrive by email right after.</p></details>
+      <details><summary>What&rsquo;s LINK.COM on my statement?</summary><p>That&rsquo;s your TenTen purchase. Link handles payment and tax. Your download links arrive by email right after.</p></details>
       <details><summary>I already own it. Should I install the demo?</summary><p>No, it replaces your paid copy. Reinstall the paid version to get it back.</p></details>
       <details><summary>Lost your download links?</summary><p><a href="resend.html">Get them again.</a></p></details>
     </section>
@@ -361,8 +372,18 @@ document.querySelectorAll(".video").forEach((box) => {
     if (os === mine) a.textContent = "Try the free demo";
     else a.classList.add("other");
   });
-  const sync = () => document.querySelectorAll(".clip").forEach((c) =>
-    c.classList.toggle("is-playing", c.querySelector(".clip-play").textContent === "Stop"));
+  const tile = (base) => document.querySelector(`.clip[data-base="${base}"]`);
+  const sync = () => {
+    document.querySelectorAll(".clip").forEach((c) =>
+      c.classList.toggle("is-playing", c.querySelector(".clip-play").textContent === "Stop"));
+    document.querySelectorAll("[data-plays]").forEach((b) => {
+      const state = tile(b.dataset.plays).querySelector(".clip-play").textContent;
+      b.classList.toggle("on", state === "Stop");
+      b.textContent = state === "Stop" ? `\u25A0 ${b.dataset.label}` : state === "Loading" ? "Loading" : `\u25B6 ${b.dataset.label}`;
+    });
+  };
+  document.querySelectorAll("[data-plays]").forEach((b) =>
+    b.addEventListener("click", () => tile(b.dataset.plays).querySelector(".clip-play").click()));
   document.querySelectorAll(".clip-play").forEach((b) => new MutationObserver(sync).observe(b, { childList: true }));
 })();
 </script>
