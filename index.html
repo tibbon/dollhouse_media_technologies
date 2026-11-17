@@ -221,15 +221,6 @@
     max-width: 720px;
   }
 
-  .service-desc {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--text-secondary);
-    margin-bottom: 20px;
-    max-width: 60ch;
-    transition: color 0.4s ease;
-  }
-
   .product-link {
     display: inline-block;
     font-size: 0.85rem;
@@ -252,11 +243,6 @@
     font-size: 0.95rem;
     color: var(--text-secondary);
     max-width: 65ch;
-  }
-
-  .advisory-note a {
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
   }
 
   /* ── Product card ── */
@@ -342,6 +328,11 @@
     margin-bottom: clamp(16px, 2vw, 24px);
     border-radius: 8px;
     border: 1px solid var(--rule);
+  }
+
+  /* consecutive paragraphs in one entry sit closer together than the gap before its links */
+  .product-description:has(+ .product-description) {
+    margin-bottom: 1em;
   }
 
   .product-header {
@@ -519,13 +510,13 @@
     <h2 class="section-label" id="studio-heading">The studio</h2>
     <!-- TODO(owner): optionally add a photo of the room or a few artists/records worked on -->
     <div class="studio-block">
-      <p class="section-intro">My recording studio in Providence is mostly where I make my own work. Every so often, I take on a project with an artist whose music I connect with.</p>
-      <p class="service-desc">It isn&rsquo;t a room for hire, so I keep these collaborations few and choose them with care. If you think we&rsquo;d make something good together, send me a note about what you&rsquo;re working on and a link to your music.</p>
-      <div class="hero-actions">
-        <a class="btn" href="mailto:info@dollhousemediatech.com?subject=Studio%20project">Tell me about your project</a>
+      <p class="section-intro">Occasional collaborations with artists.</p>
+      <p class="product-description">My recording studio in Providence is mostly where I make my own work. Every so often, I take on a project with an artist whose music I connect with.</p>
+      <p class="product-description">It isn&rsquo;t a room for hire, so I keep these collaborations few and choose them with care. If you think we&rsquo;d make something good together, send me a note about what you&rsquo;re working on and a link to your music.</p>
+      <div class="product-links">
+        <a class="product-link" href="mailto:info@dollhousemediatech.com?subject=Studio%20project">Tell me about your project</a>
       </div>
     </div>
-    <p class="advisory-note">I also take on a small amount of security and AI advisory work. <a href="#contact">Get in touch</a> if that&rsquo;s what you need.</p>
   </section>
 
   <hr>
@@ -538,6 +529,7 @@
       <p class="contact-email">
         <a href="mailto:info@dollhousemediatech.com">info@dollhousemediatech.com</a>
       </p>
+      <p class="advisory-note">I also take on a small amount of security and AI advisory work. The same address works for that.</p>
     </div>
   </section>
 
