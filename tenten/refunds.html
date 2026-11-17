@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>try{var t=localStorage.getItem('theme'),r=document.documentElement;if(t==='dmt'&&!r.hasAttribute('data-dmt'))t='dark';if(t==='light'||t==='dark'||t==='dmt')r.classList.add(t)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TenTen – Refund Policy</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
@@ -13,6 +14,8 @@
 </style>
 </head>
 <body>
+
+<a class="skip-link" href="#main">Skip to content</a>
 
 <div class="page page--narrow">
 
@@ -31,9 +34,9 @@
       <h1>Refund Policy</h1>
       <p>Effective 2 November 2026.</p>
       <p>If TenTen isn&rsquo;t for you, ask for a refund within <strong>14 days</strong> of buying it, no questions asked. You get back the full amount you paid, including any sales tax or VAT.</p>
-      <h3>How to ask</h3>
+      <h2 class="subhead">How to ask</h2>
       <p>Email <a href="mailto:support@dollhousemediatech.com">support@dollhousemediatech.com</a> from the address you bought with, or include your order number from the download email. TenTen is sold through Link, so you can also request a refund through <a href="https://support.link.com/topics/sold-through-link">Link support</a>, which handles purchases and may refund in some cases up to 60 days after purchase.</p>
-      <h3>After a refund</h3>
+      <h2 class="subhead">After a refund</h2>
       <p>Your licence ends, your download links stop working, and you agree to delete TenTen. Refunds usually reach your bank within 5 to 10 business days.</p>
       <p>This policy doesn&rsquo;t limit any rights you have under the law where you live.</p>
     </section>
@@ -51,10 +54,10 @@
 
 </div>
 
-<div class="mode-switcher">
-  <button data-mode="light">Light</button>
-  <button data-mode="dark">Dark</button>
-</div>
+<aside class="mode-switcher" aria-label="Color theme">
+  <button type="button" data-mode="light">Light</button>
+  <button type="button" data-mode="dark">Dark</button>
+</aside>
 
 <script src="/site.js" defer></script>
 </body>

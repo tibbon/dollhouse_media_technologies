@@ -2,19 +2,28 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>try{var t=localStorage.getItem('theme'),r=document.documentElement;if(t==='dmt'&&!r.hasAttribute('data-dmt'))t='dark';if(t==='light'||t==='dark'||t==='dmt')r.classList.add(t)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="BlackBox Audio Recorder – Architecture: lock-free real-time audio recording engine in Rust">
 <title>BlackBox Audio Recorder – Architecture</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://dollhousemediatech.com/blackbox/architecture">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Dollhouse Media Technologies">
+<meta property="og:title" content="BlackBox Audio Recorder – Architecture">
+<meta property="og:description" content="BlackBox Audio Recorder – Architecture: lock-free real-time audio recording engine in Rust">
+<meta property="og:url" content="https://dollhousemediatech.com/blackbox/architecture">
+<meta property="og:image" content="https://dollhousemediatech.com/blackbox/icon-256.png">
+<meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../site.css">
 <style>
   /* ── Pipeline accent tokens (light + dark safe) ── */
   :root {
-    --rt-color: #d95a1b;
-    --ring-color: #b8860b;
-    --writer-color: #0f8c6e;
+    --rt-color: #b0440f;
+    --ring-color: #8a6100;
+    --writer-color: #0b6e56;
     --wav-color: #4f46e5;
     --surface: rgba(0,0,0,0.03);
     --surface-border: var(--rule);
@@ -337,11 +346,11 @@
     font-size: 1.75rem;
     font-weight: 700;
     color: var(--rt-color);
-    opacity: 0.25;
+    opacity: 0.75;
     margin-bottom: 6px;
   }
 
-  .why-item h4 {
+  .why-item h3 {
     font-family: var(--mono);
     font-size: 0.75rem;
     font-weight: 600;
@@ -385,6 +394,8 @@
 </style>
 </head>
 <body>
+
+<a class="skip-link" href="#main">Skip to content</a>
 
 <div class="page page--arch">
 
@@ -472,6 +483,7 @@
       </div>
 
       <!-- Detail cards -->
+      <h2 class="visually-hidden">Pipeline stages</h2>
       <div class="cards-grid">
 
         <div class="card">
@@ -534,7 +546,7 @@
       </div>
 
       <!-- Ring buffer animation -->
-      <p class="tech-subsection-label">Ring Buffer &mdash; Live Simulation</p>
+      <h2 class="tech-subsection-label">Ring Buffer &mdash; Live Simulation</h2>
       <div class="ring-canvas-wrap">
         <canvas id="ringBuf" width="240" height="240" role="img" aria-label="Animated visualization of a ring buffer with write and read heads cycling through 48 slots"></canvas>
         <div class="ring-stats">
@@ -558,36 +570,36 @@
       </div>
 
       <!-- Why it's fast -->
-      <p class="tech-subsection-label">Why It&rsquo;s Highly Optimized</p>
+      <h2 class="tech-subsection-label">Why It&rsquo;s Highly Optimized</h2>
       <div class="why-grid">
         <div class="why-item">
           <div class="num">01</div>
-          <h4>RT / Writer Thread Separation</h4>
+          <h3>RT / Writer Thread Separation</h3>
           <p>The audio callback never touches the filesystem. All I/O, encoding, and monitoring happens on a separate thread. This eliminates the #1 cause of audio glitches: blocking the RT thread on disk.</p>
         </div>
         <div class="why-item">
           <div class="num">02</div>
-          <h4>Wait-Free SPSC Ring Buffer</h4>
+          <h3>Wait-Free SPSC Ring Buffer</h3>
           <p>The rtrb crate provides a lock-free, wait-free SPSC queue. No mutexes, no condition variables, no syscalls on the hot path. Just atomic load/store on read/write cursors.</p>
         </div>
         <div class="why-item">
           <div class="num">03</div>
-          <h4>Zero Allocation in RT Path</h4>
+          <h3>Zero Allocation in RT Path</h3>
           <p>The callback pushes raw f32 samples directly into a pre-allocated ring buffer. No Vec growth, no Box, no String formatting. The ring buffer is sized once at startup and never resized.</p>
         </div>
         <div class="why-item">
           <div class="num">04</div>
-          <h4>5-Second Buffer Runway</h4>
+          <h3>5-Second Buffer Runway</h3>
           <p>The ring buffer holds 5 full seconds of audio. File rotation takes &lt;10ms worst case (64ch split). That&rsquo;s 4,990+ ms of headroom &mdash; enough to absorb any OS scheduling jitter or disk I/O spike.</p>
         </div>
         <div class="why-item">
           <div class="num">05</div>
-          <h4>Rust&rsquo;s Zero-Cost Abstractions</h4>
+          <h3>Rust&rsquo;s Zero-Cost Abstractions</h3>
           <p>No garbage collector, no runtime overhead. Rust compiles to the same tight machine code as hand-tuned C, with memory safety guaranteed at compile time.</p>
         </div>
         <div class="why-item">
           <div class="num">06</div>
-          <h4>Batch I/O on Writer Thread</h4>
+          <h3>Batch I/O on Writer Thread</h3>
           <p>The writer thread processes samples in bulk from the ring buffer, amortizing syscall overhead. Peak metering piggybacks on the write pass at zero extra cost.</p>
         </div>
       </div>
@@ -606,10 +618,10 @@
 
 </div>
 
-<div class="mode-switcher">
-  <button data-mode="light">Light</button>
-  <button data-mode="dark">Dark</button>
-</div>
+<aside class="mode-switcher" aria-label="Color theme">
+  <button type="button" data-mode="light">Light</button>
+  <button type="button" data-mode="dark">Dark</button>
+</aside>
 
 <script src="/site.js" defer></script>
 <script>
