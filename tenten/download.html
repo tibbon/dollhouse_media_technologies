@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>try{var t=localStorage.getItem('theme'),r=document.documentElement;if(t==='dmt'&&!r.hasAttribute('data-dmt'))t='dark';if(t==='light'||t==='dark'||t==='dmt')r.classList.add(t)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="referrer" content="no-referrer">
 <title>TenTen – Download</title>
@@ -14,6 +15,8 @@
 </style>
 </head>
 <body>
+
+<a class="skip-link" href="#main">Skip to content</a>
 
 <div class="page page--narrow">
 
@@ -36,7 +39,7 @@
     <hr>
 
     <section class="section">
-      <p class="section-label">Need help?</p>
+      <h2 class="section-label">Need help?</h2>
       <p>Email <a href="mailto:support@dollhousemediatech.com">support@dollhousemediatech.com</a>.</p>
     </section>
   </main>
@@ -53,10 +56,10 @@
 
 </div>
 
-<div class="mode-switcher">
-  <button data-mode="light">Light</button>
-  <button data-mode="dark">Dark</button>
-</div>
+<aside class="mode-switcher" aria-label="Color theme">
+  <button type="button" data-mode="light">Light</button>
+  <button type="button" data-mode="dark">Dark</button>
+</aside>
 
 <script src="/site.js" defer></script>
 <script>

@@ -2,15 +2,26 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>try{var t=localStorage.getItem('theme'),r=document.documentElement;if(t==='dmt'&&!r.hasAttribute('data-dmt'))t='dark';if(t==='light'||t==='dark'||t==='dmt')r.classList.add(t)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="BlackBox Audio Recorder – Support">
 <title>BlackBox Audio Recorder – Support</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://dollhousemediatech.com/blackbox/support">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Dollhouse Media Technologies">
+<meta property="og:title" content="BlackBox Audio Recorder – Support">
+<meta property="og:description" content="BlackBox Audio Recorder – Support">
+<meta property="og:url" content="https://dollhousemediatech.com/blackbox/support">
+<meta property="og:image" content="https://dollhousemediatech.com/blackbox/icon-256.png">
+<meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../site.css">
 </head>
 <body>
+
+<a class="skip-link" href="#main">Skip to content</a>
 
 <div class="page page--narrow">
 
@@ -33,7 +44,7 @@
     <hr>
 
     <section class="section">
-      <p class="section-label">Frequently Asked Questions</p>
+      <h2 class="section-label">Frequently Asked Questions</h2>
 
       <h3>BlackBox isn&rsquo;t recording any audio</h3>
       <p>Make sure you&rsquo;ve granted microphone access. Go to <strong>System Settings &gt; Privacy &amp; Security &gt; Microphone</strong> and ensure BlackBox is enabled. Then check the input device in the BlackBox menu, and open the Level Meter window to confirm audio is reaching BlackBox.</p>
@@ -63,7 +74,7 @@
     <hr>
 
     <section class="section">
-      <p class="section-label">Contact</p>
+      <h2 class="section-label">Contact</h2>
       <p>If you need further help, please email us at <a href="mailto:info@dollhousemediatech.com">info@dollhousemediatech.com</a> or <a href="https://github.com/tibbon/audio_blackbox/issues">open an issue on GitHub</a>.</p>
     </section>
   </main>
@@ -79,10 +90,10 @@
 
 </div>
 
-<div class="mode-switcher">
-  <button data-mode="light">Light</button>
-  <button data-mode="dark">Dark</button>
-</div>
+<aside class="mode-switcher" aria-label="Color theme">
+  <button type="button" data-mode="light">Light</button>
+  <button type="button" data-mode="dark">Dark</button>
+</aside>
 
 <script src="/site.js" defer></script>
 </body>

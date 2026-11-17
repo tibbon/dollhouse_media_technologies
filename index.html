@@ -1,20 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-dmt>
 <head>
 <meta charset="UTF-8">
+<script>try{var t=localStorage.getItem('theme'),r=document.documentElement;if(t==='dmt'&&!r.hasAttribute('data-dmt'))t='dark';if(t==='light'||t==='dark'||t==='dmt')r.classList.add(t)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Dollhouse Media Technologies – Music, cybersecurity, AI, and physical installations">
-<title>Dollhouse Media Technologies</title>
+<title>Dollhouse Media Technologies · Recording studio &amp; audio software, Providence RI</title>
+<meta name="description" content="Dollhouse Media Technologies is David’s one-person creative technology studio in Providence, Rhode Island: TenTen, a glitchy pitch shifter plugin; BlackBox Audio Recorder for macOS; small-batch hardware for servicing MCI JH-500 series consoles; and a recording studio.">
+<link rel="canonical" href="https://dollhousemediatech.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Dollhouse Media Technologies">
+<meta property="og:title" content="Dollhouse Media Technologies">
+<meta property="og:description" content="Dollhouse Media Technologies is David’s one-person creative technology studio in Providence, Rhode Island: TenTen, a glitchy pitch shifter plugin; BlackBox Audio Recorder for macOS; small-batch hardware for servicing MCI JH-500 series consoles; and a recording studio.">
+<meta property="og:url" content="https://dollhousemediatech.com/">
+<meta property="og:image" content="https://dollhousemediatech.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="site.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Dollhouse Media Technologies",
+  "url": "https://dollhousemediatech.com/",
+  "email": "info@dollhousemediatech.com",
+  "image": "https://dollhousemediatech.com/og-image.png",
+  "description": "Dollhouse Media Technologies is David’s one-person creative technology studio in Providence, Rhode Island: TenTen, a glitchy pitch shifter plugin; BlackBox Audio Recorder for macOS; small-batch hardware for servicing MCI JH-500 series consoles; and a recording studio.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Providence",
+    "addressRegion": "RI",
+    "addressCountry": "US"
+  },
+  "areaServed": "Providence, Rhode Island",
+  "knowsAbout": ["Audio plugins", "Audio software", "MCI JH-500 console repair", "Recording studio", "Interactive installations"]
+}
+</script>
 <style>
   /* ── Hero layout ── */
+  /* Lines the hero up with the 1200px content column used by .page */
+  :root {
+    --hero-gutter: calc(max(0px, (100vw - 1200px) / 2) + clamp(32px, 6vw, 80px));
+  }
+
   .container {
     position: relative;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
+    height: 100svh;
+    min-height: 32rem;
+  }
+
+  /* ── Top nav ── */
+  .site-nav {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 3;
+    display: flex;
+    justify-content: flex-end;
+    padding: clamp(16px, 2.5vw, 28px) var(--hero-gutter);
+  }
+
+  .site-nav ul {
+    display: flex;
+    gap: clamp(16px, 2.5vw, 32px);
+    list-style: none;
+  }
+
+  .site-nav a {
+    color: var(--text);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .site-nav a:hover {
+    color: var(--accent);
   }
 
   /* ── Shader effect layers ── */
@@ -45,14 +110,21 @@
     width: 100%; height: 100%;
     background: #000;
     mix-blend-mode: multiply;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-left: clamp(32px, 6vw, 80px);
   }
 
-  .blend-mask h1 { color: #000; }
+  .blend-mask .hero-text { color: #000; }
   .blend-mask .ml { color: #fff; }
+  .blend-mask .hero-sub { visibility: hidden; }
+
+  /* Both layers share this layout so the mask lines up with the visible text */
+  .hero-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 var(--hero-gutter);
+  }
 
   /* ── Hero typography ── */
   .hero-text {
@@ -63,6 +135,7 @@
     letter-spacing: -0.02em;
     line-height: 1.05;
     text-align: left;
+    margin-bottom: 0;
   }
 
   .hero-text .dmt,
@@ -70,15 +143,58 @@
     font-weight: 900;
   }
 
+  .hero-sub {
+    margin-top: clamp(24px, 3.5vw, 44px);
+    max-width: 36rem;
+  }
+
+  .hero-tagline {
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    line-height: 1.5;
+    color: var(--text-secondary);
+    transition: color 0.4s ease;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: clamp(20px, 2.5vw, 32px);
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0 1.4em;
+    border: 1px solid var(--text);
+    border-radius: 999px;
+    background: var(--text);
+    color: var(--bg);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .btn--ghost {
+    background: transparent;
+    color: var(--text);
+  }
+
   /* ── Visible text layer ── */
   .visible-text {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-left: clamp(32px, 6vw, 80px);
     z-index: 2;
   }
 
@@ -91,32 +207,56 @@
     color: transparent;
   }
 
-  /* ── Disciplines grid ── */
-  .disciplines-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: clamp(20px, 3vw, 40px);
-  }
-
-  .discipline-item {
-    padding: clamp(24px, 3vw, 40px) 0;
-    border-top: 1px solid var(--rule);
-    transition: border-color 0.4s ease;
-  }
-
-  .discipline-name {
-    font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+  /* ── Services ── */
+  .section-intro {
+    font-size: clamp(1.3rem, 2.4vw, 2rem);
     font-weight: 700;
     letter-spacing: -0.02em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
+    line-height: 1.25;
+    max-width: 34ch;
+    margin-bottom: clamp(24px, 3vw, 40px);
   }
 
-  .discipline-desc {
-    font-size: 0.9rem;
+  .studio-block {
+    max-width: 720px;
+  }
+
+  .service-desc {
+    font-size: 1rem;
     line-height: 1.6;
     color: var(--text-secondary);
+    margin-bottom: 20px;
+    max-width: 60ch;
     transition: color 0.4s ease;
+  }
+
+  .product-link {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .product-link::after {
+    content: " \2192";
+  }
+
+  .product-link:hover {
+    color: var(--text);
+  }
+
+  .advisory-note {
+    margin-top: clamp(24px, 3vw, 40px);
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    max-width: 65ch;
+  }
+
+  .advisory-note a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   /* ── Product card ── */
@@ -125,12 +265,14 @@
   }
 
   .product-card + .product-card {
-    margin-top: clamp(32px, 4vw, 48px);
+    margin-top: clamp(32px, 4vw, 56px);
+    padding-top: clamp(24px, 3vw, 40px);
+    border-top: 1px solid var(--rule);
   }
 
   .product-type {
     display: inline-block;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -165,24 +307,6 @@
     transition: color 0.4s ease;
   }
 
-  .product-link {
-    display: inline-block;
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .product-link:hover {
-    color: var(--text);
-  }
-
-  .product-link::after {
-    content: " \2192";
-  }
 
   /* ── Contact ── */
   .contact-block {
@@ -210,111 +334,206 @@
     color: var(--text);
   }
 
+
+  .product-shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: clamp(16px, 2vw, 24px);
+    border-radius: 8px;
+    border: 1px solid var(--rule);
+  }
+
+  .product-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: clamp(16px, 2vw, 28px);
+  }
+
+  .product-header .product-name {
+    margin-bottom: 0;
+  }
+
+  .product-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.75rem;
+  }
+
+  .contact-note {
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: clamp(16px, 2vw, 24px);
+    max-width: 52ch;
+  }
+
+  .contact-email a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
   /* ── Homepage 3-button mode switcher override ── */
   .mode-switcher button.dmt-btn {
-    font-size: 0.85rem;
-    padding: 0.35em 0.8em;
+    font-size: 0.95rem;
   }
 
   /* ── Mobile ── */
-  @media (max-width: 600px) {
-    .disciplines-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 900px) and (min-width: 601px) {
-    .disciplines-grid {
-      grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 480px) {
+    .site-nav {
+      justify-content: flex-start;
     }
   }
 </style>
 </head>
 <body>
 
+<a class="skip-link" href="#main">Skip to content</a>
+
 <!-- Hero: full viewport -->
-<div class="container">
-  <!-- Shader layers: canvas + blend mask -->
-  <div class="shader-layers">
+<header class="container">
+  <nav class="site-nav" aria-label="Main">
+    <ul>
+      <li><a href="#made-here">Made here</a></li>
+      <li><a href="#studio">Studio</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Shader layers: canvas + blend mask (decorative) -->
+  <div class="shader-layers" aria-hidden="true">
     <canvas id="c"></canvas>
     <div class="blend-mask">
-      <h1 class="hero-text" aria-hidden="true">
-        <span class="ml">D</span>ollhouse<br>
-        <span class="ml">M</span>edia<br>
-        <span class="ml">T</span>echnologies
-      </h1>
+      <div class="hero-inner">
+        <p class="hero-text">
+          <span class="ml">D</span>ollhouse<br>
+          <span class="ml">M</span>edia<br>
+          <span class="ml">T</span>echnologies
+        </p>
+      <div class="hero-sub">
+        <p class="hero-tagline">A one-person creative technology studio in Providence, Rhode Island. I&rsquo;m David: I make audio software, hardware, and installations, and run a recording studio.</p>
+        <div class="hero-actions">
+          <a href="#made-here" class="btn" tabindex="-1">See what I make</a>
+          <a href="#studio" class="btn btn--ghost" tabindex="-1">Studio projects</a>
+        </div>
+      </div>
+      </div>
     </div>
   </div>
 
   <!-- Visible text (always shown) -->
   <div class="visible-text">
-    <h1 class="hero-text">
-      <span class="dmt">D</span>ollhouse<br>
-      <span class="dmt">M</span>edia<br>
-      <span class="dmt">T</span>echnologies
-    </h1>
+    <div class="hero-inner">
+      <h1 class="hero-text">
+        <span class="dmt">D</span>ollhouse<br>
+        <span class="dmt">M</span>edia<br>
+        <span class="dmt">T</span>echnologies
+      </h1>
+      <div class="hero-sub">
+        <p class="hero-tagline">A one-person creative technology studio in Providence, Rhode Island. I&rsquo;m David: I make audio software, hardware, and installations, and run a recording studio.</p>
+        <div class="hero-actions">
+          <a href="#made-here" class="btn">See what I make</a>
+          <a href="#studio" class="btn btn--ghost">Studio projects</a>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</header>
 
 <!-- Page content below the fold -->
 <main id="main" class="page">
 
   <hr>
 
-  <!-- Disciplines -->
-  <section class="section">
-    <p class="section-label">What We Do</p>
-    <div class="disciplines-grid">
-      <div class="discipline-item">
-        <h2 class="discipline-name">Music</h2>
-        <p class="discipline-desc">Production, sound design, and audio tools.</p>
-      </div>
-      <div class="discipline-item">
-        <h2 class="discipline-name">Security</h2>
-        <p class="discipline-desc">vCISO services: strategic oversight, risk management, and compliance.</p>
-      </div>
-      <div class="discipline-item">
-        <h2 class="discipline-name">AI</h2>
-        <p class="discipline-desc">Safety evaluation, governance frameworks, and responsible deployment.</p>
-      </div>
-      <div class="discipline-item">
-        <h2 class="discipline-name">Physical</h2>
-        <p class="discipline-desc">Installations, interactive environments, and fabrication.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- Products -->
-  <section class="section">
-    <p class="section-label">Products</p>
+  <section class="section" id="made-here" aria-labelledby="made-here-heading">
+    <h2 class="section-label" id="made-here-heading">Made here</h2>
+    <p class="section-intro">Audio software, hardware, and installations I&rsquo;ve made.</p>
     <div class="product-card">
-      <p class="product-type">Software</p>
+      <p class="product-type">Plugin &middot; Mac, Windows, Linux</p>
       <h3 class="product-name"><a href="/tenten/">TenTen</a></h3>
+      <a href="/tenten/" class="product-shot-link" tabindex="-1" aria-hidden="true"><img class="product-shot" src="/tenten/panel.png" alt="" width="1880" height="590" loading="lazy"></a>
       <p class="product-description">
-        Pitch shifting with the glitches left in. A 1970s rack pitch shifter and delay plugin for Mac, Windows and Linux: VST3, AU, CLAP.
+        Pitch shifting with the glitches left in. A 1970s rack pitch shifter and delay, rebuilt in software and then circuit-bent. VST3, AU and CLAP. $25, with a free demo.
       </p>
-      <a href="/tenten/" class="product-link">Learn More</a>
+      <div class="product-links">
+        <a href="/tenten/#listen" class="product-link">Hear TenTen</a>
+        <a href="https://buy.stripe.com/3cI28sfbUakd9O5bhMew800" class="product-link">Buy for $25</a>
+      </div>
     </div>
+
     <div class="product-card">
-      <p class="product-type">Software</p>
-      <div style="display: flex; align-items: center; gap: 0.75rem;">
-        <img src="/blackbox/icon-256.png" alt="BlackBox Audio Recorder icon" width="48" height="48" style="border-radius: 10px;">
-        <h3 class="product-name" style="margin-bottom: 0;">
+      <p class="product-type">Software for macOS</p>
+      <div class="product-header">
+        <img src="/blackbox/icon-256.png" alt="" width="48" height="48" class="app-icon">
+        <h3 class="product-name">
           <a href="/blackbox/">BlackBox Audio Recorder</a>
         </h3>
       </div>
       <p class="product-description">
-        Always-on audio recording for macOS. Menu bar, uncompressed WAV, any input device.
+        An always-on recorder that lives in your menu bar and captures every channel of your audio interface to uncompressed WAV. I built it for my own studio.
       </p>
-      <a href="/blackbox/" class="product-link">Learn More</a>
-      <a href="https://apps.apple.com/app/apple-store/id6759437659?pt=445919&amp;ct=website&amp;mt=8" class="product-link" style="margin-left: 1.5rem;">Mac App Store</a>
+      <div class="product-links">
+        <a href="/blackbox/" class="product-link">About BlackBox</a>
+        <a href="https://apps.apple.com/app/apple-store/id6759437659?pt=445919&amp;ct=website&amp;mt=8" class="product-link">Get it on the Mac App Store</a>
+      </div>
+    </div>
+
+    <!-- TODO(owner): add product names, photos, prices, and a link once listings exist -->
+    <div class="product-card">
+      <p class="product-type">Hardware &middot; Small batch</p>
+      <h3 class="product-name">Hardware for MCI consoles</h3>
+      <p class="product-description">
+        Bench test rigs and replacement cards for servicing MCI JH-500 series consoles. Built in small batches to keep these desks running.
+      </p>
+      <div class="product-links">
+        <a href="mailto:info@dollhousemediatech.com?subject=MCI%20hardware" class="product-link">Ask about availability</a>
+      </div>
+    </div>
+
+    <!-- TODO(owner): add a photo only if you have the rights to use it (e.g. your own, or with the photographer's permission and credit) -->
+    <div class="product-card">
+      <p class="product-type">Installation &middot; Burning Man 2019</p>
+      <h3 class="product-name">Windchest</h3>
+      <p class="product-description">
+        An interactive sculpture that recalls a pipe organ: softly lit columns rising out of the desert, ringed by LED-lit pads that compress like bellows. Each pad triggers a sound, so anywhere from one to fifteen people jumping on them play a single open-ended piece of music together.
+      </p>
+      <p class="product-description">
+        I did the LEDs, audio, electrical, and programming. Sculpture by verbstudio, music by James Wright Glasgow, built with a crew of Boston fabricators, architects, and engineers.
+      </p>
+      <div class="product-links">
+        <a href="https://strangefangs.com/windchest-2/" class="product-link">Project page</a>
+        <a href="https://gallery.burningman.org/asset/a78828d5-39bf-4ae4-9e6d-77a2a01ec65c" class="product-link">Burning Man photo archive</a>
+        <a href="https://www.scottrklinephoto.com/Road-Trips/Burning-Man-Scenes/1" class="product-link">Photos by Scott R. Kline</a>
+      </div>
     </div>
   </section>
 
+  <hr>
+
+  <!-- Studio -->
+  <section class="section" id="studio" aria-labelledby="studio-heading">
+    <h2 class="section-label" id="studio-heading">The studio</h2>
+    <!-- TODO(owner): optionally add a photo of the room or a few artists/records worked on -->
+    <div class="studio-block">
+      <p class="section-intro">I have a recording studio in Providence. I rarely take on outside projects, and I&rsquo;m selective about the artists I work with.</p>
+      <p class="service-desc">The studio isn&rsquo;t for hire by the hour. If you think your project is a strong fit, send a note about who you are and what you&rsquo;re making, with a link to your work.</p>
+      <div class="hero-actions">
+        <a class="btn" href="mailto:info@dollhousemediatech.com?subject=Studio%20project">Tell me about your project</a>
+      </div>
+    </div>
+    <p class="advisory-note">I also take on a small amount of security and AI advisory work. <a href="#contact">Get in touch</a> if that&rsquo;s what you need.</p>
+  </section>
+
+  <hr>
+
   <!-- Contact -->
-  <section class="section" id="contact">
+  <section class="section" id="contact" aria-labelledby="contact-heading">
     <div class="contact-block">
-      <h2 class="contact-heading">Let's work together.</h2>
+      <h2 class="contact-heading" id="contact-heading">Get in touch.</h2>
+      <p class="contact-note">For studio projects, tell me about the artist, the music, and your timeline, with a link to your work. Questions about TenTen, BlackBox or MCI hardware are welcome too.</p>
       <p class="contact-email">
         <a href="mailto:info@dollhousemediatech.com">info@dollhousemediatech.com</a>
       </p>
@@ -333,71 +552,21 @@
 
 </main>
 
-<div class="mode-switcher" id="modeSwitcher">
-  <button data-mode="light">Light</button>
-  <button data-mode="dark">Dark</button>
-  <button data-mode="dmt" class="dmt-btn">👾</button>
-</div>
+<aside class="mode-switcher" aria-label="Color theme">
+  <button type="button" data-mode="light">Light</button>
+  <button type="button" data-mode="dark">Dark</button>
+  <button type="button" data-mode="dmt" class="dmt-btn" aria-label="Psychedelic" title="Psychedelic mode"><span aria-hidden="true">👾</span></button>
+</aside>
 
 <script>
-// ─── WebGL state (declared early so applyMode can reference them) ───
+// Theme switching lives in /site.js, which fires "themechange"; this script only
+// runs the WebGL background for the DMT mode.
 const canvas = document.getElementById('c');
+const root = document.documentElement;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let gl = null, prog = null, uR, uT, uM;
 let shaderReady = false, shaderRunning = false, animId = null, t0 = 0;
 let mx = 0, my = 0, smx = 0, smy = 0;
-
-// ─── Mode switcher ───
-const root = document.documentElement;
-const switcher = document.getElementById('modeSwitcher');
-const btns = switcher.querySelectorAll('button');
-const modes = ['light', 'dark', 'dmt'];
-
-function osPrefersDark() {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
-function currentMode() {
-  for (const m of modes) {
-    if (root.classList.contains(m)) return m;
-  }
-  return osPrefersDark() ? 'dark' : 'light';
-}
-
-function applyMode(mode) {
-  root.classList.remove(...modes);
-  root.classList.add(mode);
-  btns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-  localStorage.setItem('theme', mode);
-
-  if (mode === 'dmt') {
-    startShader();
-  } else {
-    stopShader();
-  }
-}
-
-switcher.addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  applyMode(btn.dataset.mode);
-});
-
-// Restore saved or detect OS preference
-const saved = localStorage.getItem('theme');
-if (saved && modes.includes(saved)) {
-  applyMode(saved);
-} else {
-  const initial = osPrefersDark() ? 'dark' : 'light';
-  root.classList.add(initial);
-  btns.forEach(b => b.classList.toggle('active', b.dataset.mode === initial));
-}
-
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-  if (!root.classList.contains('light') && !root.classList.contains('dark') && !root.classList.contains('dmt')) {
-    const mode = osPrefersDark() ? 'dark' : 'light';
-    btns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-  }
-});
 
 // ─── WebGL Shader (lazy init, only runs in DMT mode) ───
 function initShader() {
@@ -588,19 +757,25 @@ function resizeCanvas() {
   gl.viewport(0, 0, canvas.width, canvas.height);
 }
 
+function drawFrame(t) {
+  gl.uniform2f(uR, canvas.width, canvas.height);
+  gl.uniform1f(uT, t);
+  gl.uniform2f(uM, smx, smy);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+}
+
 function startShader() {
   if (shaderRunning) return;
   if (!shaderReady && !initShader()) return;
   resizeCanvas();
+  // Respect reduced-motion: show a single still frame instead of animating.
+  if (reduceMotion.matches) { drawFrame(40); return; }
   shaderRunning = true;
   (function loop() {
     if (!shaderRunning) return;
     smx += (mx - smx) * .012;
     smy += (my - smy) * .012;
-    gl.uniform2f(uR, canvas.width, canvas.height);
-    gl.uniform1f(uT, (performance.now() - t0) / 1000);
-    gl.uniform2f(uM, smx, smy);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    drawFrame((performance.now() - t0) / 1000);
     animId = requestAnimationFrame(loop);
   })();
 }
@@ -610,21 +785,33 @@ function stopShader() {
   if (animId) { cancelAnimationFrame(animId); animId = null; }
 }
 
+const isDmt = () => root.classList.contains('dmt');
+
+document.addEventListener('themechange', e => {
+  if (e.detail.mode === 'dmt') startShader(); else stopShader();
+});
+
+reduceMotion.addEventListener('change', () => {
+  if (isDmt()) { stopShader(); startShader(); }
+});
+
 document.addEventListener('mousemove', e => {
   mx = e.clientX / window.innerWidth - .5;
   my = .5 - e.clientY / window.innerHeight;
 });
 
 window.addEventListener('resize', () => {
-  if (shaderRunning) resizeCanvas();
+  if (!isDmt()) return;
+  resizeCanvas();
+  if (!shaderRunning && shaderReady) drawFrame(40);
 });
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) stopShader();
-  else if (currentMode() === 'dmt') startShader();
+  else if (isDmt()) startShader();
 });
-
 </script>
+<script src="/site.js" defer></script>
 
 </body>
 </html>
