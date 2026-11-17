@@ -217,19 +217,6 @@
     margin-bottom: clamp(24px, 3vw, 40px);
   }
 
-  .studio-block {
-    max-width: 720px;
-  }
-
-  .service-desc {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--text-secondary);
-    margin-bottom: 20px;
-    max-width: 60ch;
-    transition: color 0.4s ease;
-  }
-
   .product-link {
     display: inline-block;
     font-size: 0.85rem;
@@ -254,20 +241,73 @@
     max-width: 65ch;
   }
 
-  .advisory-note a {
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-  }
-
-  /* ── Product card ── */
-  .product-card {
-    max-width: 720px;
-  }
-
-  .product-card + .product-card {
-    margin-top: clamp(32px, 4vw, 56px);
-    padding-top: clamp(24px, 3vw, 40px);
+  /* ── Entries: name on the left, details on the right (stacks on small screens) ── */
+  .entry {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(16px, 4vw, 64px);
+    padding: clamp(28px, 3.5vw, 48px) 0;
     border-top: 1px solid var(--rule);
+    transition: border-color 0.4s ease;
+  }
+
+  .entry:last-child {
+    padding-bottom: 0;
+  }
+
+  .section-label + .entry,
+  .entry--plain {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .entry-name {
+    font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  .entry-name a {
+    color: var(--text);
+  }
+
+  .entry-name a:hover {
+    color: var(--accent);
+  }
+
+  .entry-icon {
+    display: block;
+    margin-top: 18px;
+    box-shadow: 0 0 0 1px var(--rule);
+  }
+
+  .entry-head .contact-heading {
+    margin-bottom: 0;
+  }
+
+  .entry-lede {
+    font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+
+  .entry-body .product-description {
+    margin-bottom: 1em;
+  }
+
+  .entry-body .product-links {
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .entry {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
   }
 
   .product-type {
@@ -281,24 +321,6 @@
     transition: color 0.4s ease;
   }
 
-  .product-name {
-    font-size: clamp(1.6rem, 3vw, 2.6rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-    line-height: 1.15;
-    margin-bottom: clamp(16px, 2vw, 28px);
-  }
-
-  .product-name a {
-    color: var(--text);
-    text-decoration: none;
-  }
-
-  .product-name a:hover {
-    color: var(--accent);
-  }
-
   .product-description {
     font-size: clamp(1rem, 1.3vw, 1.15rem);
     line-height: 1.6;
@@ -309,10 +331,6 @@
 
 
   /* ── Contact ── */
-  .contact-block {
-    max-width: 640px;
-  }
-
   .contact-heading {
     font-size: clamp(1.8rem, 3.5vw, 3rem);
     font-weight: 800;
@@ -344,29 +362,10 @@
     border: 1px solid var(--rule);
   }
 
-  .product-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: clamp(16px, 2vw, 28px);
-  }
-
-  .product-header .product-name {
-    margin-bottom: 0;
-  }
-
   .product-links {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem 1.75rem;
-  }
-
-  .contact-note {
-    font-size: clamp(1rem, 1.3vw, 1.15rem);
-    line-height: 1.6;
-    color: var(--text-secondary);
-    margin-bottom: clamp(16px, 2vw, 24px);
-    max-width: 52ch;
   }
 
   .contact-email a {
@@ -413,7 +412,7 @@
           <span class="ml">T</span>echnologies
         </p>
       <div class="hero-sub">
-        <p class="hero-tagline">A one-person creative technology studio in Providence, Rhode Island. I&rsquo;m David: I make audio software, hardware, and installations, and run a recording studio.</p>
+        <p class="hero-tagline">I&rsquo;m David. I make audio software, hardware, and installations in Providence, Rhode Island.</p>
         <div class="hero-actions">
           <a href="#made-here" class="btn" tabindex="-1">See what I make</a>
           <a href="#studio" class="btn btn--ghost" tabindex="-1">Studio projects</a>
@@ -432,7 +431,7 @@
         <span class="dmt">T</span>echnologies
       </h1>
       <div class="hero-sub">
-        <p class="hero-tagline">A one-person creative technology studio in Providence, Rhode Island. I&rsquo;m David: I make audio software, hardware, and installations, and run a recording studio.</p>
+        <p class="hero-tagline">I&rsquo;m David. I make audio software, hardware, and installations in Providence, Rhode Island.</p>
         <div class="hero-actions">
           <a href="#made-here" class="btn">See what I make</a>
           <a href="#studio" class="btn btn--ghost">Studio projects</a>
@@ -450,66 +449,67 @@
   <!-- Products -->
   <section class="section" id="made-here" aria-labelledby="made-here-heading">
     <h2 class="section-label" id="made-here-heading">Made here</h2>
-    <p class="section-intro">Audio software, hardware, and installations I&rsquo;ve made.</p>
-    <div class="product-card">
-      <p class="product-type">Plugin &middot; Mac, Windows, Linux</p>
-      <h3 class="product-name"><a href="/tenten/">TenTen</a></h3>
-      <a href="/tenten/" class="product-shot-link" tabindex="-1" aria-hidden="true"><img class="product-shot" src="/tenten/panel.png" alt="" width="1880" height="590" loading="lazy"></a>
-      <p class="product-description">
-        Pitch shifting with the glitches left in. A 1970s rack pitch shifter and delay, rebuilt in software and then circuit-bent. VST3, AU and CLAP. $25, with a free demo.
-      </p>
-      <div class="product-links">
-        <a href="/tenten/#listen" class="product-link">Hear TenTen</a>
-        <a href="https://buy.stripe.com/3cI28sfbUakd9O5bhMew800" class="product-link">Buy for $25</a>
+    <article class="entry">
+      <div class="entry-head">
+        <p class="product-type">Plugin &middot; Mac, Windows, Linux</p>
+        <h3 class="entry-name"><a href="/tenten/">TenTen</a></h3>
       </div>
-    </div>
+      <div class="entry-body">
+        <a href="/tenten/" tabindex="-1" aria-hidden="true"><img class="product-shot" src="/tenten/panel.png" alt="" width="1880" height="590" loading="lazy"></a>
+        <p class="product-description">Pitch shifting with the glitches left in: a 1970s rack pitch shifter and delay, rebuilt in software and circuit-bent. VST3, AU and CLAP, with a free demo.</p>
+        <div class="product-links">
+          <a href="/tenten/#listen" class="product-link">Hear TenTen</a>
+          <a href="https://buy.stripe.com/3cI28sfbUakd9O5bhMew800" class="product-link">Buy for $25</a>
+        </div>
+      </div>
+    </article>
 
-    <div class="product-card">
-      <p class="product-type">Software for macOS</p>
-      <div class="product-header">
-        <img src="/blackbox/icon-256.png" alt="" width="48" height="48" class="app-icon">
-        <h3 class="product-name">
-          <a href="/blackbox/">BlackBox Audio Recorder</a>
-        </h3>
+    <article class="entry">
+      <div class="entry-head">
+        <p class="product-type">Software for macOS</p>
+        <h3 class="entry-name"><a href="/blackbox/">BlackBox Audio Recorder</a></h3>
+        <img src="/blackbox/icon-256.png" alt="" width="56" height="56" class="app-icon entry-icon">
       </div>
-      <p class="product-description">
-        An always-on recorder that lives in your menu bar and captures every channel of your audio interface to uncompressed WAV. I built it for my own studio.
-      </p>
-      <div class="product-links">
-        <a href="/blackbox/" class="product-link">About BlackBox</a>
-        <a href="https://apps.apple.com/app/apple-store/id6759437659?pt=445919&amp;ct=website&amp;mt=8" class="product-link">Get it on the Mac App Store</a>
+      <div class="entry-body">
+        <p class="product-description">An always-on menu bar recorder that captures every channel of your audio interface to uncompressed WAV.</p>
+        <div class="product-links">
+          <a href="/blackbox/" class="product-link">About BlackBox</a>
+          <a href="https://apps.apple.com/app/apple-store/id6759437659?pt=445919&amp;ct=website&amp;mt=8" class="product-link">Get it on the Mac App Store</a>
+        </div>
       </div>
-    </div>
+    </article>
 
     <!-- TODO(owner): add product names, photos, prices, and a link once listings exist -->
-    <div class="product-card">
-      <p class="product-type">Hardware &middot; Small batch</p>
-      <h3 class="product-name">Hardware for MCI consoles</h3>
-      <p class="product-description">
-        Bench test rigs and replacement cards for servicing MCI JH-500 series consoles. Built in small batches to keep these desks running.
-      </p>
-      <div class="product-links">
-        <a href="mailto:info@dollhousemediatech.com?subject=MCI%20hardware" class="product-link">Ask about availability</a>
+    <article class="entry">
+      <div class="entry-head">
+        <p class="product-type">Hardware &middot; Small batch</p>
+        <h3 class="entry-name">Hardware for MCI consoles</h3>
       </div>
-    </div>
+      <div class="entry-body">
+        <p class="product-description">Bench test rigs and replacement cards for MCI JH-500 series consoles, built in small batches.</p>
+        <div class="product-links">
+          <a href="mailto:info@dollhousemediatech.com?subject=MCI%20hardware" class="product-link">Ask about availability</a>
+        </div>
+      </div>
+    </article>
 
     <!-- TODO(owner): add a photo only if you have the rights to use it (e.g. your own, or with the photographer's permission and credit) -->
-    <div class="product-card">
-      <p class="product-type">Installation &middot; Burning Man 2019</p>
-      <h3 class="product-name">Windchest</h3>
-      <p class="product-description">
-        An interactive sculpture that recalls a pipe organ: softly lit columns rising out of the desert, ringed by LED-lit pads that compress like bellows. Each pad triggers a sound, so anywhere from one to fifteen people jumping on them play a single open-ended piece of music together.
-      </p>
-      <p class="product-description">
-        I did the LEDs, audio, electrical, and programming. Sculpture by verbstudio, music by James Wright Glasgow, built with a crew of Boston fabricators, architects, and engineers.
-      </p>
-      <div class="product-links">
-        <a href="https://strangefangs.com/windchest-2/" class="product-link">Project page</a>
-        <a href="https://gallery.burningman.org/asset/a78828d5-39bf-4ae4-9e6d-77a2a01ec65c" class="product-link">Burning Man photo archive</a>
-        <a href="https://www.scottrklinephoto.com/Road-Trips/Burning-Man-Scenes/1" class="product-link">Photos by Scott R. Kline</a>
-        <a href="https://www.instagram.com/verbimmersive/" class="product-link">VERB Immersive on Instagram</a>
+    <article class="entry">
+      <div class="entry-head">
+        <p class="product-type">Installation &middot; Burning Man 2019</p>
+        <h3 class="entry-name">Windchest</h3>
       </div>
-    </div>
+      <div class="entry-body">
+        <p class="product-description">A sculpture like a pipe organ: lit columns ringed by LED pads that compress like bellows, so up to fifteen people jumping on them play one piece of music together.</p>
+        <p class="product-description">I did the LEDs, audio, electrical, and programming. Sculpture by verbstudio, music by James Wright Glasgow.</p>
+        <div class="product-links">
+          <a href="https://strangefangs.com/windchest-2/" class="product-link">Project page</a>
+          <a href="https://gallery.burningman.org/asset/a78828d5-39bf-4ae4-9e6d-77a2a01ec65c" class="product-link">Burning Man photo archive</a>
+          <a href="https://www.scottrklinephoto.com/Road-Trips/Burning-Man-Scenes/1" class="product-link">Photos by Scott R. Kline</a>
+          <a href="https://www.instagram.com/verbimmersive/" class="product-link">VERB Immersive on Instagram</a>
+        </div>
+      </div>
+    </article>
   </section>
 
   <hr>
@@ -518,26 +518,34 @@
   <section class="section" id="studio" aria-labelledby="studio-heading">
     <h2 class="section-label" id="studio-heading">The studio</h2>
     <!-- TODO(owner): optionally add a photo of the room or a few artists/records worked on -->
-    <div class="studio-block">
-      <p class="section-intro">My recording studio in Providence is mostly where I make my own work. Every so often, I take on a project with an artist whose music I connect with.</p>
-      <p class="service-desc">It isn&rsquo;t a room for hire, so I keep these collaborations few and choose them with care. If you think we&rsquo;d make something good together, send me a note about what you&rsquo;re working on and a link to your music.</p>
-      <div class="hero-actions">
-        <a class="btn" href="mailto:info@dollhousemediatech.com?subject=Studio%20project">Tell me about your project</a>
+    <div class="entry entry--plain">
+      <div class="entry-head">
+        <p class="entry-lede">Occasional collaborations with artists.</p>
+      </div>
+      <div class="entry-body">
+        <p class="product-description">My studio in Providence is mostly for my own work. It isn&rsquo;t a room for hire, but now and then I take on a project with an artist whose music I connect with. If you think that&rsquo;s you, send me a note and a link to your music.</p>
+        <div class="product-links">
+          <a class="product-link" href="mailto:info@dollhousemediatech.com?subject=Studio%20project">Tell me about your project</a>
+        </div>
       </div>
     </div>
-    <p class="advisory-note">I also take on a small amount of security and AI advisory work. <a href="#contact">Get in touch</a> if that&rsquo;s what you need.</p>
   </section>
 
   <hr>
 
   <!-- Contact -->
   <section class="section" id="contact" aria-labelledby="contact-heading">
-    <div class="contact-block">
-      <h2 class="contact-heading" id="contact-heading">Get in touch.</h2>
-      <p class="contact-note">For studio projects, tell me a little about yourself and the music, and include a link so I can listen. Questions about TenTen, BlackBox or MCI hardware are welcome too.</p>
-      <p class="contact-email">
-        <a href="mailto:info@dollhousemediatech.com">info@dollhousemediatech.com</a>
-      </p>
+    <div class="entry entry--plain">
+      <div class="entry-head">
+        <h2 class="contact-heading" id="contact-heading">Get in touch.</h2>
+      </div>
+      <div class="entry-body">
+        <p class="product-description">Email me about anything on this page.</p>
+        <p class="contact-email">
+          <a href="mailto:info@dollhousemediatech.com">info@dollhousemediatech.com</a>
+        </p>
+        <p class="advisory-note">I also do a little security and AI advisory work.</p>
+      </div>
     </div>
   </section>
 
