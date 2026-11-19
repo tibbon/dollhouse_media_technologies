@@ -15,9 +15,27 @@
 <meta property="og:title" content="BlackBox Audio Recorder">
 <meta property="og:description" content="BlackBox Audio Recorder: always-on multichannel audio recording for macOS. Records every channel of your audio interface to crash-safe WAV from the menu bar.">
 <meta property="og:url" content="https://dollhousemediatech.com/blackbox/">
-<meta property="og:image" content="https://dollhousemediatech.com/blackbox/icon-256.png">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://dollhousemediatech.com/blackbox/media/social.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="676">
+<meta property="og:image:alt" content="BlackBox's level meter showing 18 channels of a live band, with the line: You forgot to hit record.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="../site.css">
+<style>
+  .lead { font-size: clamp(1.15rem, 2.2vw, 1.45rem); font-weight: 700; color: var(--text) !important; letter-spacing: -0.01em; }
+  .lead span { color: var(--accent); }
+  .demo { margin: 0; }
+  .demo video, .demo img { display: block; width: 100%; height: auto; border-radius: 12px; }
+  .demo video { background: #1e1e1e; max-width: 436px; margin: 0 auto; border-radius: 10px; box-shadow: 0 12px 40px rgba(0,0,0,0.35); }
+  .demo figcaption, .shot figcaption { margin-top: 0.75rem; font-size: 0.9rem; color: var(--text-secondary); text-align: center; }
+  .shot { margin: 0 0 clamp(24px, 4vw, 40px); display: grid; grid-template-columns: 3fr 2fr; gap: clamp(16px, 4vw, 40px); align-items: center; }
+  .shot:last-child { margin-bottom: 0; }
+  .shot img { display: block; width: 100%; height: auto; }
+  .shot--small img { max-width: 230px; margin: 0 auto; }
+  .shot figcaption { margin: 0; font-size: 1rem; text-align: left; }
+  .shot h3 { color: var(--text); }
+  @media (max-width: 600px) { .shot { grid-template-columns: 1fr; } .shot figcaption { text-align: center; } }
+</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -51,10 +69,35 @@
     <section class="section">
       <img src="icon-256.png" alt="BlackBox Audio Recorder icon" width="128" height="128" class="app-icon" style="margin-bottom: 1.25rem;">
       <h1>BlackBox Audio Recorder</h1>
+      <p class="lead">You forgot to hit record. <span>BlackBox didn&rsquo;t.</span></p>
       <p>BlackBox is an always-on audio recorder for macOS. It runs quietly in your menu bar, continuously capturing audio from any input device and saving uncompressed WAV files to your Mac.</p>
       <p>Built for musicians, podcasters, sound designers, and anyone who never wants to miss a moment of audio.</p>
       <p><a href="https://apps.apple.com/app/apple-store/id6759437659?pt=445919&amp;ct=website&amp;mt=8"><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-mac-app-store/black/en-us" alt="Download on the Mac App Store" width="156" height="40"></a></p>
       <p>$49.99 one-time, no subscription. Requires macOS 15.0 (Sequoia) or later.</p>
+    </section>
+
+    <section class="section" aria-label="BlackBox in action">
+      <figure class="demo">
+        <video id="meter-demo" autoplay muted loop playsinline preload="metadata" poster="media/meter-poster.jpg" width="872" height="860" aria-label="BlackBox's level meter recording 18 channels of a live band">
+          <source src="media/meter-loop.webm" type="video/webm">
+          <source src="media/meter-loop.mp4" type="video/mp4">
+        </video>
+        <figcaption>18 channels of a live band, metered as they record. Meters driven by &ldquo;Billy The Bouncer&rdquo; by District Radio.</figcaption>
+      </figure>
+    </section>
+
+    <hr>
+
+    <section class="section">
+      <h2 class="section-label">Set it once. Forget it&rsquo;s there.</h2>
+      <figure class="shot">
+        <img src="media/settings-channels.png" alt="BlackBox's Recording settings with all 18 channels of an audio interface selected" width="1033" height="1150" loading="lazy">
+        <figcaption><h3>Up to 255 tracks at once</h3>Every input on its own track, not just a stereo mix. Pick them once and BlackBox records them every time.</figcaption>
+      </figure>
+      <figure class="shot shot--small">
+        <img src="media/menu.png" alt="BlackBox's menu bar menu while recording, with Stop Recording and Level Meter" width="595" height="707" loading="lazy">
+        <figcaption><h3>Lives in your menu bar</h3>No window to keep open. Start, stop and check your levels from the menu bar.</figcaption>
+      </figure>
     </section>
 
     <hr>
@@ -85,7 +128,8 @@
         <li><a href="/blackbox/architecture">How it works &ndash; Recording engine architecture</a></li>
         <li><a href="/blackbox/support">Support &amp; FAQ</a></li>
         <li><a href="/blackbox/privacy">Privacy Policy</a></li>
-        <li><a href="https://github.com/tibbon/audio_blackbox">Source on GitHub</a></li>
+        <li><a href="/blackbox/changes">Release notes</a></li>
+        <li><a href="/blackbox/acknowledgments">Open source acknowledgments</a></li>
       </ul>
     </section>
   </main>
@@ -107,5 +151,12 @@
 </aside>
 
 <script src="/site.js" defer></script>
+<script>
+  // Respect reduced motion: show the poster with controls instead of autoplaying.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const v = document.getElementById('meter-demo');
+    v.removeAttribute('autoplay'); v.pause(); v.controls = true;
+  }
+</script>
 </body>
 </html>
