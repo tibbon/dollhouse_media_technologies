@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>try{var t=localStorage.getItem('theme'),r=document.documentElement;if(t==='dmt'&&!r.hasAttribute('data-dmt'))t='dark';if(t==='light'||t==='dark'||t==='dmt')r.classList.add(t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="What changed in each version of BlackBox Audio Recorder.">
+<title>BlackBox Audio Recorder – Release Notes</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://dollhousemediatech.com/blackbox/changes">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Dollhouse Media Technologies">
+<meta property="og:title" content="What changed in each version of BlackBox Audio Recorder.">
+<meta property="og:description" content="BlackBox Audio Recorder – Release Notes">
+<meta property="og:url" content="https://dollhousemediatech.com/blackbox/changes">
+<meta property="og:image" content="https://dollhousemediatech.com/blackbox/icon-256.png">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../site.css">
+<style>
+  .release h2 { margin-bottom: 0.25rem; }
+  .release .date { margin: 0 0 0.5rem; color: var(--text-secondary); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="page page--narrow">
+
+  <nav class="sub-topbar">
+    <a href="/" class="home-link"><strong>D</strong>/<strong>M</strong>/<strong>T</strong></a>
+    <span class="sep">/</span>
+    <a href="/blackbox/">BlackBox</a>
+    <span class="sep">/</span>
+    <span class="crumb">Release notes</span>
+  </nav>
+
+  <hr>
+
+  <main id="main" class="content">
+    <section class="section">
+      <h1>Release Notes</h1>
+      <p>Every version of BlackBox, newest first. Updates are free from the Mac App Store.</p>
+    </section>
+    <section class="section release" id="v1.5.1">
+      <h2>1.5.1</h2>
+      <p class="date"><time datetime="2026-10-05">2026-10-05</time></p>
+      <p>Safer long recordings, and a round of reliability fixes.</p>
+      <ul>
+        <li>Recordings cut short by a crash or power loss are repaired automatically the next time BlackBox opens, losing at most about 10 seconds.</li>
+        <li>Long takes start a new file before reaching the 4 GB WAV limit, so every file opens fully in any audio app.</li>
+        <li>The input device list updates when you plug in or unplug an audio interface.</li>
+        <li>Changing a recording setting while recording offers to restart, so the change takes effect right away. Choosing a new folder continues the recording there.</li>
+        <li>Level meters catch short peaks and clips, and are labelled with the channels you are recording.</li>
+        <li>24-bit, 32-bit and multichannel files use the WAV header that professional audio tools expect. Split-mode files are numbered from channel 1, matching the app.</li>
+        <li>Setup asks before assigning a global shortcut, and running setup again keeps your current settings.</li>
+        <li>Logging out or shutting down is no longer blocked while recording, and BlackBox finishes the file before your Mac sleeps or another app quits it.</li>
+        <li>Stopping no longer hangs after a long session with silence detection on.</li>
+        <li>Fixed channels that could swap after the recorder briefly fell behind.</li>
+        <li>The "Restart Recording" notification button now works, and a "Disabled" minimum free space setting is kept after relaunch.</li>
+        <li>Warning icons in the menu show on macOS 27.</li>
+      </ul>
+    </section>
+    <section class="section release" id="v1.5.0">
+      <h2>1.5.0</h2>
+      <p class="date"><time datetime="2026-09-21">2026-09-21</time></p>
+      <p>Localization, accessibility, and reliability improvements.</p>
+      <ul>
+        <li>The app is now localizable, with number, file-size, and bitrate values formatted for your region.</li>
+        <li>Recordings no longer clip the moment audio begins — the sound that opens the silence gate is captured from the start.</li>
+        <li>Improved fidelity when saving 16-bit files (dither on conversion).</li>
+        <li>Accessibility: VoiceOver support across onboarding, the level meter, the channel grid, and the menu; Reduce Motion and Dynamic Type are honored.</li>
+        <li>More reliable recovery from disk-write failures and across sleep/wake; recordings now save to the app's own folder by default.</li>
+      </ul>
+    </section>
+    <section class="section release" id="v1.4.0">
+      <h2>1.4.0</h2>
+      <p class="date"><time datetime="2026-06-17">2026-06-17</time></p>
+      <p>Groundwork for localization, plus reliability and accessibility fixes.</p>
+    </section>
+    <section class="section release" id="v1.3.0">
+      <h2>1.3.0</h2>
+      <p class="date"><time datetime="2026-05-20">2026-05-20</time></p>
+      <p>Reliability and accessibility fixes.</p>
+    </section>
+    <section class="section release" id="v1.2.0">
+      <h2>1.2.0</h2>
+      <p class="date"><time datetime="2026-05-08">2026-05-08</time></p>
+      <p>Reliability and accessibility polish.</p>
+      <ul>
+        <li>Settings now opens via the standard ⌘, shortcut from anywhere in the app and inherits macOS's normal Settings window behavior.</li>
+        <li>First-run onboarding correctly remembers your choice of recording folder — no more "Output Directory Unavailable" prompt on second launch when you accepted the default.</li>
+        <li>"Recording Started" notifications appear reliably on the first auto-record-on-launch, instead of being dropped before notification permission was requested.</li>
+        <li>Onboarding accessibility: VoiceOver users can now navigate the recording-mode picker as a single-select group, and step back through completed onboarding steps via the indicator dots.</li>
+        <li>Level-meter VoiceOver readouts are throttled to threshold crossings (Silent / Low / Moderate / Hot / Clipping) instead of streaming a new dB reading every screen tick.</li>
+        <li>Internal cleanups: removed leftover scaffolding code, modernized the build pipeline, hardened the supply chain.</li>
+      </ul>
+    </section>
+    <section class="section release" id="v1.1.0">
+      <h2>1.1.0</h2>
+      <p class="date"><time datetime="2026-05-07">2026-05-07</time></p>
+      <p>Reliability and polish across the recording engine.</p>
+      <ul>
+        <li>The menu bar icon now pulses while recording so you can see at a glance that capture is live.</li>
+        <li>Onboarding window no longer clips on the recording-mode step and reopens to the foreground if you've dismissed it.</li>
+        <li>Faster app launch — the menu bar appears immediately instead of waiting on a folder probe.</li>
+        <li>Smoother level meters during long sessions.</li>
+        <li>More precise error reporting — failures from the audio engine now surface specific reasons (device unavailable, low disk space, etc.) instead of a generic message.</li>
+        <li>Hardened audio-sample conversion against malformed input from unusual devices — bad samples can no longer freeze the level meter or skew silence detection.</li>
+        <li>Smaller download (~26% reduction).</li>
+        <li>Updated to the latest Rust toolchain and audio dependencies.</li>
+      </ul>
+    </section>
+    <section class="section release" id="v1.0.2">
+      <h2>1.0.2</h2>
+      <p class="date"><time datetime="2026-03-06">2026-03-06</time></p>
+      <p>Fixes to the build and release process.</p>
+    </section>
+    <section class="section release" id="v1.0.1">
+      <h2>1.0.1</h2>
+      <p class="date"><time datetime="2026-03-06">2026-03-06</time></p>
+      <p>The first Mac App Store release.</p>
+      <ul>
+        <li>Level meter now shows live audio levels before recording starts</li>
+        <li>Open the Level Meter window to preview signal and verify your device/channels</li>
+        <li>Monitoring auto-starts when the meter opens and stops when you close it</li>
+        <li>Recording seamlessly takes over from monitoring, and monitoring resumes when you stop</li>
+        <li>Various bug fixes and improvements</li>
+      </ul>
+    </section>
+  </main>
+
+  <hr>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-location">Providence, Rhode Island</span>
+      <span class="footer-copy">&copy; 2024&ndash;2026 <strong>D</strong>ollhouse <strong>M</strong>edia <strong>T</strong>echnologies</span>
+    </div>
+  </footer>
+
+</div>
+
+<aside class="mode-switcher" aria-label="Color theme">
+  <button type="button" data-mode="light">Light</button>
+  <button type="button" data-mode="dark">Dark</button>
+</aside>
+
+<script src="/site.js" defer></script>
+</body>
+</html>
